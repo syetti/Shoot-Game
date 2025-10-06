@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bswfqd31g4p7v"]
+
+[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler1.gd" id="1_ulgjp"]
+[ext_resource type="Texture2D" uid="uid://l3nyqtw052io" path="res://icon.svg" id="2_pbqa5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk4a"]
+size = Vector2(128, 128)
+
+[node name="Wrestler" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+script = ExtResource("1_ulgjp")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("2_pbqa5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_ruk4a")
+
+[node name="ShotTimer" type="Timer" parent="."]
+wait_time = 0.4

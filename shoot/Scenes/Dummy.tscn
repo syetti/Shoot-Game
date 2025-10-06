@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb0psmexpdxxf"]
+
+[ext_resource type="Script" uid="uid://c7cycsf0rrt56" path="res://Scenes/Dummy.gd" id="1_s2l5p"]
+[ext_resource type="Texture2D" uid="uid://l3nyqtw052io" path="res://icon.svg" id="2_7go7v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk4a"]
+size = Vector2(128, 128)
+
+[node name="Dummy" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+script = ExtResource("1_s2l5p")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+modulate = Color(1, 0.294118, 1, 1)
+texture = ExtResource("2_7go7v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_ruk4a")
+
+[node name="ShotTimer" type="Timer" parent="."]
+wait_time = 0.4
