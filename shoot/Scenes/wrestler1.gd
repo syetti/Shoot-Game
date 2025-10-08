@@ -9,6 +9,8 @@ var is_shooting: bool = false
 var can_shoot: bool = true
 var can_move: bool = false
 var shotbar = 3
+var block_stun_time: float = 0.6
+var stuffed_stun_time: float = 0.3
 
 
 func _ready() -> void:
@@ -68,9 +70,11 @@ func shoot(delta: float) -> void:
 	if collider && collider.get_collider().is_class("CharacterBody2D"):
 		
 		if collider.get_collider().is_blocking:
-			await get_tree().create_timer(0.3).timeout 
+			
+			await get_tree().create_timer(stuffed_stun_time).timeout
 			print("STUFFED")
 			velocity.x = move_toward(-velocity.x, -SHOTSPEED, 2)
+			$"../AnimationPlayer".play("Stuffed_anim") 
 			move_and_collide(velocity)
 			
 			
@@ -79,5 +83,5 @@ func shoot(delta: float) -> void:
 	
 func block() -> void:
 	can_move = false
-	await get_tree().create_timer(0.6).timeout 
+	await get_tree().create_timer(block_stun_time).timeout 
 	can_move = true
