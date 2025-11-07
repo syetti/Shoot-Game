@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://Global.gd"
+DummyNetworkAdaptor="*res://Addons/addons/delta_rollback/DummyNetworkAdaptor.gd"
 
 [input]
 
