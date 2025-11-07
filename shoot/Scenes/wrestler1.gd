@@ -40,16 +40,20 @@ func _physics_process(delta: float) -> void:
 		can_move = false
 	else:
 		can_move = true
-		
+	
+	if velocity.x == 0:
+		$Anims.play("Idle_anim")
 		
 	if can_move:
 		if Input.is_action_pressed("p1_block"):
 			is_blocking  = true
+			$Anims.play("Stuff_anim")
 			block()
 			is_blocking  = false
 			
 		if Input.is_action_just_pressed("p1_shoot") and direction < 0 and can_shoot:
 			is_shooting = true
+			$Anims.play("Shoot_anim")
 			shoot(delta)
 			await get_tree().create_timer(1).timeout 
 			is_shooting = false
@@ -57,24 +61,26 @@ func _physics_process(delta: float) -> void:
 		
 		if direction:
 			velocity.x = direction * SPEED
+			$Anims.play("Walk_anim")
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 		move_and_collide(velocity)
 
 func shoot(delta: float) -> void:
-	velocity.x = 0
-	await get_tree().create_timer(0.2).timeout 
+	
+	$Anims.play("Shoot_anim")
+
+
 	velocity.x -= SHOTSPEED
 	var collider = move_and_collide(velocity)
 	if collider && collider.get_collider().is_class("CharacterBody2D"):
 		
 		if collider.get_collider().is_blocking:
-			
+			$Anims.play("Stuff_anim")
 			await get_tree().create_timer(stuffed_stun_time).timeout
 			print("STUFFED")
 			velocity.x = move_toward(-velocity.x, -SHOTSPEED, 2)
-			$"../AnimationPlayer".play("Stuffed_anim") 
 			move_and_collide(velocity)
 			
 			
@@ -84,4 +90,8 @@ func shoot(delta: float) -> void:
 func block() -> void:
 	can_move = false
 	await get_tree().create_timer(block_stun_time).timeout 
+	can_move = true
+
+
+func _on_anims_animation_finished() -> void:
 	can_move = true
