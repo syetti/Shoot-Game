@@ -15,7 +15,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MatchBeginTime" type="Label" parent="."]
-visible = false
 z_index = 1
 layout_mode = 0
 offset_right = 1152.0
@@ -24,7 +23,7 @@ label_settings = SubResource("LabelSettings_wviqb")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StuffedLabel" type="Label" parent="."]
+[node name="Announcer" type="Label" parent="."]
 visible = false
 layout_mode = 0
 offset_right = 1152.0

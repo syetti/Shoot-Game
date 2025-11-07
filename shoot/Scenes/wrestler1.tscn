@@ -1,8 +1,9 @@
-[gd_scene load_steps=39 format=3 uid="uid://bswfqd31g4p7v"]
+[gd_scene load_steps=47 format=3 uid="uid://bswfqd31g4p7v"]
 
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler1.gd" id="1_ulgjp"]
 [ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_1xqed"]
 [ext_resource type="Texture2D" uid="uid://csdyvx72hbj5l" path="res://Sprites/Wrestler/Wrestler-Shoot-Anim.png" id="3_pbqa5"]
+[ext_resource type="Texture2D" uid="uid://g8pj5gxkqwdx" path="res://Sprites/Wrestler/Wrestler-Walk-Back.png" id="4_1xqed"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk4a"]
 size = Vector2(119, 128)
@@ -79,6 +80,34 @@ region = Rect2(896, 0, 32, 32)
 atlas = ExtResource("3_1xqed")
 region = Rect2(928, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_6bvcc"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6k4pi"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0vks"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8y2x"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8sbc4"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6e16q"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nid4"]
+atlas = ExtResource("4_1xqed")
+region = Rect2(192, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_orio1"]
 atlas = ExtResource("3_1xqed")
 region = Rect2(608, 0, 32, 32)
@@ -147,7 +176,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle_anim",
-"speed": 12.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -167,6 +196,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qkwvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xf3h2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xf3h2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xf3h2")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xf3h2")
@@ -196,6 +234,32 @@ animations = [{
 }],
 "loop": false,
 "name": &"Stuff_anim",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6bvcc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6k4pi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s0vks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8y2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8sbc4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6e16q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7nid4")
+}],
+"loop": true,
+"name": &"WalkBack_anim",
 "speed": 12.0
 }, {
 "frames": [{
@@ -278,7 +342,7 @@ shape = SubResource("RectangleShape2D_ruk4a")
 position = Vector2(-3.8147e-06, -3.8147e-06)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_ujqbw")
-animation = &"Shoot_anim"
+animation = &"Stuff_anim"
 
 [node name="ShotTimer" type="Timer" parent="."]
 wait_time = 0.4
