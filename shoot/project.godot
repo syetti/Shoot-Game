@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://Global.gd"
-DummyNetworkAdaptor="*res://Addons/addons/delta_rollback/DummyNetworkAdaptor.gd"
 SyncManager="*res://addons/delta_rollback/SyncManager.gd"
 
 [editor_plugins]
