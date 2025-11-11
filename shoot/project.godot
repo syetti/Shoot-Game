@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Shoot"
 run/main_scene="uid://r84tnuykum7k"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
 
@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 
 Global="*res://Global.gd"
 DummyNetworkAdaptor="*res://Addons/addons/delta_rollback/DummyNetworkAdaptor.gd"
+SyncManager="*res://addons/delta_rollback/SyncManager.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/delta_rollback/plugin.cfg")
 
 [input]
 
@@ -63,6 +68,16 @@ p2_shoot={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+sync_debug={
+&"deadzone": 0.5,
+&"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194342,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+[network]
+
+rollback/classes/network_adaptor="uid://dly3af6hat3yy"
+rollback/classes/message_serializer="uid://c2la0g7gr36x3"
 
 [rendering]
 
