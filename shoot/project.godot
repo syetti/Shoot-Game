@@ -76,7 +76,7 @@ sync_debug={
 [network]
 
 rollback/classes/network_adaptor="uid://dly3af6hat3yy"
-rollback/classes/message_serializer="uid://c2la0g7gr36x3"
+rollback/classes/message_serializer="uid://mk7bd2lsj38l"
 
 [rendering]
 

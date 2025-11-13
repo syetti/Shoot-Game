@@ -328,17 +328,17 @@ _data = {
 &"Stuffed_anim": SubResource("Animation_ulgjp")
 }
 
-[node name="Wrestler" type="Node2D"]
+[node name="Wrestler" type="Node2D" groups=["network_sync"]]
 scale = Vector2(-1, 1)
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="WChar" type="CharacterBody2D" parent="." groups=["network_sync"]]
 script = ExtResource("1_ulgjp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WChar"]
 position = Vector2(-4.5, 0)
 shape = SubResource("RectangleShape2D_ruk4a")
 
-[node name="Anims" type="AnimatedSprite2D" parent="CharacterBody2D"]
+[node name="Anims" type="AnimatedSprite2D" parent="WChar"]
 position = Vector2(-3.8147e-06, -3.8147e-06)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_ujqbw")
@@ -352,4 +352,4 @@ libraries = {
 &"": SubResource("AnimationLibrary_1xqed")
 }
 
-[connection signal="animation_finished" from="CharacterBody2D/Anims" to="CharacterBody2D" method="_on_anims_animation_finished"]
+[connection signal="animation_finished" from="WChar/Anims" to="WChar" method="_on_anims_animation_finished"]
