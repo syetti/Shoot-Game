@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
-var input_prefix := "p1_"
+# 1 = Facing Right (Player 1)
+# -1 = Facing Left (Player 2)
+@export var fixed_facing_dir: int = -1
+
 const SPEED: float = 300.0
 const SHOTSPEED: float = 5000.0
 const STUFFEDSPEED: float = 2.0
@@ -11,138 +14,142 @@ var shoot_cooldown := 0
 var is_blocking: bool = false
 var is_shooting: bool = false
 var can_shoot: bool = true
-var can_move: bool = false
 var shotbar = 3
 var block_stun_time: float = 0.6
 var stuffed_stun_time: float = 1
 var shoot_prep_time: float = 0.6
+var dir_multi = 0
 
-@onready var anims = $Anim
+
+
+enum State {
+	IDLE,
+	SHOOT,
+	BLOCK,
+	THROW,
+	WALK
+}
+
+var current_state = State.IDLE
+@onready var anims = $Anims
 
 
 func _ready() -> void:
+	if fixed_facing_dir == 1:
+		$Anims.flip_h = true
+	current_state = State.IDLE
 	
-	#await get_tree().create_timer(4).timeout 
-	can_move = true
-	
-	
-	
-func _get_local_input() -> Dictionary:
-	
-	
-	var input := {}
-	if can_move:
-		if Input.is_action_pressed(input_prefix + "left"):
-			input["left"] = true
-		if Input.is_action_pressed(input_prefix + "right"):
-			input["right"] = true
-		if Input.is_action_just_pressed(input_prefix + "block"):
-			input["block"] = true
-		if Input.is_action_just_pressed(input_prefix + "shoot"):
-			input["shoot"] = true
-	
-	return input
+#Finally learning state machines...
 func _network_process(input: Dictionary) -> void:
+	
 	
 	#EVERYTIME PLAYER SHOOTS, BAR DROPS 1
 	#IF PLAYER SHOOTS INTO BLOCK, BAR DROPS 0.5, INCENTIVIZE AGGRESSION, DISCOURAGE SPAMMING
 	#if shotbar == 0:
 #		can_shoot = false
-		
+
+
+
+	
+	match current_state:
+		State.IDLE:
+			_handle_idle_state(input)
+		State.SHOOT:
+			_handle_shoot_state(input)
+		State.BLOCK:
+			_handle_block_state(input)
+		State.THROW:
+			_handle_throw_state(input)
+		State.WALK:
+			_handle_walk_state(input)
 	# Update timers
 	if shoot_timer > 0:
 		shoot_timer -= 1
-		
 			
 	if shoot_cooldown > 0:
 		shoot_cooldown -= 1
 	
-	# Reset direction
-	var direction = 0
+	###  Transition to IDLE
+	if velocity.x == 0:
+		current_state = State.IDLE
+		
+	###  MOVE
+	set_velocity(Vector2(SPEED, 0))
+	move_and_slide()
+	velocity = get_velocity()
 	
-	if can_move:
-		# Handle movement inputs
-		if input.get("left", false):
-			direction = -1
-			if not is_shooting:
-				anims.play("Walk_anim")
-		elif input.get("right", false):
-			direction = 1
-			if not is_shooting:
-				anims.play("WalkBack_anim")
+
+func _get_local_input() -> Dictionary:
+	
+	
+	var input := {}
+	
+	input["block"] = Input.is_action_just_pressed("block")
+	input["shoot"] =  Input.is_action_just_pressed("shoot")
+	input["throw"] =  Input.is_action_just_pressed("throw")
+	input["move_x"] = Input.get_axis("left","right")
+			
+	
+	return input
+	
+
+func _save_state() -> Dictionary:
+	return{
+		position = position,
+		velocity =  velocity,
+		current_state = current_state
+	}
+	
+
+func _load_state(state: Dictionary):
+	position = state['position']
+	velocity = state['velocity']
+	current_state = state['current_state']
+	
+func _handle_idle_state(input: Dictionary) -> void:
+	anims.play("Idle_anim")
+	
+	var move_dir = input.get("move_x", 0)
+	if move_dir !=0:
+		current_state = State.WALK
+	
+	if input.get("block", false):
+		current_state = State.BLOCK
 		
-		# Handle block input
-		if input.get("block", false):
-			block()
-		
-		# Handle shoot input
-		if input.get("shoot", false) and not is_shooting :
+	# Handle shoot input
+		if input.get("shoot", false):
 			if shoot_cooldown == 0:
-				is_shooting = true
-				shoot()
+				velocity.x = 0
+				current_state = State.BLOCK
 				shoot_cooldown = shoot_cooldown_ticks
 				anims.play("Shoot_anim")
-	
-	# Apply movement
-	if is_shooting:
-		velocity.x = -3 * SHOTSPEED
-	else:
-		velocity.x = direction * SPEED
-	
-	# Idle animation when not moving
-	if velocity.x == 0 and can_move and not is_shooting:
-		anims.play("Idle_anim")
-	
-	move_and_slide()
-func _physics_process(delta: float) -> void:
-	
-	
-	
-	
-	
 
-	var direction = 0
-	var last_direction = 0
-	
-	#Inputs and movement
-	
-	if is_shooting:
-		can_move = false
-	elif is_blocking:
-		can_move = false
-	else:
-		can_move = true
-	
-	if velocity.x == 0 and can_move:
-		$Anims.play("Idle_anim")
+
+func _handle_walk_state(input: Dictionary) -> void:
+	current_state = State.WALK
+	# Handle movement inputs
+	var move_dir = input.get("move_x", 0)
+	if move_dir !=0:
+		velocity.x = move_dir * SPEED
 		
-	if can_move:
-		if Input.is_action_pressed("p1_left"):
-			direction = -1 
+		if move_dir == fixed_facing_dir:
 			$Anims.play("Walk_anim")
-		if Input.is_action_pressed("p1_right"):
-			direction = 1 
+		else:
 			$Anims.play("WalkBack_anim")
-		
-		if Input.is_action_just_pressed("p1_block"):
-			block()
-			
-		if Input.is_action_just_pressed("p1_shoot") and velocity.x < 0 and can_shoot:
-			is_shooting = true
-			$Anims.play("Shoot_anim")
-			await get_tree().create_timer(shoot_prep_time).timeout
-			velocity.x = -3 * SHOTSPEED
-			move_and_slide()
-			shoot()
-			await get_tree().create_timer(1).timeout 
-			is_shooting = false
+	else:
+		velocity.x = 0
 	
-		velocity.x = direction * SPEED
+	
+func _handle_throw_state(input: Dictionary) -> void:
+	pass
+func _handle_block_state(input: Dictionary) -> void:
+	is_blocking  = true
+	$Anims.play("Stuff_anim")
+	await get_tree().create_timer(block_stun_time).timeout 
+	is_blocking  = false
 
-		move_and_slide()
-
-func shoot() -> void:
-
+func _handle_shoot_state(input: Dictionary) -> void:
+	velocity.x = dir_multi* -3 * SHOTSPEED
 	for i in get_slide_collision_count():
 		
 		var collider = get_slide_collision(i)
@@ -159,15 +166,3 @@ func shoot() -> void:
 				
 				
 		shotbar -= 1
-		
-	
-func block() -> void:
-	is_blocking  = true
-	$Anims.play("Stuff_anim")
-	await get_tree().create_timer(block_stun_time).timeout 
-	is_blocking  = false
-	can_move = true
-
-
-func _on_anims_animation_finished() -> void:
-	can_move = true

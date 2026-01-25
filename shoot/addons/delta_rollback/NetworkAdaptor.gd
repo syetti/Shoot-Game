@@ -43,7 +43,7 @@ func is_network_master_for_node(node: Node) -> bool:
 
 func get_network_unique_id() -> int:
 	push_error("UNIMPLEMENTED ERROR: NetworkAdaptor.get_network_unique_id()")
-	return 1
+	return multiplayer.get_unique_id()
 
 func poll() -> void:
 	pass

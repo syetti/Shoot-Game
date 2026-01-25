@@ -63,3 +63,11 @@ text = "Client
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="sync_status" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "ggagg"
+horizontal_alignment = 3
+vertical_alignment = 1

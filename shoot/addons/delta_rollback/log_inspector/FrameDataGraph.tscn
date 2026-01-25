@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://vf3gjk5tt6ih"]
 
 [ext_resource type="Script" uid="uid://ddt0vnws4fwx3" path="res://addons/delta_rollback/log_inspector/FrameDataGraph.gd" id="1"]
-[ext_resource type="PackedScene" path="res://addons/delta_rollback/log_inspector/FrameDataGraphCanvas.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://o0toyecmrlgp" path="res://addons/delta_rollback/log_inspector/FrameDataGraphCanvas.tscn" id="2"]
 
 [node name="FrameDataGraph" type="VBoxContainer"]
 clip_contents = true
