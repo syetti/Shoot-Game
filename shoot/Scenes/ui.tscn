@@ -65,6 +65,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="sync_status" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

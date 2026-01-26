@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bswfqd31g4p7v"]
+[gd_scene load_steps=18 format=3 uid="uid://bswfqd31g4p7v"]
 
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler1.gd" id="1_ulgjp"]
 [ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_1xqed"]
@@ -9,6 +9,30 @@ size = Vector2(119, 128)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(25, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_wpdsj"]
 resource_name = "new_animation"
@@ -76,27 +100,9 @@ tracks/0/keys = {
 "values": [14, 18]
 }
 
-[sub_resource type="Animation" id="Animation_pbqa5"]
-length = 0.16666834
-loop_mode = 1
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.08210906, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Color(1, 1, 1, 1), Color(0, 0, 1, 1), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jl2re"]
 _data = {
 &"RESET": SubResource("Animation_8iimx"),
-&"hit": SubResource("Animation_pbqa5"),
 &"idle": SubResource("Animation_qkwvy"),
 &"shoot_p_anim": SubResource("Animation_wpdsj"),
 &"walk_b": SubResource("Animation_ybvib"),
@@ -199,7 +205,6 @@ _data = {
 
 [node name="Wrestler" type="Node2D" groups=["network_sync"]]
 scale = Vector2(-1, 1)
-metadata/_edit_horizontal_guides_ = [385.0]
 
 [node name="WChar" type="CharacterBody2D" parent="." groups=["network_sync"]]
 script = ExtResource("1_ulgjp")
@@ -222,7 +227,7 @@ position = Vector2(-5.684342e-14, 0)
 scale = Vector2(3.9728954, 3.9728956)
 texture = ExtResource("3_1xqed")
 hframes = 30
-frame = 14
+frame = 25
 
 [node name="ShotTimer" type="Timer" parent="."]
 wait_time = 0.4

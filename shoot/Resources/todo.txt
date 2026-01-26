@@ -1,0 +1,5 @@
+- handle block logic
+- handle spawn logic
+- "doneblock" 3 times? wsp w that
+- redo sprite legs. ugly.
+- add animation for hitting opp

@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://r84tnuykum7k"]
+[gd_scene load_steps=6 format=3 uid="uid://r84tnuykum7k"]
 
 [ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://Scenes/ui.tscn" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bswfqd31g4p7v" path="res://Scenes/wrestler1.tscn" id="3_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bb0psmexpdxxf" path="res://Scenes/Dummy.tscn" id="4_jjvhh"]
+[ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://Scenes/solo_network_test.gd" id="5_kry3j"]
 
 [node name="Main" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [414.0]
+metadata/_edit_vertical_guides_ = [182.0]
 
 [node name="UI" parent="." instance=ExtResource("1_8gbba")]
 anchors_preset = 0
@@ -25,3 +28,6 @@ position = Vector2(751, 352)
 
 [node name="Dummy" parent="." instance=ExtResource("4_jjvhh")]
 position = Vector2(430, 353)
+
+[node name="soloNetworkTest" type="Node" parent="."]
+script = ExtResource("5_kry3j")
