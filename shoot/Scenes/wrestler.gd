@@ -8,7 +8,7 @@ var fixed_facing_dir: int = -1
 const SPEED: float = 300.0
 const SHOTSPEED: float = 5000.0
 const STUFFEDSPEED: float = 2.0
-var shoot_distance: float = 400.0
+var shoot_distance: float = 200.0
 
 ##Timers
 var state_timer = 0
@@ -42,7 +42,7 @@ var has_connected: bool = false
 var shoot_state = 0
 var block_state = 0
 var throw_state = 0
-
+var starting_state : String
 
 
 ###Major States
@@ -73,7 +73,20 @@ func _ready() -> void:
 
 func _network_spawn(data: Dictionary) -> void:
 	position = data.get("position", Vector2(180,400))
-	fixed_facing_dir = data.get("facing_dir", 1)
+	fixed_facing_dir = data.get("fixed_facing_dir", 1)
+	starting_state = data.get("State", "IDLE")
+	
+	match starting_state:
+		"IDLE":
+			current_state = State.IDLE
+		"BLOCK":
+			current_state = State.BLOCK
+			print("blocking")
+		"WALK":
+			current_state = State.WALK
+		
+	 
+	
 	
 	if fixed_facing_dir == 1:
 		$Sprite.flip_h = true
@@ -82,15 +95,12 @@ func _network_spawn(data: Dictionary) -> void:
 		
 	var owner_id = data.get("peer_id", 1)
 	set_multiplayer_authority(owner_id)
-	current_state = State.IDLE
 	
 #Finally learning state machines...
 func _network_process(input: Dictionary) -> void:
 	if state_timer > 0:
 		state_timer -=1
 		
-	
-	
 	#EVERYTIME PLAYER SHOOTS, BAR DROPS 1
 	#IF PLAYER SHOOTS INTO BLOCK, BAR DROPS 0.5, INCENTIVIZE AGGRESSION, DISCOURAGE SPAMMING
 	#if shotbar == 0:
@@ -147,6 +157,8 @@ func _save_state() -> Dictionary:
 		position = position,
 		velocity =  velocity,
 		current_state = current_state,
+		hit_state = hit_state,
+		has_connected = has_connected,
 		state_timer = state_timer,
 		shoot_state = shoot_state,
 		shoot_cooldown = shoot_cooldown,
@@ -160,7 +172,7 @@ func _load_state(state: Dictionary):
 	current_state = state['current_state']
 	state_timer = state['state_timer']
 	shoot_state = state['shoot_state']
-	
+	has_connected = state['has_connected']
 	shoot_cooldown = state['shoot_cooldown']
 	block_cooldown = state['block_cooldown']
 	
@@ -221,15 +233,16 @@ func _handle_block_state() -> void:
 	$Anims.play("block_anim/block_a")
 	
 	if state_timer <= 0:
-		print("doneblock")
+		
 		block_cooldown = block_cooldown_time
 		current_state = State.IDLE
 
 func _handle_shoot_state() -> void:
 	if state_timer > 0:
 		if shoot_state == 1:
+			
 			var req_speed = shoot_distance/(shoot_active_m_time/60.0)
-			velocity.x = fixed_facing_dir * req_speed
+			velocity.x = -fixed_facing_dir * req_speed
 			###Collision
 			if not has_connected:
 				for i in get_slide_collision_count():
@@ -242,33 +255,35 @@ func _handle_shoot_state() -> void:
 								print("Hit_Target")
 								has_connected = true
 								velocity.x = 0
-								anims.play("hit")
+								
+								
 							hit_state.BLOCKED:
 								print("Stuffed")
 								has_connected = true
-								return
+								
 						
 					return
 			return
-
-		match shoot_state:
-			0:
-				anims.play("shoot_anim/shoot_a")
-				state_timer = shoot_active_m_time
-				shoot_state = 1
-			1:
-				anims.play("shoot_anim/shoot_r")
-				state_timer = shoot_recovery_time
-				shoot_state = 2
-				velocity.x = 0
-			2:
-				velocity.x = 0
-				shoot_cooldown = shoot_cooldown_time
-				current_state = State.IDLE
+		
+		return
+	match shoot_state:
+		0:
+			anims.play("shoot_anim/shoot_a")
+			state_timer = shoot_active_m_time
+			shoot_state = 1
+		1:
+			anims.play("shoot_anim/shoot_r")
+			state_timer = shoot_recovery_time
+			shoot_state = 2
+			velocity.x = 0
+		2:
+			velocity.x = 0
+			shoot_cooldown = shoot_cooldown_time
+			current_state = State.IDLE
 				
 		
 		
-		shotbar -= 1
+		
 	return
 func _handle_stun_state() -> void:
 	current_state = State.IDLE
@@ -278,6 +293,8 @@ func try_hit(dmg : int) -> hit_state:
 	if current_state == State.BLOCK:
 		return hit_state.BLOCKED
 	print("BEEN HIT")
-	velocity.x = 0
+	$Sprite.self_modulate = Color(0,0,1,1)
+	current_state = State.STUN
+	
 	return hit_state.HIT
 	

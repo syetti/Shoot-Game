@@ -1,62 +1,30 @@
-[gd_scene load_steps=19 format=3 uid="uid://bswfqd31g4p7v"]
+[gd_scene load_steps=19 format=3 uid="uid://c00otajcfr0y7"]
 
-[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler1.gd" id="1_ulgjp"]
-[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_1xqed"]
-[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="5_8iimx"]
+[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler.gd" id="1_da70j"]
+[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
+[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_d6ntd"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk4a"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_urx73"]
 size = Vector2(119, 128)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
 
-[sub_resource type="Animation" id="Animation_wpdsj"]
-resource_name = "new_animation"
-length = 0.10000167
+[sub_resource type="Animation" id="Animation_pbqa5"]
+length = 0.16666834
+loop_mode = 1
 step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
+tracks/0/path = NodePath("Sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.083333336),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0, 5]
-}
-
-[sub_resource type="Animation" id="Animation_jl2re"]
-length = 0.50000167
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [19, 24]
-}
-
-[sub_resource type="Animation" id="Animation_ybvib"]
-length = 0.50000167
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [24, 19]
+"times": PackedFloat32Array(0, 0.08210906, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 1), Color(0, 0, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_qkwvy"]
@@ -76,21 +44,53 @@ tracks/0/keys = {
 "values": [14, 18]
 }
 
-[sub_resource type="Animation" id="Animation_pbqa5"]
-length = 0.16666834
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_wpdsj"]
+resource_name = "new_animation"
+length = 0.10000167
 step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.08210906, 0.15),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Color(1, 1, 1, 1), Color(0, 0, 1, 1), Color(1, 1, 1, 1)]
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 5]
+}
+
+[sub_resource type="Animation" id="Animation_ybvib"]
+length = 0.50000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [24, 19]
+}
+
+[sub_resource type="Animation" id="Animation_jl2re"]
+length = 0.50000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [19, 24]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jl2re"]
@@ -140,22 +140,6 @@ _data = {
 &"block_p": SubResource("Animation_lmj65")
 }
 
-[sub_resource type="Animation" id="Animation_4u3dw"]
-length = 0.333335
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [7, 13]
-}
-
 [sub_resource type="Animation" id="Animation_ba55o"]
 length = 0.083335005
 loop_mode = 1
@@ -190,6 +174,22 @@ tracks/0/keys = {
 "values": [0, 5]
 }
 
+[sub_resource type="Animation" id="Animation_4u3dw"]
+length = 0.333335
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [7, 13]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7diys"]
 _data = {
 &"shoot_a": SubResource("Animation_ba55o"),
@@ -197,32 +197,25 @@ _data = {
 &"shoot_r": SubResource("Animation_4u3dw")
 }
 
-[node name="Wrestler" type="Node2D" groups=["network_sync"]]
-scale = Vector2(-1, 1)
-metadata/_edit_horizontal_guides_ = [385.0]
+[node name="Wrestler" type="CharacterBody2D" groups=["network_sync"]]
+script = ExtResource("1_da70j")
 
-[node name="WChar" type="CharacterBody2D" parent="." groups=["network_sync"]]
-script = ExtResource("1_ulgjp")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WChar"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-4.5, 0)
-shape = SubResource("RectangleShape2D_ruk4a")
+shape = SubResource("RectangleShape2D_urx73")
 
-[node name="Anims" type="AnimationPlayer" parent="WChar"]
+[node name="Anims" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_jl2re"),
 &"block_anim": SubResource("AnimationLibrary_ujqbw"),
 &"shoot_anim": SubResource("AnimationLibrary_7diys")
 }
-script = ExtResource("5_8iimx")
+script = ExtResource("2_04xvm")
 metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
-[node name="Sprite" type="Sprite2D" parent="WChar"]
+[node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(-5.684342e-14, 0)
-scale = Vector2(3.9728954, 3.9728956)
-texture = ExtResource("3_1xqed")
+scale = Vector2(4, 4)
+texture = ExtResource("3_d6ntd")
 hframes = 30
-frame = 14
-
-[node name="ShotTimer" type="Timer" parent="."]
-wait_time = 0.4
+frame = 6

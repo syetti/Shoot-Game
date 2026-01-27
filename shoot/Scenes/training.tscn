@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://Scenes/ui.tscn" id="3_urnhv"]
 
 [node name="Training" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [319.0, 316.0]
+metadata/_edit_vertical_guides_ = [-301.0, 302.0]
 
 [node name="wrestlingMat" parent="." instance=ExtResource("1_1ydqc")]
 position = Vector2(-576, -100)

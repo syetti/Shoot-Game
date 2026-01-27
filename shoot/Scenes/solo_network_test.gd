@@ -1,6 +1,6 @@
 extends Node
 
-var wrestler = preload("res://Scenes/wrestler1.tscn")
+var wrestler = preload("res://Scenes/wrestler.tscn")
 
 func _ready():
 	# 1. Create a "Fake" Server
@@ -20,24 +20,41 @@ func _ready():
 func _on_SyncManager_sync_started():
 	# This function is now called automatically by the signal connection above
 	if multiplayer.is_server():
+		
+		print("Connected")
 		_spawn_players()
 		
 func _spawn_players():
 	var p1_data = {
-		"position": Vector2(925, 354), 
-		"facing_dir": 1,
-		"peer_id": 1 
+		"position": Vector2(300, 0), 
+		"fixed_facing_dir": 1,
+		"peer_id": 1,
+		 
 	}
 	# Spawn Player 1
 	SyncManager.spawn("P1", self, wrestler, p1_data, true)
 	
-	# Use ID 2 for the dummy "Player 2" so it doesn't conflict with you (ID 1)
-	var p2_id = 2 
 	
-	var p2_data = {
-		"position": Vector2(200, 418), 
-		"facing_dir": -1,
-		"peer_id": p2_id
-	}
+	# Use ID 2 for the dummy "Player 2" so it doesn't conflict with you (ID 1)
+	#var p2_id = 2 
+	
+	#var p2_data = {
+	#	"position": Vector2(-300, 0), 
+	#	"fixed_facing_dir": -1,
+	#	"peer_id": p2_id,
+	#}
 	# Spawn Player 2
-	SyncManager.spawn("P2", self, wrestler, p2_data, true)
+	#SyncManager.spawn("P2", self, wrestler, p2_data, true)
+	_spawn_dummy()
+	
+func _spawn_dummy():
+	var d_id = 2
+	
+	var d_data = {
+		"position": Vector2(-400, 0), 
+		"fixed_facing_dir": -1,
+		"peer_id": d_id,
+		"State" : "BLOCK"
+	}
+	# Spawn Dummy
+	SyncManager.spawn("D", self, wrestler, d_data, true)
