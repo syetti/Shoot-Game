@@ -1,3 +1,26 @@
+--IDEA - Overload. Each player has bar of mental. Repeated actions from other players that illicit a response fill 
+	the bar until they're stunned for a certain period. Mimic mental fatigue.
+		-Fatigue bar depletes as you make the opponent react 
+
+--Win - shoot or throw opp
+
+--Lose - get thrown or shot on
+
+--Options:
+	Shoot:
+		- attack towards opp by covering 0.15 meters (lol) over .083 seconds. (~200 pixels over 5 frames)
+		- if shooting at already shooting opponent both players take mental fatigue and reset positions
+	Block - block shot attacks. 
+	Throw - throw blocking opp.
+
+	(?)Faint - fake the shot, make the opp commit to something (fill up fatigue bar)
+	
+	
+	-Blocking easier than shooting, insentivze use of fatigue
+
+--Frame Data:
+	-Will be updated later...
+
 - handle block logic
 - redo sprite legs. ugly.
 - add animation for hitting opp
@@ -5,3 +28,6 @@
 
 --MUSIC
 -Anything
+
+--Fatigue bar
+- 

@@ -1,11 +1,14 @@
-[gd_scene load_steps=19 format=3 uid="uid://c00otajcfr0y7"]
+[gd_scene load_steps=23 format=3 uid="uid://c00otajcfr0y7"]
 
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler.gd" id="1_da70j"]
 [ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
 [ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_d6ntd"]
+[ext_resource type="Texture2D" uid="uid://b3xfh45wcw1sx" path="res://Sprites/Stun-Bar/StunBarBackground.png" id="4_urx73"]
+[ext_resource type="Texture2D" uid="uid://bk67e4h60wb1x" path="res://Sprites/Stun-Bar/StunBarOutline.png" id="5_ddc1g"]
+[ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_7r32w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_urx73"]
-size = Vector2(119, 128)
+size = Vector2(92, 81)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
@@ -197,11 +200,16 @@ _data = {
 &"shoot_r": SubResource("Animation_4u3dw")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
+radius = 1184.1221
+
 [node name="Wrestler" type="CharacterBody2D" groups=["network_sync"]]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_da70j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4.5, 0)
+position = Vector2(2, 23.5)
 shape = SubResource("RectangleShape2D_urx73")
 
 [node name="Anims" type="AnimationPlayer" parent="."]
@@ -218,4 +226,23 @@ position = Vector2(-5.684342e-14, 0)
 scale = Vector2(4, 4)
 texture = ExtResource("3_d6ntd")
 hframes = 30
-frame = 6
+frame = 14
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_da70j")
+
+[node name="fatigue_bar" type="TextureProgressBar" parent="."]
+offset_left = -26.0
+offset_top = -91.0
+offset_right = 26.919998
+offset_bottom = -70.0
+max_value = 90.0
+step = 30.0
+nine_patch_stretch = true
+texture_under = ExtResource("4_urx73")
+texture_over = ExtResource("5_ddc1g")
+texture_progress = ExtResource("6_7r32w")

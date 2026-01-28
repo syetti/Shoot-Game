@@ -32,7 +32,7 @@ func _spawn_players():
 		 
 	}
 	# Spawn Player 1
-	SyncManager.spawn("P1", self, wrestler, p1_data, true)
+	SyncManager.spawn("P", self, wrestler, p1_data, true)
 	
 	
 	# Use ID 2 for the dummy "Player 2" so it doesn't conflict with you (ID 1)

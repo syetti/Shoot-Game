@@ -51,5 +51,7 @@ func try_hit(dmg : int) -> hit_state:
 	if current_state == State.BLOCK:
 		return hit_state.BLOCKED
 	print("BEEN HIT")
-	velocity.x = 0
+	$Sprite.self_modulate = Color(0,0,1,1)
+	current_state = State.STUN
+	
 	return hit_state.HIT
