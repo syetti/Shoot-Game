@@ -1,3 +1,11 @@
+
+- add win anim
+- add throw mechanic
+- calibrate feint animations
+
+
+
+
 --IDEA - Overload. Each player has bar of mental. Repeated actions from other players that illicit a response fill 
 	the bar until they're stunned for a certain period. Mimic mental fatigue.
 		-Fatigue bar depletes as you make the opponent react 
