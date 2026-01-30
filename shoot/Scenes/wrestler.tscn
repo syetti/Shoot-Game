@@ -204,12 +204,12 @@ _data = {
 radius = 1184.1221
 
 [node name="Wrestler" type="CharacterBody2D" groups=["network_sync"]]
-collision_layer = 3
+collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_da70j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(2, 23.5)
+position = Vector2(0, 23.5)
 shape = SubResource("RectangleShape2D_urx73")
 
 [node name="Anims" type="AnimationPlayer" parent="."]
@@ -229,7 +229,7 @@ hframes = 30
 frame = 14
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 3
+collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
@@ -240,8 +240,7 @@ offset_left = -26.0
 offset_top = -91.0
 offset_right = 26.919998
 offset_bottom = -70.0
-max_value = 90.0
-step = 30.0
+max_value = 3.0
 nine_patch_stretch = true
 texture_under = ExtResource("4_urx73")
 texture_over = ExtResource("5_ddc1g")
