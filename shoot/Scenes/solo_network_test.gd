@@ -1,7 +1,7 @@
 extends Node
 
 var wrestler = preload("res://Scenes/wrestler.tscn")
-
+var dummy = preload("res://Scenes/dummy.tscn")
 func _ready():
 	# 1. Create a "Fake" Server
 	var peer = ENetMultiplayerPeer.new()
@@ -57,4 +57,4 @@ func _spawn_dummy():
 		"State" : "BLOCK"
 	}
 	# Spawn Dummy
-	SyncManager.spawn("D", self, wrestler, d_data, true)
+	SyncManager.spawn("D", self, dummy, d_data, true)

@@ -3,7 +3,6 @@ extends CharacterBody2D
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int = -1
-var dummy  = false
 #Speed
 const SPEED: float = 300.0
 const SHOTSPEED: float = 5000.0
@@ -55,7 +54,7 @@ var shoot_state: int
 var block_state: int
 var throw_state:int
 var feint_state: int
-var starting_state : String
+
 
 
 ###Major States
@@ -91,13 +90,11 @@ func _ready() -> void:
 func _network_spawn(data: Dictionary) -> void:
 	position = data.get("position", Vector2(180,400))
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
-	starting_state = data.get("State", "IDLE")
+
 	
 	
 	
 	
-	if starting_state == "Player":
-		dummy = false
 	
 	if fixed_facing_dir == 1:
 		$Sprite.flip_h = true
@@ -107,15 +104,10 @@ func _network_spawn(data: Dictionary) -> void:
 	var owner_id = data.get("peer_id", 1)
 	set_multiplayer_authority(owner_id)
 	
-#Finally learning state machines...
+
 func _network_process(input: Dictionary) -> void:
 	if state_timer > 0:
 		state_timer -=1
-		
-	#EVERYTIME PLAYER SHOOTS, BAR DROPS 1
-	#IF PLAYER SHOOTS INTO BLOCK, BAR DROPS 0.5, INCENTIVIZE AGGRESSION, DISCOURAGE SPAMMING
-	#if shotbar == 0:
-#		can_shoot = false
 ### Major States
 	match current_state:
 		State.IDLE:
@@ -123,7 +115,7 @@ func _network_process(input: Dictionary) -> void:
 		State.SHOOT:
 			_handle_shoot_state()
 		State.BLOCK:
-			_handle_block_state()
+			_handle_block_state(input)
 		State.THROW:
 			_handle_throw_state(input)
 		State.WALK:
@@ -132,16 +124,6 @@ func _network_process(input: Dictionary) -> void:
 			_handle_stun_state()
 		State.FEINT:
 			_handle_feint_state(input)
-	if dummy:
-		match starting_state:
-			"Player":
-				current_state = State.IDLE
-			"BLOCK":
-				current_state = State.BLOCK
-			"WALK":
-				current_state = State.WALK
-			"IDLE":
-				current_state = State.IDLE
 			
 	# Update timers
 	if shoot_cooldown > 0:
@@ -164,6 +146,10 @@ func _network_process(input: Dictionary) -> void:
 		#(?)Don't shoot at feint
 		
 
+	if input.get("block", false):
+		current_state = State.BLOCK
+		print("blocking")
+		
 	
 		
 	###  MOVE
@@ -196,8 +182,7 @@ func _network_process(input: Dictionary) -> void:
 	
 	if fatigue_bar_val > 3:
 		current_state = State.STUN
-		
-		
+	
 func _get_local_input() -> Dictionary:
 	
 	
@@ -209,7 +194,7 @@ func _get_local_input() -> Dictionary:
 	if not is_multiplayer_authority():
 		return {}
 	
-	input["block"] = Input.is_action_just_pressed("block")
+	input["block"] = Input.is_action_pressed("block")
 	input["shoot"] =  Input.is_action_just_pressed("shoot")
 	input["throw"] =  Input.is_action_just_pressed("throw")
 	input["move_x"] = Input.get_axis("left","right")
@@ -277,12 +262,8 @@ func _handle_walk_state(input: Dictionary) -> void:
 func _handle_throw_state(input: Dictionary) -> void:
 	pass
 
-func _handle_block_state() -> void:
+func _handle_block_state(input: Dictionary) -> void:
 	
-	if starting_state == "BLOCK":
-		block_state = 3
-		current_state = State.BLOCK
-		
 	
 	if state_timer > 0:
 		return
@@ -294,15 +275,18 @@ func _handle_block_state() -> void:
 			block_state = 1
 		1:
 			anims.play("block_anim/block_a")
-			state_timer = block_active_time
-			block_state = 2
+
+			var is_holding = input.get("block", false)
+			if is_holding:
+				block_state = 1
+			else:
+				state_timer = block_active_time
+				block_state = 2
 			
 		2:
 			block_cooldown = block_cooldown_time
 			current_state = State.IDLE
 			block_state =  0
-		3:
-			anims.play("block_anim/block_a")
 
 func _handle_shoot_state() -> void:
 	
@@ -387,8 +371,11 @@ func _handle_feint_state(input: Dictionary) -> void:
 			opp = find_opp()
 			if opp != self:
 				opp.try_feint()
-				feint_cooldown = feint_cooldown_time
-				#anims.play("feint_anim/faint_p")
+				if input.get("feint", false):
+					feint_state = 2
+				else:
+					feint_cooldown = feint_cooldown_time
+					#anims.play("feint_anim/faint_p")
 			else:
 				print("Could not find opponent!")
 				return

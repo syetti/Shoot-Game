@@ -2,7 +2,7 @@
 - add win anim
 - add throw mechanic
 - calibrate feint animations
-
+- MAKE DUMMY STATE WORK
 
 
 
