@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://Scenes/ui.tscn" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="2_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://bswfqd31g4p7v" path="res://Scenes/wrestler1.tscn" id="3_kry3j"]
-[ext_resource type="PackedScene" uid="uid://bb0psmexpdxxf" path="res://Scenes/Dummy.tscn" id="4_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://c00otajcfr0y7" path="res://Scenes/wrestler.tscn" id="3_kry3j"]
+[ext_resource type="PackedScene" uid="uid://u82oxhsay76n" path="res://Scenes/Dummy.tscn" id="4_jjvhh"]
 [ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://Scenes/solo_network_test.gd" id="5_kry3j"]
 
 [node name="Main" type="Node2D"]
