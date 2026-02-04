@@ -3,6 +3,9 @@ extends CharacterBody2D
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int = -1
+
+var input_buffer = []
+
 #Speed
 const SPEED: float = 300.0
 const SHOTSPEED: float = 5000.0
@@ -35,8 +38,8 @@ var block_cooldown = 0
 var stuffed_stun_time: float = 10
 var has_connected: bool = false
 
-var reaction_window: float 
-var reaction_window_time: float = 60
+var reaction_window: float = 0.0
+var reaction_window_time: float = 60.0
 
 ##
 
@@ -183,6 +186,10 @@ func _network_process(input: Dictionary) -> void:
 	if fatigue_bar_val > 3:
 		current_state = State.STUN
 	
+	
+	if input_buffer.size() >1:
+		input_buffer.pop_front()
+		
 func _get_local_input() -> Dictionary:
 	
 	
@@ -200,7 +207,7 @@ func _get_local_input() -> Dictionary:
 	input["move_x"] = Input.get_axis("left","right")
 	input["feint"] =  Input.is_action_just_pressed("feint")
 	
-	
+	input_buffer.append(input)
 	return input
 	
 
@@ -410,7 +417,7 @@ func try_hit() -> String:
 func try_feint() -> void:
 	
 	reaction_window = reaction_window_time
-
+	
 func try_block() -> void:
 	
 	
@@ -435,10 +442,15 @@ func find_opp() -> Node2D:
 	
 	return opp
 func check_reaction() -> bool:
+
+	# Print the current state AND the target state
+	if reaction_window > 0: # Only print every 10 frames to avoid spam
+		print("Checking Reaction... Current State: ", current_state, " | Looking for: ", State.BLOCK)
 	if current_state == State.BLOCK:
 		print("failed")
 		fatigue_bar_val +=1
 		current_state = State.STUN
+		reaction_window = 0
 		 
 	print("noreaction")
 	return false

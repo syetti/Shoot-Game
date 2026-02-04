@@ -1,4 +1,4 @@
-
+- TOO MANY COOKS IN THE KITCHEN, Seperate code
 - add win anim
 - add throw mechanic
 - calibrate feint animations
