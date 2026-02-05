@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmptjr1mlrtb4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ph31m"]
+size = Vector2(1150, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_edq5k"]
+size = Vector2(9, 421)
+
+[node name="wrestlingMat" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(579, 431)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-3, 0)
+shape = SubResource("RectangleShape2D_ph31m")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(577, -220.5)
+shape = SubResource("RectangleShape2D_edq5k")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-584, -219)
+shape = SubResource("RectangleShape2D_edq5k")

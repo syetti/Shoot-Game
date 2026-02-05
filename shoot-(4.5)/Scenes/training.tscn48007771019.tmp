@@ -1,23 +1,23 @@
-[gd_scene format=3 uid="uid://xr00k45gbxkl"]
+[gd_scene load_steps=4 format=3 uid="uid://xr00k45gbxkl"]
 
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="1_1ydqc"]
 [ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://Scenes/solo_network_test.gd" id="2_1ydqc"]
 [ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://Scenes/ui.tscn" id="3_urnhv"]
 
-[node name="Training" type="Node2D" unique_id=1017353119]
+[node name="Training" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [319.0, 316.0]
 metadata/_edit_vertical_guides_ = [-301.0, 302.0]
 
-[node name="wrestlingMat" parent="." unique_id=808622029 instance=ExtResource("1_1ydqc")]
+[node name="wrestlingMat" parent="." instance=ExtResource("1_1ydqc")]
 position = Vector2(-576, -100)
 
-[node name="soloNetworkTest" type="Node" parent="." unique_id=357611242]
+[node name="soloNetworkTest" type="Node" parent="."]
 script = ExtResource("2_1ydqc")
 
-[node name="UI" parent="." unique_id=1770421172 instance=ExtResource("3_urnhv")]
+[node name="UI" parent="." instance=ExtResource("3_urnhv")]
 offset_left = 474.0
 offset_top = 139.0
 offset_right = 474.0
 offset_bottom = 139.0
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
+[node name="Camera2D" type="Camera2D" parent="."]

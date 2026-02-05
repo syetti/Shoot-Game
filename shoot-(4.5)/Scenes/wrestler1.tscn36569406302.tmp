@@ -1,0 +1,233 @@
+[gd_scene load_steps=18 format=3 uid="uid://bswfqd31g4p7v"]
+
+[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler1.gd" id="1_ulgjp"]
+[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_1xqed"]
+[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="5_8iimx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk4a"]
+size = Vector2(119, 128)
+
+[sub_resource type="Animation" id="Animation_8iimx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(25, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wpdsj"]
+resource_name = "new_animation"
+length = 0.10000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 5]
+}
+
+[sub_resource type="Animation" id="Animation_jl2re"]
+length = 0.50000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [19, 24]
+}
+
+[sub_resource type="Animation" id="Animation_ybvib"]
+length = 0.50000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [24, 19]
+}
+
+[sub_resource type="Animation" id="Animation_qkwvy"]
+length = 1.0000017
+loop_mode = 1
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [14, 18]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jl2re"]
+_data = {
+&"RESET": SubResource("Animation_8iimx"),
+&"idle": SubResource("Animation_qkwvy"),
+&"shoot_p_anim": SubResource("Animation_wpdsj"),
+&"walk_b": SubResource("Animation_ybvib"),
+&"walk_f": SubResource("Animation_jl2re")
+}
+
+[sub_resource type="Animation" id="Animation_xf3h2"]
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5001652),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(28, 0), Vector2i(28, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lmj65"]
+length = 0.05000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.049999997),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [25, 27]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ujqbw"]
+_data = {
+&"block_a": SubResource("Animation_xf3h2"),
+&"block_p": SubResource("Animation_lmj65")
+}
+
+[sub_resource type="Animation" id="Animation_4u3dw"]
+length = 0.333335
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [7, 13]
+}
+
+[sub_resource type="Animation" id="Animation_ba55o"]
+length = 0.083335005
+loop_mode = 1
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [6, 6]
+}
+
+[sub_resource type="Animation" id="Animation_ujqbw"]
+resource_name = "shoot_p_"
+length = 0.10000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7diys"]
+_data = {
+&"shoot_a": SubResource("Animation_ba55o"),
+&"shoot_p": SubResource("Animation_ujqbw"),
+&"shoot_r": SubResource("Animation_4u3dw")
+}
+
+[node name="Wrestler" type="Node2D" groups=["network_sync"]]
+scale = Vector2(-1, 1)
+
+[node name="WChar" type="CharacterBody2D" parent="." groups=["network_sync"]]
+script = ExtResource("1_ulgjp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WChar"]
+position = Vector2(-4.5, 0)
+shape = SubResource("RectangleShape2D_ruk4a")
+
+[node name="Anims" type="AnimationPlayer" parent="WChar"]
+libraries = {
+&"": SubResource("AnimationLibrary_jl2re"),
+&"block_anim": SubResource("AnimationLibrary_ujqbw"),
+&"shoot_anim": SubResource("AnimationLibrary_7diys")
+}
+script = ExtResource("5_8iimx")
+metadata/_custom_type_script = "uid://7pefdhcr1asv"
+
+[node name="Sprite" type="Sprite2D" parent="WChar"]
+position = Vector2(-5.684342e-14, 0)
+scale = Vector2(3.9728954, 3.9728956)
+texture = ExtResource("3_1xqed")
+hframes = 30
+frame = 25
+
+[node name="ShotTimer" type="Timer" parent="."]
+wait_time = 0.4
