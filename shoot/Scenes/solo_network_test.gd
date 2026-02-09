@@ -1,5 +1,5 @@
 extends Node
-
+const DummyNetworkAdaptor = preload("res://addons/delta_rollback/DummyNetworkAdaptor.gd")
 var wrestler = preload("res://Scenes/wrestler.tscn")
 var dummy = preload("res://Scenes/dummy.tscn")
 func _ready():
@@ -7,7 +7,7 @@ func _ready():
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(9999) 
 	multiplayer.multiplayer_peer = peer
-	
+	SyncManager.network_adaptor = DummyNetworkAdaptor.new()
 	# 2. CRITICAL FIX: Connect the signal!
 	# Without this line, _on_SyncManager_sync_started NEVER runs.
 	SyncManager.sync_started.connect(_on_SyncManager_sync_started)
@@ -29,7 +29,8 @@ func _spawn_players():
 		"position": Vector2(300, 0), 
 		"fixed_facing_dir": 1,
 		"peer_id": 1,
-		 
+		"starting_state" : 0
+		
 	}
 	# Spawn Player 1
 	SyncManager.spawn("P", self, wrestler, p1_data, true)
@@ -54,7 +55,7 @@ func _spawn_dummy():
 		"position": Vector2(-400, 0), 
 		"fixed_facing_dir": -1,
 		"peer_id": d_id,
-		"State" : "BLOCK"
+		"dummy_state": true 
 	}
 	# Spawn Dummy
 	SyncManager.spawn("D", self, dummy, d_data, true)

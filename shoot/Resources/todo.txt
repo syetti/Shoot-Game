@@ -1,14 +1,25 @@
 - TOO MANY COOKS IN THE KITCHEN, Seperate code
-- add win anim
-- add throw mechanic
-- calibrate feint animations
-- MAKE DUMMY STATE WORK
+- reimport all anims
+	- add win anim
+	- handle blocked while shooting anim
+	- calibrate feint animations
+- import map
+	- get flag system working
 
 
 
 --IDEA - Overload. Each player has bar of mental. Repeated actions from other players that illicit a response fill 
 	the bar until they're stunned for a certain period. Mimic mental fatigue.
-		-Fatigue bar depletes as you make the opponent react 
+	- Weaponize reactions
+	- Fatigue bar depletes as you make the opponent react 
+	- Fast-paced gameplay
+	- 3 rounds
+	-- Controls 
+		- Q : Shoot
+		- E : Feint
+		- A : Left
+		- D : Right
+		- S : Block
 
 --Win - shoot or throw opp
 

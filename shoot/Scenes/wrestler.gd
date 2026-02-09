@@ -4,8 +4,14 @@ extends CharacterBody2D
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int = -1
 
-var input_buffer = []
 
+var input_buffer = []
+#Dummy Variables
+var dummy = false
+@export var dummy_block = false
+@export var dummy_feint = false
+var dummy_walkfwd = false
+var dummy_walkbck = false
 #Speed
 const SPEED: float = 300.0
 const SHOTSPEED: float = 5000.0
@@ -61,6 +67,10 @@ var feint_state: int
 
 
 ###Major States
+enum awareness_state {
+	PLAYER,
+	DUMMY
+}
 
 enum hit_state {
 	HIT,
@@ -72,7 +82,6 @@ enum State {
 	IDLE,
 	SHOOT,
 	BLOCK,
-	THROW,
 	WALK,
 	STUN,
 	FEINT
@@ -83,6 +92,7 @@ var current_state = State.IDLE
 @onready var detect = $Area2D
 @onready var fatigue_bar = $fatigue_bar
 var fatigue_bar_val = 0
+var fatigue_bar_charge_time = 120 #2 secs
 var found_opp = false
 var opp : Node2D
 var feinted = false
@@ -93,7 +103,7 @@ func _ready() -> void:
 func _network_spawn(data: Dictionary) -> void:
 	position = data.get("position", Vector2(180,400))
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
-
+	dummy = data.get("dummy_state", false)
 	
 	
 	
@@ -111,6 +121,13 @@ func _network_spawn(data: Dictionary) -> void:
 func _network_process(input: Dictionary) -> void:
 	if state_timer > 0:
 		state_timer -=1
+	if dummy:
+		input = {
+			"block" : dummy_block,
+			"feint" : dummy_feint,
+			"walk" : dummy_walkfwd
+			}
+		input_buffer.append(input)
 ### Major States
 	match current_state:
 		State.IDLE:
@@ -119,8 +136,6 @@ func _network_process(input: Dictionary) -> void:
 			_handle_shoot_state()
 		State.BLOCK:
 			_handle_block_state(input)
-		State.THROW:
-			_handle_throw_state(input)
 		State.WALK:
 			_handle_walk_state(input)
 		State.STUN:
@@ -151,7 +166,6 @@ func _network_process(input: Dictionary) -> void:
 
 	if input.get("block", false):
 		current_state = State.BLOCK
-		print("blocking")
 		
 	
 		
@@ -186,20 +200,31 @@ func _network_process(input: Dictionary) -> void:
 	if fatigue_bar_val > 3:
 		current_state = State.STUN
 	
-	
-	if input_buffer.size() >1:
+	if input_buffer.size() >2:
 		input_buffer.pop_front()
 		
 func _get_local_input() -> Dictionary:
-	
-	
 	var input := {}
 	
 	# SECURITY CHECK:
 	# Only read inputs if *I* own this character.
-	# If I am Player 1, this returns False for the Player 2 character.
+	# player 1: true
+	# player 2: false
 	if not is_multiplayer_authority():
 		return {}
+	
+	if dummy:
+		print(dummy)
+		input["block"] = false
+		input["shoot"] = false
+		input["throw"] = false
+		input["move_x"] = 1
+		input["feint"] = false
+		
+	
+		input_buffer.append(input) 
+		print(input_buffer)
+		return input
 	
 	input["block"] = Input.is_action_pressed("block")
 	input["shoot"] =  Input.is_action_just_pressed("shoot")
@@ -225,7 +250,6 @@ func _save_state() -> Dictionary:
 		block_cooldown = block_cooldown,
 		fatigue_bar_val = fatigue_bar_val
 	}
-	
 
 func _load_state(state: Dictionary):
 	position = state['position']
@@ -240,7 +264,7 @@ func _load_state(state: Dictionary):
 	
 	block_cooldown = state['block_cooldown']
 	fatigue_bar_val = state['fatigue_bar_val']
-	
+
 func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
 	
@@ -254,7 +278,6 @@ func _handle_idle_state(input: Dictionary) -> void:
 	if blocking:
 		anims.play("block_anim/block_p")
 		current_state = State.BLOCK
-	
 
 func _handle_walk_state(input: Dictionary) -> void:	
 	# Handle movement inputs
@@ -270,7 +293,6 @@ func _handle_throw_state(input: Dictionary) -> void:
 	pass
 
 func _handle_block_state(input: Dictionary) -> void:
-	
 	
 	if state_timer > 0:
 		return
@@ -369,7 +391,7 @@ func _handle_shoot_state() -> void:
 func _handle_stun_state() -> void:
 	#anims.play("stunned")
 	print("im so stunned")
-	
+	current_state = State.IDLE
 	pass
 func _handle_feint_state(input: Dictionary) -> void:
 
@@ -415,7 +437,6 @@ func try_hit() -> String:
 	return "HIT"
 
 func try_feint() -> void:
-	
 	reaction_window = reaction_window_time
 	
 func try_block() -> void:
@@ -430,6 +451,7 @@ func move(move_dir: int):
 		anims.play("walk_f")
 	else:
 		anims.play("walk_b")
+		
 func find_opp() -> Node2D: 
 	if not found_opp:
 		var targets = detect.get_overlapping_bodies()
@@ -439,18 +461,15 @@ func find_opp() -> Node2D:
 				if target != self and target.has_method("try_feint"):
 					found_opp = true
 					opp = target
-	
 	return opp
-func check_reaction() -> bool:
 
+#check input buffer for reactions
+func check_reaction() -> bool:
 	# Print the current state AND the target state
-	if reaction_window > 0: # Only print every 10 frames to avoid spam
-		print("Checking Reaction... Current State: ", current_state, " | Looking for: ", State.BLOCK)
-	if current_state == State.BLOCK:
-		print("failed")
-		fatigue_bar_val +=1
-		current_state = State.STUN
-		reaction_window = 0
-		 
-	print("noreaction")
+	if reaction_window > 0: 
+		if input_buffer.size() > 0:
+			if input_buffer[-1]["block"]:
+				fatigue_bar_val +=1
+				reaction_window = 0
+				return true
 	return false

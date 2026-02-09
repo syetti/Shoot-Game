@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c00otajcfr0y7"]
+[gd_scene format=3 uid="uid://c00otajcfr0y7"]
 
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler.gd" id="1_da70j"]
 [ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
@@ -203,39 +203,37 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
 radius = 1184.1221
 
-[node name="Wrestler" type="CharacterBody2D" groups=["network_sync"]]
+[node name="Wrestler" type="CharacterBody2D" unique_id=1523320001 groups=["network_sync"]]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_da70j")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1660789225]
 position = Vector2(0, 23.5)
 shape = SubResource("RectangleShape2D_urx73")
 
-[node name="Anims" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_jl2re"),
-&"block_anim": SubResource("AnimationLibrary_ujqbw"),
-&"shoot_anim": SubResource("AnimationLibrary_7diys")
-}
+[node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
+libraries/ = SubResource("AnimationLibrary_jl2re")
+libraries/block_anim = SubResource("AnimationLibrary_ujqbw")
+libraries/shoot_anim = SubResource("AnimationLibrary_7diys")
 script = ExtResource("2_04xvm")
 metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=131849878]
 position = Vector2(-5.684342e-14, 0)
 scale = Vector2(4, 4)
 texture = ExtResource("3_d6ntd")
 hframes = 30
 frame = 14
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=1839895748]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=726653416]
 shape = SubResource("CircleShape2D_da70j")
 
-[node name="fatigue_bar" type="TextureProgressBar" parent="."]
+[node name="fatigue_bar" type="TextureProgressBar" parent="." unique_id=1879679904]
 offset_left = -26.0
 offset_top = -91.0
 offset_right = 26.919998
