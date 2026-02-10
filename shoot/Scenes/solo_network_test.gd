@@ -29,7 +29,6 @@ func _spawn_players():
 		"position": Vector2(300, 0), 
 		"fixed_facing_dir": 1,
 		"peer_id": 1,
-		"starting_state" : 0
 		
 	}
 	# Spawn Player 1
@@ -52,10 +51,10 @@ func _spawn_dummy():
 	var d_id = 2
 	
 	var d_data = {
-		"position": Vector2(-400, 0), 
+		"position": Vector2(-300, 0), 
 		"fixed_facing_dir": -1,
 		"peer_id": d_id,
 		"dummy_state": true 
 	}
 	# Spawn Dummy
-	SyncManager.spawn("D", self, dummy, d_data, true)
+	SyncManager.spawn("D", self, wrestler, d_data, true)

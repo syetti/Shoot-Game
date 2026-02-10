@@ -1,4 +1,5 @@
-- TOO MANY COOKS IN THE KITCHEN, Seperate code
+
+- add shadows
 - reimport all anims
 	- add win anim
 	- handle blocked while shooting anim

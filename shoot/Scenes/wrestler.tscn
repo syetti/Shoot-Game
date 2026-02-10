@@ -8,10 +8,22 @@
 [ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_7r32w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_urx73"]
-size = Vector2(92, 81)
+size = Vector2(128, 128)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5.684342e-14, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_pbqa5"]
 length = 0.16666834
@@ -176,6 +188,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [0, 5]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.043593287),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(-5.684342e-14, 0), Vector2(-6, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_4u3dw"]
 length = 0.333335
@@ -203,13 +227,15 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
 radius = 1184.1221
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddc1g"]
+size = Vector2(120, 36)
+
 [node name="Wrestler" type="CharacterBody2D" unique_id=1523320001 groups=["network_sync"]]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_da70j")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1660789225]
-position = Vector2(0, 23.5)
+[node name="IdleCollision" type="CollisionShape2D" parent="." unique_id=1660789225]
 shape = SubResource("RectangleShape2D_urx73")
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
@@ -224,9 +250,10 @@ position = Vector2(-5.684342e-14, 0)
 scale = Vector2(4, 4)
 texture = ExtResource("3_d6ntd")
 hframes = 30
-frame = 14
+frame = 6
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1839895748]
+visible = false
 collision_layer = 0
 collision_mask = 2
 
@@ -243,3 +270,9 @@ nine_patch_stretch = true
 texture_under = ExtResource("4_urx73")
 texture_over = ExtResource("5_ddc1g")
 texture_progress = ExtResource("6_7r32w")
+
+[node name="ShootCollision" type="CollisionShape2D" parent="." unique_id=20392300]
+position = Vector2(-1, 14)
+shape = SubResource("RectangleShape2D_ddc1g")
+disabled = true
+debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

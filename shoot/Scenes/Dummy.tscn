@@ -203,6 +203,9 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
 radius = 1184.1221
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5uy75"]
+size = Vector2(120, 36)
+
 [node name="Wrestler" type="CharacterBody2D" unique_id=655400637 groups=["network_sync"]]
 collision_layer = 3
 collision_mask = 3
@@ -238,9 +241,14 @@ offset_left = -26.0
 offset_top = -91.0
 offset_right = 26.919998
 offset_bottom = -70.0
-max_value = 90.0
-step = 30.0
+max_value = 3.0
 nine_patch_stretch = true
 texture_under = ExtResource("4_72ywh")
 texture_over = ExtResource("5_83jov")
 texture_progress = ExtResource("6_8jhgi")
+
+[node name="ShootCollision" type="CollisionShape2D" parent="." unique_id=1993682825]
+position = Vector2(-4, 14)
+shape = SubResource("RectangleShape2D_5uy75")
+disabled = true
+debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)
