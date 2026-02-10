@@ -22,8 +22,7 @@ var shoot_distance: float = 150.0
 var state_timer = 0
 
 #Shooting
-
-var shoot_cooldown_time := 40 # ~2/3 second at 40 ticks/sec
+var shoot_total := shoot_prep_time + shoot_active_h_time + shoot_recovery_m_time 
 var shoot_recovery_m_time := 26 #On Miss
 var shoot_root_time: = 20 #Frozen in air for effect
 
@@ -125,6 +124,7 @@ func _network_process(input: Dictionary) -> void:
 			"walk": dummy_walkfwd,
 		}
 		input_buffer.append(input)
+		
 	### Major States
 	match current_state:
 		State.IDLE:
@@ -157,10 +157,6 @@ func _network_process(input: Dictionary) -> void:
 		stun_timer -= 1
 
 		#(?)Don't shoot at feint
-
-	if input.get("block", false):
-		current_state = State.BLOCK
-
 	###  MOVE
 	move_and_slide()
 
@@ -206,17 +202,6 @@ func _get_local_input() -> Dictionary:
 	if not is_multiplayer_authority():
 		return { }
 
-	if dummy:
-		print(dummy)
-		input["block"] = dummy_block
-		input["shoot"] = false
-		input["throw"] = false
-		input["move_x"] = 0
-		input["feint"] = false
-
-		input_buffer.append(input)
-		print(input_buffer)
-		return input
 
 	input["block"] = Input.is_action_pressed("block")
 	input["shoot"] = Input.is_action_just_pressed("shoot")
@@ -264,7 +249,7 @@ func _load_state(state: Dictionary):
 
 func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
-
+	
 	#Movement Transition
 	var move_dir = input.get("move_x", 0)
 	if move_dir != 0:

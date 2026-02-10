@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_7r32w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_urx73"]
-size = Vector2(100, 82)
+size = Vector2(98, 82)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
