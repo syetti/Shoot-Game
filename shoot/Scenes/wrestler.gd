@@ -83,6 +83,7 @@ enum State {
 	FEINT,
 }
 
+	
 var current_state = State.IDLE
 @onready var anims = $Anims
 @onready var detect = $Area2D
@@ -120,8 +121,6 @@ func _network_process(input: Dictionary) -> void:
 	if dummy:
 		input = {
 			"block": dummy_block,
-			"feint": dummy_feint,
-			"walk": dummy_walkfwd,
 		}
 		input_buffer.append(input)
 		
@@ -202,14 +201,20 @@ func _get_local_input() -> Dictionary:
 	if not is_multiplayer_authority():
 		return { }
 
-
-	input["block"] = Input.is_action_pressed("block")
-	input["shoot"] = Input.is_action_just_pressed("shoot")
-	input["throw"] = Input.is_action_just_pressed("throw")
+	while Input.is_action_pressed("block"):
+		input["block"] = true
+		input_buffer.append(2)
+	if Input.is_action_just_pressed("shoot"):
+		input["shoot"] = true
+		input_buffer.append(3)
 	input["move_x"] = Input.get_axis("left", "right")
-	input["feint"] = Input.is_action_just_pressed("feint")
-
+	if Input.is_action_just_pressed("feint"):
+		input_buffer.append(4)
+		input["feint"] = true
+	
+		
 	input_buffer.append(input)
+
 	return input
 
 
@@ -243,9 +248,6 @@ func _load_state(state: Dictionary):
 
 	has_connected = state['has_connected']
 	fatigue_bar_val = state['fatigue_bar_val']
-	
-	
-
 
 func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
@@ -421,6 +423,7 @@ func try_block() -> void:
 
 
 func move(move_dir: int):
+	input_buffer.append(move_dir)
 	velocity.x = move_dir * SPEED
 	if move_dir == 0:
 		current_state = State.IDLE
@@ -445,10 +448,14 @@ func find_opp() -> Node2D:
 #check input buffer for reactions
 func check_reaction() -> bool:
 	# Print the current state AND the target state
-	if reaction_window > 0:
-		if input_buffer.size() > 0:
-			if input_buffer[-1]["block"]:
-				fatigue_bar_val += 1
-				reaction_window = 0
-				return true
+	if reaction_window <= 0:
+		return false
+	if input_buffer.size() <= 0:
+		return false
+		
+	if input_buffer[-1] == 2:
+		fatigue_bar_val += 1
+		reaction_window = 0
+		return true
+	
 	return false

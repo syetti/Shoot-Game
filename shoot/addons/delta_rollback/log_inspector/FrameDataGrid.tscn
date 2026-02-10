@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://rpd4rw4s314x"]
 
-[ext_resource type="Script" uid="uid://c206huish0wid" path="res://addons/delta_rollback/log_inspector/FrameDataGrid.gd" id="1"]
+[ext_resource type="Script" uid="uid://c206huish0wid" path="res://Addons/delta_rollback/log_inspector/FrameDataGrid.gd" id="1"]
 
 [node name="FrameViewerDataGrid" type="Tree"]
 anchor_right = 1.0

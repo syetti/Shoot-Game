@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bsboupqenth1u"]
 
-[ext_resource type="Script" uid="uid://cchtng35e1k1c" path="res://addons/delta_rollback/debugger/PeerStatus.gd" id="1"]
+[ext_resource type="Script" uid="uid://cchtng35e1k1c" path="res://Addons/delta_rollback/debugger/PeerStatus.gd" id="1"]
 
 [node name="PeerStatus" type="ColorRect"]
 anchors_preset = 15

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://teh77pd0ah27"]
 
-[ext_resource type="Script" uid="uid://v0atxsjld47v" path="res://addons/delta_rollback/log_inspector/ProgressDialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://v0atxsjld47v" path="res://Addons/delta_rollback/log_inspector/ProgressDialog.gd" id="1"]
 
 [node name="ProgressDialog" type="Popup"]
 visible = true

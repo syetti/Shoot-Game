@@ -24,11 +24,17 @@ offset_bottom = 139.0
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
 
 [node name="moveList" type="ScrollContainer" parent="." unique_id=2006324]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = -1
+offset_left = -572.0
+offset_top = -98.0
+offset_right = -522.0
+offset_bottom = 302.0
+size_flags_vertical = 3
 horizontal_scroll_mode = 0
 script = ExtResource("4_tel2d")
+metadata/_edit_use_anchors_ = true
 
 [node name="box" type="VBoxContainer" parent="moveList" unique_id=1049242151]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3

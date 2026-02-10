@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dsud2u0uhwn4m"]
 
-[ext_resource type="PackedScene" uid="uid://teh77pd0ah27" path="res://addons/delta_rollback/log_inspector/ProgressDialog.tscn" id="1"]
-[ext_resource type="Script" uid="uid://be1j634v4plaj" path="res://addons/delta_rollback/log_inspector/LogInspector.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://fudyysmir8u" path="res://addons/delta_rollback/log_inspector/StateInputViewer.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://58hro2kq3tlw" path="res://addons/delta_rollback/log_inspector/FrameViewer.tscn" id="4"]
-[ext_resource type="Script" uid="uid://cd1ndqx47x4uo" path="res://addons/delta_rollback/log_inspector/ReplayServer.gd" id="5"]
+[ext_resource type="PackedScene" uid="uid://teh77pd0ah27" path="res://Addons/delta_rollback/log_inspector/ProgressDialog.tscn" id="1"]
+[ext_resource type="Script" uid="uid://be1j634v4plaj" path="res://Addons/delta_rollback/log_inspector/LogInspector.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://fudyysmir8u" path="res://Addons/delta_rollback/log_inspector/StateInputViewer.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://58hro2kq3tlw" path="res://Addons/delta_rollback/log_inspector/FrameViewer.tscn" id="4"]
+[ext_resource type="Script" uid="uid://cd1ndqx47x4uo" path="res://Addons/delta_rollback/log_inspector/ReplayServer.gd" id="5"]
 
 [node name="LogInspector" type="AcceptDialog"]
 title = "Log Inspector"

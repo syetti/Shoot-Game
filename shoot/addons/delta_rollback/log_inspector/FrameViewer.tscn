@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://58hro2kq3tlw"]
 
-[ext_resource type="Script" uid="uid://bpho4mjvbvpjb" path="res://addons/delta_rollback/log_inspector/FrameViewer.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://vf3gjk5tt6ih" path="res://addons/delta_rollback/log_inspector/FrameDataGraph.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://d3aa0ihjfmkb8" path="res://addons/delta_rollback/log_inspector/FrameViewerSettingsDialog.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://rpd4rw4s314x" path="res://addons/delta_rollback/log_inspector/FrameDataGrid.tscn" id="4"]
+[ext_resource type="Script" uid="uid://bpho4mjvbvpjb" path="res://Addons/delta_rollback/log_inspector/FrameViewer.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://vf3gjk5tt6ih" path="res://Addons/delta_rollback/log_inspector/FrameDataGraph.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d3aa0ihjfmkb8" path="res://Addons/delta_rollback/log_inspector/FrameViewerSettingsDialog.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://rpd4rw4s314x" path="res://Addons/delta_rollback/log_inspector/FrameDataGrid.tscn" id="4"]
 
 [node name="FrameViewer" type="Control"]
 layout_mode = 3

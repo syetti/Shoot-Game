@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3aa0ihjfmkb8"]
 
-[ext_resource type="Script" uid="uid://byedmj8c1q3fg" path="res://addons/delta_rollback/log_inspector/FrameViewerSettingsDialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://byedmj8c1q3fg" path="res://Addons/delta_rollback/log_inspector/FrameViewerSettingsDialog.gd" id="1"]
 
 [node name="FrameViewerSettingsDialog" type="AcceptDialog"]
 title = "Frame Viewer Settings"

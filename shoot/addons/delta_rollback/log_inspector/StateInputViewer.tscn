@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://fudyysmir8u"]
 
-[ext_resource type="Script" uid="uid://dqkh77c4yt2hf" path="res://addons/delta_rollback/log_inspector/StateInputViewer.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqkh77c4yt2hf" path="res://Addons/delta_rollback/log_inspector/StateInputViewer.gd" id="1"]
 
 [node name="StateInputViewer" type="VBoxContainer"]
 anchor_right = 1.0
