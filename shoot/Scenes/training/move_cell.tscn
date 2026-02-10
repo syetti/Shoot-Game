@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://d1hrs4woq0g0c"]
+
+[ext_resource type="Script" uid="uid://doa4h5dsdsjxn" path="res://Scenes/training/move_cell.gd" id="1_j0fc7"]
+
+[node name="MoveCell" type="HBoxContainer" unique_id=769156475]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("1_j0fc7")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1168666346]
+layout_mode = 2
+text = "ggggg"
+scroll_active = false

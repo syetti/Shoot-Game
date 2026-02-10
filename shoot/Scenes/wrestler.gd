@@ -186,7 +186,7 @@ func _network_process(input: Dictionary) -> void:
 		current_state = State.STUN
 		stun_timer = stun_time
 
-	if input_buffer.size() > 2:
+	if input_buffer.size() > 60:
 		input_buffer.pop_front()
 
 	fatigue_bar.value = fatigue_bar_val

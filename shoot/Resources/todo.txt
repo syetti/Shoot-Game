@@ -1,4 +1,4 @@
-
+- add scrolling movelist... extend input buffer and make input_buffer display
 - add shadows
 - reimport all anims
 	- add win anim
@@ -6,6 +6,7 @@
 	- calibrate feint animations
 - import map
 	- get flag system working
+	- use ijf scorebug with flags ( if flag falling system too complex)
 
 
 
