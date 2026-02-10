@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://58hro2kq3tlw"]
+[gd_scene format=3 uid="uid://58hro2kq3tlw"]
 
 [ext_resource type="Script" uid="uid://bpho4mjvbvpjb" path="res://addons/delta_rollback/log_inspector/FrameViewer.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://vf3gjk5tt6ih" path="res://addons/delta_rollback/log_inspector/FrameDataGraph.tscn" id="2"]

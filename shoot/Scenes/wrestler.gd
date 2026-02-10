@@ -73,16 +73,7 @@ var throw_state: int
 var feint_state: int
 
 ###Major States
-enum awareness_state {
-	PLAYER,
-	DUMMY,
-}
 
-enum hit_state {
-	HIT,
-	BLOCKED,
-	INVUNERABLE,
-}
 
 enum State {
 	IDLE,
@@ -241,14 +232,15 @@ func _save_state() -> Dictionary:
 	return {
 		position = position,
 		velocity = velocity,
+		
 		current_state = current_state,
-		hit_state = hit_state,
-		reaction_window = reaction_window,
-		has_connected = has_connected,
 		state_timer = state_timer,
+		reaction_window = reaction_window,
+		
 		shoot_state = shoot_state,
-		shoot_cooldown = shoot_cooldown,
-		block_cooldown = block_cooldown,
+		block_state = block_state,
+		
+		has_connected = has_connected,
 		fatigue_bar_val = fatigue_bar_val,
 	}
 
@@ -259,13 +251,15 @@ func _load_state(state: Dictionary):
 
 	current_state = state['current_state']
 	state_timer = state['state_timer']
+	reaction_window = state['reaction_window']
+	
 	shoot_state = state['shoot_state']
-	shoot_cooldown = state['shoot_cooldown']
+	block_state = state['block_state']
 
 	has_connected = state['has_connected']
-
-	block_cooldown = state['block_cooldown']
 	fatigue_bar_val = state['fatigue_bar_val']
+	
+	
 
 
 func _handle_idle_state(input: Dictionary) -> void:
@@ -307,7 +301,7 @@ func _handle_block_state(input: Dictionary) -> void:
 				state_timer = block_active_time
 				block_state = 2
 		2:
-			block_cooldown = block_cooldown_time
+			
 			current_state = State.IDLE
 			block_state = 0
 
@@ -351,6 +345,7 @@ func _handle_shoot_state() -> void:
 			return
 
 		return
+	state_timer = hitstop
 	match shoot_state:
 		0: #prepping
 			shoot_collision.disabled = true
@@ -363,12 +358,12 @@ func _handle_shoot_state() -> void:
 			state_timer = shoot_active_h_time
 			shoot_state = 2
 		2: #falling
-			anims.play("shoot_anim/shoot_r")
 			state_timer = shoot_root_time
+			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
 			shoot_state = 3
 		3: #fell
-			shoot_cooldown = shoot_cooldown_time
+			shoot_collision.disabled = true
 			current_state = State.IDLE
 			velocity.x = 0
 			shoot_state = 0

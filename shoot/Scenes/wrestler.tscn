@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_7r32w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_urx73"]
-size = Vector2(128, 128)
+size = Vector2(100, 82)
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
@@ -236,6 +236,7 @@ collision_mask = 3
 script = ExtResource("1_da70j")
 
 [node name="IdleCollision" type="CollisionShape2D" parent="." unique_id=1660789225]
+position = Vector2(0, 23)
 shape = SubResource("RectangleShape2D_urx73")
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
@@ -250,7 +251,7 @@ position = Vector2(-5.684342e-14, 0)
 scale = Vector2(4, 4)
 texture = ExtResource("3_d6ntd")
 hframes = 30
-frame = 6
+frame = 14
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1839895748]
 visible = false

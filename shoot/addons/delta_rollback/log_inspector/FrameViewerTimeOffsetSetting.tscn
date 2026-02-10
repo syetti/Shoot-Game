@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxawh8jpamxsy"]
+[gd_scene format=3 uid="uid://cxawh8jpamxsy"]
 
 [ext_resource type="Script" uid="uid://bgei8t6cfl8oa" path="res://addons/delta_rollback/log_inspector/FrameViewerTimeOffsetSetting.gd" id="1"]
 

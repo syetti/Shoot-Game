@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyq3376suasch"]
+[gd_scene format=3 uid="uid://dyq3376suasch"]
 
 [ext_resource type="Script" uid="uid://cjoaib30ay7ol" path="res://addons/delta_rollback/debugger/DebugOverlay.gd" id="1"]
 

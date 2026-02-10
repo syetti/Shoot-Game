@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://rpd4rw4s314x"]
+[gd_scene format=3 uid="uid://rpd4rw4s314x"]
 
 [ext_resource type="Script" uid="uid://c206huish0wid" path="res://addons/delta_rollback/log_inspector/FrameDataGrid.gd" id="1"]
 
