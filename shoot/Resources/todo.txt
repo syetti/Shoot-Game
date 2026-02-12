@@ -1,3 +1,4 @@
+- optimize state machine (this is dumb for speed but good theory-wise)
 - add scrolling movelist... extend input buffer and make input_buffer display
 - add shadows
 - reimport all anims

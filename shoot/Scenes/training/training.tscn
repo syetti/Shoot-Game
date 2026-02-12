@@ -24,7 +24,6 @@ offset_bottom = 139.0
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
 
 [node name="moveList" type="ScrollContainer" parent="." unique_id=2006324]
-anchors_preset = -1
 offset_left = -572.0
 offset_top = -98.0
 offset_right = -522.0

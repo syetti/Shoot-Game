@@ -46,7 +46,7 @@ var knockback_time: float = 15
 var block_prep_time: int = 5
 var block_active_time: int = 20
 var block_cooldown_time: int = 20
-var block_cooldown = 0
+
 
 var stuffed_stun_time: float = 10
 var has_connected: bool = false
@@ -66,6 +66,9 @@ var feint_cooldown = 0
 ###
 
 ### Minor States
+enum InputOptions{
+	
+}
 enum ShootState{
 	HIT = 4,
 	KNOCKBACK = 5
@@ -77,8 +80,6 @@ var feint_state: int
 
 ###Major States
 
-<<<<<<< Updated upstream
-=======
 
 
 enum hit_state {
@@ -86,7 +87,6 @@ enum hit_state {
 	BLOCKED,
 	INVUNERABLE,
 }
->>>>>>> Stashed changes
 
 enum State {
 	IDLE,
@@ -157,9 +157,6 @@ func _network_process(input: Dictionary) -> void:
 	if shoot_cooldown > 0:
 		shoot_cooldown -= 1
 
-	if block_cooldown > 0:
-		block_cooldown -= 1
-
 	if feint_cooldown > 0:
 		feint_cooldown -= 1
 
@@ -175,24 +172,6 @@ func _network_process(input: Dictionary) -> void:
 
 	###Stuff I want to player to be able to do regardless of state ( I don't want to write the same thing in idle and walk lol)###
 
-	#if nothing happening we can do
-	if state_timer <= 0:
-		if input.get("shoot", false):
-			if shoot_cooldown <= 0:
-				velocity.x = 0
-				current_state = State.SHOOT
-
-		if input.get("feint", false):
-			if feint_cooldown <= 0:
-				velocity.x = 0
-				#anims.play("feint")
-				current_state = State.FEINT
-
-		if input.get("block", false):
-			if block_cooldown <= 0:
-				velocity.x = 0
-
-				current_state = State.BLOCK
 
 	if fatigue_bar_val >= 3:
 		fatigue_bar_val = 0
@@ -215,7 +194,7 @@ func _get_local_input() -> Dictionary:
 	if not is_multiplayer_authority():
 		return { }
 
-	while Input.is_action_pressed("block"):
+	if Input.is_action_pressed("block"):
 		input["block"] = true
 		input_buffer.append(2)
 	if Input.is_action_just_pressed("shoot"):
@@ -248,7 +227,6 @@ func _save_state() -> Dictionary:
 		fatigue_bar_val = fatigue_bar_val,
 	}
 
-
 func _load_state(state: Dictionary):
 	position = state['position']
 	velocity = state['velocity']
@@ -271,7 +249,7 @@ func _handle_idle_state(input: Dictionary) -> void:
 	if move_dir != 0:
 		current_state = State.WALK
 		return
-
+	#
 
 func _handle_walk_state(input: Dictionary) -> void:
 	# Handle movement inputs
@@ -323,6 +301,7 @@ func _handle_shoot_state() -> void:
 
 			###Collision
 			if not has_connected:
+				#go through each body colliding with area
 				for i in get_slide_collision_count():
 					var collider = get_slide_collision(i)
 					var object = collider.get_collider()
@@ -331,15 +310,13 @@ func _handle_shoot_state() -> void:
 					if not object or not object.has_method("try_hit"):
 						continue
 					
-					#hit
 					var is_hittable = object.try_hit()
 					match is_hittable:
 						true: #if hittable and not blocking
 							print("Hit_Target")
 							shoot_state = ShootState.HIT
 							has_connected = true
-
-								#current_state = State.WIN
+							#current_state = State.WIN
 						false: #if blocking
 							shoot_state = ShootState.KNOCKBACK #knockback
 
@@ -436,9 +413,6 @@ func try_hit() -> bool:
 func try_feint() -> void:
 	reaction_window = reaction_window_time
 
-
-func try_block() -> void:
-	pass
 
 
 func move(move_dir: int):
