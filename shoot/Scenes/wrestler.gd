@@ -66,13 +66,26 @@ var feint_cooldown = 0
 ###
 
 ### Minor States
-var shoot_state: int
+enum ShootState{
+	HIT = 4,
+	KNOCKBACK = 5
+}
+var shoot_state : int
 var block_state: int
 var throw_state: int
 var feint_state: int
 
 ###Major States
 
+<<<<<<< Updated upstream
+=======
+
+enum hit_state {
+	HIT,
+	BLOCKED,
+	INVUNERABLE,
+}
+>>>>>>> Stashed changes
 
 enum State {
 	IDLE,
@@ -312,19 +325,24 @@ func _handle_shoot_state() -> void:
 				for i in get_slide_collision_count():
 					var collider = get_slide_collision(i)
 					var object = collider.get_collider()
-					if object and object.has_method("try_hit"):
-						var res = object.try_hit()
-						match res:
-							true: #if hittable and not blocking
-								print("Hit_Target")
-								shoot_state = 4
-								has_connected = true
+					
+					#skip not hittable
+					if not object or not object.has_method("try_hit"):
+						continue
+					
+					#hit
+					var is_hittable = object.try_hit()
+					match is_hittable:
+						true: #if hittable and not blocking
+							print("Hit_Target")
+							shoot_state = ShootState.HIT
+							has_connected = true
 
 								#current_state = State.WIN
-							false: #if blocking
-								shoot_state = 6 #knockback
+						false: #if blocking
+							shoot_state = ShootState.KNOCKBACK #knockback
 
-								has_connected = true
+							has_connected = true
 
 					has_connected = false
 

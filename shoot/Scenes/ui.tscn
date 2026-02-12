@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cs5enfem1nuq5"]
+[gd_scene format=3 uid="uid://cs5enfem1nuq5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_wviqb"]
 font_size = 100
@@ -6,7 +6,7 @@ font_size = 100
 [sub_resource type="LabelSettings" id="LabelSettings_jxero"]
 font_size = 100
 
-[node name="UI" type="Control"]
+[node name="UI" type="Control" unique_id=1566333752]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,7 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MatchBeginTime" type="Label" parent="."]
+[node name="MatchBeginTime" type="Label" parent="." unique_id=130276897]
 z_index = 1
 layout_mode = 0
 offset_right = 1152.0
@@ -23,7 +23,7 @@ label_settings = SubResource("LabelSettings_wviqb")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Announcer" type="Label" parent="."]
+[node name="Announcer" type="Label" parent="." unique_id=1834204145]
 visible = false
 layout_mode = 0
 offset_right = 1152.0
@@ -32,7 +32,7 @@ text = "STUFFED!"
 label_settings = SubResource("LabelSettings_jxero")
 horizontal_alignment = 1
 
-[node name="server" type="Button" parent="."]
+[node name="server" type="Button" parent="." unique_id=9554592]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -44,7 +44,7 @@ grow_vertical = 2
 text = "Server
 "
 
-[node name="client" type="Button" parent="."]
+[node name="client" type="Button" parent="." unique_id=781432825]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -59,12 +59,12 @@ grow_vertical = 2
 text = "Client
 "
 
-[node name="network_status" type="Label" parent="."]
+[node name="network_status" type="Label" parent="." unique_id=1496981205]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="sync_status" type="Label" parent="."]
+[node name="sync_status" type="Label" parent="." unique_id=1201686128]
 visible = false
 layout_mode = 0
 offset_right = 40.0
