@@ -80,6 +80,7 @@ var feint_state: int
 <<<<<<< Updated upstream
 =======
 
+
 enum hit_state {
 	HIT,
 	BLOCKED,
