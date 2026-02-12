@@ -1,5 +1,6 @@
-class_name WrestlerIdle
-extends Resource
+extends baseState
+
+
 
 func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
