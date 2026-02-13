@@ -9,8 +9,8 @@ var input_buffer = []
 var dummy = false
 @export var dummy_block = false
 @export var dummy_feint = false
-var dummy_walkfwd = false
-var dummy_walkbck = false
+@export var dummy_walkfwd = false
+@export var dummy_walkbck = false
 
 #Speed
 const SPEED: float = 300.0
