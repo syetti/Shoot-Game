@@ -75,7 +75,6 @@ enum ShootState{
 }
 var shoot_state : int
 var block_state: int
-var throw_state: int
 var feint_state: int
 
 ###Major States
@@ -95,6 +94,14 @@ enum State {
 	WALK,
 	STUN,
 	FEINT,
+}
+
+enum Actions {
+	WALK_L = -1,
+	WAlK_R = 1,
+	BLOCK = 2,
+	SHOOT = 3,
+	FEINT = 4
 }
 
 	
@@ -132,6 +139,7 @@ func _network_spawn(data: Dictionary) -> void:
 func _network_process(input: Dictionary) -> void:
 	if state_timer > 0:
 		state_timer -= 1
+		
 	if dummy:
 		input = {
 			"block": dummy_block,
@@ -177,14 +185,13 @@ func _network_process(input: Dictionary) -> void:
 		current_state = State.STUN
 		stun_timer = stun_time
 
-	if input_buffer.size() > 3:
-		input_buffer.pop_front()
 
 	fatigue_bar.value = fatigue_bar_val
 
 func _get_local_input() -> Dictionary:
+	
+
 	var input := { }
-	var temp_buffer = [ ]
 	# SECURITY CHECK:
 	# Only read inputs if *I* own this character.
 	# player 1: true
@@ -193,28 +200,39 @@ func _get_local_input() -> Dictionary:
 		return { }
 
 	if Input.is_action_pressed("block"):
+		
 		input["block"] = true
-		temp_buffer.append(2)
+		_add_to_buffer(Actions.BLOCK)
 	if Input.is_action_just_pressed("shoot"):
 		input["shoot"] = true
-		temp_buffer.append(3)
-	input["move_x"] = Input.get_axis("left", "right")
+		_add_to_buffer(Actions.SHOOT)
 	if Input.is_action_just_pressed("feint"):
-		temp_buffer.append(4)
+		_add_to_buffer(Actions.FEINT)
 		input["feint"] = true
-	
-	if not input_buffer:
-		return input
 		
-		
-	#if most recent action is different than second most recent action then append what we've seen
-	if input_buffer[-1] != input_buffer[len(input_buffer)-2]:
-		input_buffer.append_array(temp_buffer)
-		print(input_buffer)
-
+	var move_val = Input.get_axis("left", "right")
+	input["move_x"] = move_val
+	_add_to_buffer(move_val)
 
 	return input
 
+func _add_to_buffer(action: int) -> void:
+	#keep buffer size
+	if input_buffer.size() > 5:
+		input_buffer.pop_front()
+		
+	if action == 0:
+		return
+	
+	# Don't add duplicate consecutive actions
+	if input_buffer.size() > 0 and input_buffer[-1] == action:
+		return
+		
+	input_buffer.append(action)
+	print(input_buffer)
+
+	
+		
 
 func _save_state() -> Dictionary:
 	return {
@@ -251,6 +269,14 @@ func _handle_idle_state(input: Dictionary) -> void:
 	
 	#Movement Transition
 	var move_dir = input.get("move_x", 0)
+	if input.get("block", false):
+		input_buffer.append(Actions.BLOCK)
+		current_state = State.BLOCK
+	if input.get("shoot", false):
+		current_state = State.SHOOT
+	if input.get("feint", false):
+		current_state = State.FEINT
+	
 	if move_dir != 0:
 		current_state = State.WALK
 		return
@@ -430,6 +456,9 @@ func move(move_dir: int):
 
 
 func find_opp() -> Node2D:
+	if found_opp:
+		return null
+
 	var targets = detect.get_overlapping_bodies()
 	if not targets:
 		return null
