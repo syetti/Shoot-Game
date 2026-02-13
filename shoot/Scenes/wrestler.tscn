@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c00otajcfr0y7"]
 
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://Scenes/wrestler.gd" id="1_da70j"]
-[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://Addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
+[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
 [ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_d6ntd"]
 [ext_resource type="Texture2D" uid="uid://b3xfh45wcw1sx" path="res://Sprites/Stun-Bar/StunBarBackground.png" id="4_urx73"]
 [ext_resource type="Texture2D" uid="uid://bk67e4h60wb1x" path="res://Sprites/Stun-Bar/StunBarOutline.png" id="5_ddc1g"]

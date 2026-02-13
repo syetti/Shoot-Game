@@ -136,7 +136,6 @@ func _network_process(input: Dictionary) -> void:
 		input = {
 			"block": dummy_block,
 		}
-		input_buffer.append(input)
 		
 	### Major States
 	match current_state:
@@ -178,15 +177,14 @@ func _network_process(input: Dictionary) -> void:
 		current_state = State.STUN
 		stun_timer = stun_time
 
-	if input_buffer.size() > 60:
+	if input_buffer.size() > 3:
 		input_buffer.pop_front()
 
 	fatigue_bar.value = fatigue_bar_val
 
-
 func _get_local_input() -> Dictionary:
 	var input := { }
-
+	var temp_buffer = [ ]
 	# SECURITY CHECK:
 	# Only read inputs if *I* own this character.
 	# player 1: true
@@ -196,17 +194,24 @@ func _get_local_input() -> Dictionary:
 
 	if Input.is_action_pressed("block"):
 		input["block"] = true
-		input_buffer.append(2)
+		temp_buffer.append(2)
 	if Input.is_action_just_pressed("shoot"):
 		input["shoot"] = true
-		input_buffer.append(3)
+		temp_buffer.append(3)
 	input["move_x"] = Input.get_axis("left", "right")
 	if Input.is_action_just_pressed("feint"):
-		input_buffer.append(4)
+		temp_buffer.append(4)
 		input["feint"] = true
 	
+	if not input_buffer:
+		return input
 		
-	input_buffer.append(input)
+		
+	#if most recent action is different than second most recent action then append what we've seen
+	if input_buffer[-1] != input_buffer[len(input_buffer)-2]:
+		input_buffer.append_array(temp_buffer)
+		print(input_buffer)
+
 
 	return input
 
@@ -305,11 +310,9 @@ func _handle_shoot_state() -> void:
 				for i in get_slide_collision_count():
 					var collider = get_slide_collision(i)
 					var object = collider.get_collider()
-					
 					#skip not hittable
 					if not object or not object.has_method("try_hit"):
 						continue
-					
 					var is_hittable = object.try_hit()
 					match is_hittable:
 						true: #if hittable and not blocking
@@ -427,22 +430,22 @@ func move(move_dir: int):
 
 
 func find_opp() -> Node2D:
-	if not found_opp:
-		var targets = detect.get_overlapping_bodies()
-		if targets:
-			for target in targets:
-				print(target)
-				if target != self and target.has_method("try_feint"):
-					found_opp = true
-					opp = target
+	var targets = detect.get_overlapping_bodies()
+	if not targets:
+		return null
+	for target in targets:
+		print(target)
+		if target != self and target.has_method("try_feint"):
+			found_opp = true
+			opp = target
 	return opp
 
 
 #check input buffer for reactions
 func check_reaction() -> bool:
-	# Print the current state AND the target state
 	if reaction_window <= 0:
 		return false
+		
 	if input_buffer.size() <= 0:
 		return false
 		

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://ckuutscjitbvm"
-path="res://.godot/imported/monogram_extended.ttf-8e62ac3e69a6053ab9349b69b861e431.fontdata"
+path="res://.godot/imported/monogram_extended.ttf-6749b7b454b15a9ef12831f253482074.fontdata"
 
 [deps]
 
-source_file="res://Addons/delta_rollback/log_inspector/monogram_extended.ttf"
-dest_files=["res://.godot/imported/monogram_extended.ttf-8e62ac3e69a6053ab9349b69b861e431.fontdata"]
+source_file="res://addons/delta_rollback/log_inspector/monogram_extended.ttf"
+dest_files=["res://.godot/imported/monogram_extended.ttf-6749b7b454b15a9ef12831f253482074.fontdata"]
 
 [params]
 
