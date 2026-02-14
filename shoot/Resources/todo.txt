@@ -33,12 +33,10 @@
 		- attack towards opp by covering 0.15 meters (lol) over .083 seconds. (~200 pixels over 5 frames)
 		- if shooting at already shooting opponent both players take mental fatigue and reset positions
 	Block - block shot attacks. 
-	Throw - throw blocking opp.
 
-	(?)Faint - fake the shot, make the opp commit to something (fill up fatigue bar)
+	Feint - fake the shot, make the opp commit to something or fill up fatigue bar given they block
 	
-	
-	-Blocking easier than shooting, insentivze use of fatigue
+	-Blocking easier than shooting, insentivize use of fatigue
 
 --Frame Data:
 	-Will be updated later...

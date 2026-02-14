@@ -4,16 +4,18 @@
 	  "walk_speed": 300.0,
 	  "shoot_speed": 5000.0,
 	  "stuffed_speed": 2.0,
-	  "shoot_distance": 150.0
+	  
 	},
 	"moves": {
 	  "shoot": {
+		"shoot_distance": 150.0,
 		"prep_time": 15,
 		"active_hit_time": 5,
 		"recovery_miss_time": 26,
 		"root_time": 20,
 		"cooldown_time": 40,
 		"total_frames": 46
+		
 	  },
 	  "block": {
 		"prep_time": 5,

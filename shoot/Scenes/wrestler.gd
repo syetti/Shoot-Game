@@ -3,7 +3,7 @@ extends CharacterBody2D
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int = -1
-
+var stats_data: Dictionary
 var input_buffer = []
 #Dummy Variables
 var dummy = false
@@ -12,22 +12,14 @@ var dummy = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
 
-#Speed
-const SPEED: float = 300.0
-const SHOTSPEED: float = 5000.0
-const STUFFEDSPEED: float = 2.0
-var shoot_distance: float = 150.0
-
 ###Timers
 var state_timer = 0
 
-#Shooting
-var shoot_total := shoot_prep_time + shoot_active_h_time + shoot_recovery_m_time 
-var shoot_recovery_m_time := 26 #On Miss
-var shoot_root_time: = 20 #Frozen in air for effect
+
+
 
 var shoot_prep_time: int = 15
-var shoot_active_h_time: int= 5
+var shoot_active_h_time: int = 5
 
 var shoot_cooldown := 0
 
@@ -38,7 +30,7 @@ var stun_timer = 0
 #Think in frames
 
 ## Gamefeel
-var hitstop = 10
+var hitstop = 0
 var knockback_distance: float = 50
 var knockback_time: float = 15
 
@@ -46,7 +38,6 @@ var knockback_time: float = 15
 var block_prep_time: int = 5
 var block_active_time: int = 20
 var block_cooldown_time: int = 20
-
 
 var stuffed_stun_time: float = 10
 var has_connected: bool = false
@@ -66,26 +57,25 @@ var feint_cooldown = 0
 ###
 
 ### Minor States
-enum InputOptions{
-	
-}
-enum ShootState{
+enum ShootState {
 	HIT = 4,
-	KNOCKBACK = 5
+	KNOCKBACK = 5,
 }
-var shoot_state : int
+var shoot_state: int
 var block_state: int
 var feint_state: int
+
+const VALID_TRANSITIONS: Dictionary = {
+	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
+	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
+	State.SHOOT: [State.IDLE, State.STUN],
+	State.BLOCK: [State.IDLE],
+	State.FEINT: [State.IDLE, State.STUN],
+}
 
 ###Major States
 
 
-
-enum hit_state {
-	HIT,
-	BLOCKED,
-	INVUNERABLE,
-}
 
 enum State {
 	IDLE,
@@ -97,14 +87,12 @@ enum State {
 }
 
 enum Actions {
-	WALK_L = -1,
-	WAlK_R = 1,
+	#Index -1 and 1 are reserved for movement
 	BLOCK = 2,
 	SHOOT = 3,
-	FEINT = 4
+	FEINT = 4,
 }
 
-	
 var current_state = State.IDLE
 @onready var anims = $Anims
 @onready var detect = $Area2D
@@ -116,6 +104,8 @@ var found_opp = false
 var opp: Node2D
 var feinted = false
 
+var walk_speed: float = 0.0
+
 
 func _ready() -> void:
 	pass
@@ -126,6 +116,15 @@ func _network_spawn(data: Dictionary) -> void:
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
 	shoot_collision.disabled = true
+
+	var stat_file = FileAccess.open("res://resources/data/character_stats.json", FileAccess.READ)
+	var json = JSON.new()
+	json.parse(stat_file.get_as_text())
+	stats_data = json.data["character_stats"]
+	stat_file.close()
+
+	walk_speed = stats_data["speed"]["walk_speed"]
+	hitstop = stats_data["combat"]["hitstop_frames"]
 
 	if fixed_facing_dir == 1:
 		$Sprite.flip_h = true
@@ -139,12 +138,12 @@ func _network_spawn(data: Dictionary) -> void:
 func _network_process(input: Dictionary) -> void:
 	if state_timer > 0:
 		state_timer -= 1
-		
+
 	if dummy:
 		input = {
 			"block": dummy_block,
 		}
-		
+
 	### Major States
 	match current_state:
 		State.IDLE:
@@ -179,18 +178,15 @@ func _network_process(input: Dictionary) -> void:
 
 	###Stuff I want to player to be able to do regardless of state ( I don't want to write the same thing in idle and walk lol)###
 
-
 	if fatigue_bar_val >= 3:
 		fatigue_bar_val = 0
 		current_state = State.STUN
 		stun_timer = stun_time
 
-
 	fatigue_bar.value = fatigue_bar_val
 
-func _get_local_input() -> Dictionary:
-	
 
+func _get_local_input() -> Dictionary:
 	var input := { }
 	# SECURITY CHECK:
 	# Only read inputs if *I* own this character.
@@ -200,7 +196,6 @@ func _get_local_input() -> Dictionary:
 		return { }
 
 	if Input.is_action_pressed("block"):
-		
 		input["block"] = true
 		_add_to_buffer(Actions.BLOCK)
 	if Input.is_action_just_pressed("shoot"):
@@ -209,46 +204,87 @@ func _get_local_input() -> Dictionary:
 	if Input.is_action_just_pressed("feint"):
 		_add_to_buffer(Actions.FEINT)
 		input["feint"] = true
-		
+
 	var move_val = Input.get_axis("left", "right")
 	input["move_x"] = move_val
 	_add_to_buffer(move_val)
 
 	return input
 
+
+func _try_state_transition(new_state: State) -> bool:
+	if new_state in VALID_TRANSITIONS[current_state]:
+		_on_state_exit(current_state)
+		current_state = new_state
+		_on_state_enter(new_state)
+		return true
+	else:
+		if OS.is_debug_build():
+			push_warning("Invalid transition: %s -> %s" % 
+			State.keys()[current_state], 
+			State.keys()[new_state])
+		return false
+
+func _on_state_enter(state: State) -> void:
+	match state:
+		State.IDLE:
+			velocity.x = 0
+			anims.play("idle")
+		State.SHOOT:
+			shoot_state = 0
+			has_connected = false
+			velocity.x = 0
+		State.BLOCK:
+			block_state = 0
+		State.STUN:
+			stun_timer = stun_time
+			#anims.play("stunned")
+		State.FEINT:
+			feint_state = 0
+
+
+#reset variables on exit so that next transition to the state is clean
+func _on_state_exit(state: State) -> void:
+	match state:
+		State.SHOOT:
+			shoot_state = 0
+			has_connected = false
+			velocity.x = 0
+		State.BLOCK:
+			block_state = 0
+		State.FEINT:
+			feint_state = 0
+
+
 func _add_to_buffer(action: int) -> void:
 	#keep buffer size
 	if input_buffer.size() > 5:
 		input_buffer.pop_front()
-		
+
 	if action == 0:
 		return
-	
+
 	# Don't add duplicate consecutive actions
 	if input_buffer.size() > 0 and input_buffer[-1] == action:
 		return
-		
+
 	input_buffer.append(action)
 	print(input_buffer)
 
-	
-		
 
 func _save_state() -> Dictionary:
 	return {
 		position = position,
 		velocity = velocity,
-		
 		current_state = current_state,
 		state_timer = state_timer,
 		reaction_window = reaction_window,
-		
 		shoot_state = shoot_state,
 		block_state = block_state,
-		
 		has_connected = has_connected,
 		fatigue_bar_val = fatigue_bar_val,
 	}
+
 
 func _load_state(state: Dictionary):
 	position = state['position']
@@ -257,30 +293,35 @@ func _load_state(state: Dictionary):
 	current_state = state['current_state']
 	state_timer = state['state_timer']
 	reaction_window = state['reaction_window']
-	
+
 	shoot_state = state['shoot_state']
 	block_state = state['block_state']
 
 	has_connected = state['has_connected']
 	fatigue_bar_val = state['fatigue_bar_val']
 
+
 func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
-	
+
 	#Movement Transition
 	var move_dir = input.get("move_x", 0)
 	if input.get("block", false):
 		input_buffer.append(Actions.BLOCK)
-		current_state = State.BLOCK
+		_try_state_transition(State.BLOCK)
 	if input.get("shoot", false):
-		current_state = State.SHOOT
+		input_buffer.append(Actions.SHOOT)
+		_try_state_transition(State.SHOOT)
 	if input.get("feint", false):
-		current_state = State.FEINT
-	
+		input_buffer.append(Actions.FEINT)
+		_try_state_transition(State.FEINT)
+
 	if move_dir != 0:
-		current_state = State.WALK
+		input_buffer.append(move_dir)
+		_try_state_transition(State.WALK)
 		return
 	#
+
 
 func _handle_walk_state(input: Dictionary) -> void:
 	# Handle movement inputs
@@ -311,49 +352,26 @@ func _handle_block_state(input: Dictionary) -> void:
 				state_timer = block_active_time
 				block_state = 2
 		2:
-			
 			current_state = State.IDLE
 			block_state = 0
 
 
 func _handle_shoot_state() -> void:
-	var total_frames = float(shoot_active_h_time)
+	var shoot_data = get_move_data("shoot")
+	var total_frames = float(shoot_data["active_hit_time"])
 	var current_frame_progress = total_frames - state_timer
 	var time = current_frame_progress / total_frames
 
-	var speed = shoot_distance / (total_frames / 60.0)
-	var knockback_speed = knockback_distance / (total_frames / 60.0)
+	var speed = shoot_data["shoot_distance"] / (total_frames / 60.0)
+	var knockback_speed = (stats_data["combat"]["knockback_distance"]) / (total_frames / 60.0)
 	var speed_ramp = lerpf(0.2, 4, ease(time, 0.2))
 	var knockback_ramp = lerpf(0, 2.3, ease(time, -1.8))
 
 	if state_timer > 0:
 		if shoot_state == 2:
+			_check_shoot_collision()
 			velocity.x = -fixed_facing_dir * (speed * speed_ramp)
 
-			###Collision
-			if not has_connected:
-				#go through each body colliding with area
-				for i in get_slide_collision_count():
-					var collider = get_slide_collision(i)
-					var object = collider.get_collider()
-					#skip not hittable
-					if not object or not object.has_method("try_hit"):
-						continue
-					var is_hittable = object.try_hit()
-					match is_hittable:
-						true: #if hittable and not blocking
-							print("Hit_Target")
-							shoot_state = ShootState.HIT
-							has_connected = true
-							#current_state = State.WIN
-						false: #if blocking
-							shoot_state = ShootState.KNOCKBACK #knockback
-
-							has_connected = true
-
-					has_connected = false
-
-					return
 			return
 
 		return
@@ -370,7 +388,7 @@ func _handle_shoot_state() -> void:
 			state_timer = shoot_active_h_time
 			shoot_state = 2
 		2: #falling
-			state_timer = shoot_root_time
+			state_timer = stats_data["recovery_miss_time"]
 			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
 			shoot_state = 3
@@ -387,7 +405,7 @@ func _handle_shoot_state() -> void:
 			shoot_state = 3
 		5: #blocked
 			velocity.x = 0
-			state_timer = shoot_root_time
+			state_timer = stats_data["root_time"]
 			anims.play("shoot_anim/shoot_r")
 			shoot_state = 3
 		6: #knockback
@@ -396,6 +414,25 @@ func _handle_shoot_state() -> void:
 			shoot_state = 5
 
 	return
+
+
+func _check_shoot_collision() -> bool:
+	if has_connected:
+		return false
+
+	#go through each body colliding with area
+	for i in get_slide_collision_count():
+		var collider = get_slide_collision(i)
+		var object = collider.get_collider()
+
+		#skip not hittable
+		if not object or not object.has_method("try_hit"):
+			continue
+
+		var is_hittable = object.try_hit()
+		has_connected = false
+		return is_hittable
+	return false
 
 
 func _handle_stun_state() -> void:
@@ -443,10 +480,8 @@ func try_feint() -> void:
 	reaction_window = reaction_window_time
 
 
-
 func move(move_dir: int):
-	input_buffer.append(move_dir)
-	velocity.x = move_dir * SPEED
+	velocity.x = move_dir * walk_speed
 	if move_dir == 0:
 		current_state = State.IDLE
 	if move_dir == fixed_facing_dir:
@@ -474,13 +509,17 @@ func find_opp() -> Node2D:
 func check_reaction() -> bool:
 	if reaction_window <= 0:
 		return false
-		
+
 	if input_buffer.size() <= 0:
 		return false
-		
+
 	if input_buffer[-1] == 2:
 		fatigue_bar_val += 1
 		reaction_window = 0
 		return true
-	
+
 	return false
+
+
+func get_move_data(move_name: String) -> Dictionary:
+	return stats_data["moves"].get(move_name, { })

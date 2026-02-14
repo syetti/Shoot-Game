@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://xr00k45gbxkl"]
 
-[ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="1_rmh2y"]
-[ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://Scenes/solo_network_test.gd" id="2_4cldr"]
-[ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://Scenes/ui.tscn" id="3_qyxhr"]
-[ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://Scenes/training/move_list.gd" id="4_tel2d"]
+[ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://scenes/wrestlingMat.tscn" id="1_rmh2y"]
+[ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://scenes/solo_network_test.gd" id="2_4cldr"]
+[ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://scenes/ui.tscn" id="3_qyxhr"]
+[ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://scenes/training/move_list.gd" id="4_tel2d"]
 
 [node name="Training" type="Node2D" unique_id=1017353119]
 metadata/_edit_horizontal_guides_ = [319.0, 316.0]

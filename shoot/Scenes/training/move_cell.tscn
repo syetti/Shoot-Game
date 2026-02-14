@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d1hrs4woq0g0c"]
 
-[ext_resource type="Script" uid="uid://doa4h5dsdsjxn" path="res://Scenes/training/move_cell.gd" id="1_j0fc7"]
+[ext_resource type="Script" uid="uid://doa4h5dsdsjxn" path="res://scenes/training/move_cell.gd" id="1_j0fc7"]
 
 [node name="MoveCell" type="HBoxContainer" unique_id=769156475]
 anchors_preset = 15
