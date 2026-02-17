@@ -1,18 +1,21 @@
 [gd_scene format=3 uid="uid://cs5enfem1nuq5"]
 
+[ext_resource type="Script" uid="uid://dd7npr67iuvei" path="res://Scenes/ui.gd" id="1_jxero"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_wviqb"]
 font_size = 100
 
 [sub_resource type="LabelSettings" id="LabelSettings_jxero"]
 font_size = 100
 
-[node name="UI" type="Control" unique_id=1566333752]
+[node name="UI" type="Control" unique_id=1566333752 groups=["network_sync"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_jxero")
 
 [node name="MatchBeginTime" type="Label" parent="." unique_id=130276897]
 z_index = 1

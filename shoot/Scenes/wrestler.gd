@@ -66,7 +66,7 @@ var block_state: int
 var feint_state: int
 
 const VALID_TRANSITIONS: Dictionary = {
-	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
+	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
 	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
 	State.SHOOT: [State.IDLE, State.STUN],
 	State.BLOCK: [State.IDLE],
@@ -136,6 +136,7 @@ func _network_spawn(data: Dictionary) -> void:
 
 
 func _network_process(input: Dictionary) -> void:
+	UI.input_buffer.append_array(input_buffer)
 	if state_timer > 0:
 		state_timer -= 1
 
@@ -220,9 +221,7 @@ func _try_state_transition(new_state: State) -> bool:
 		return true
 	else:
 		if OS.is_debug_build():
-			push_warning("Invalid transition: %s -> %s" % 
-			State.keys()[current_state], 
-			State.keys()[new_state])
+			push_warning("Invalid transition: " + State.keys()[current_state]+ "-> " + State.keys()[new_state])
 		return false
 
 func _on_state_enter(state: State) -> void:
@@ -305,19 +304,19 @@ func _handle_idle_state(input: Dictionary) -> void:
 	anims.play("idle")
 
 	#Movement Transition
-	var move_dir = input.get("move_x", 0)
+	var move_dir: int = input.get("move_x", 0)
 	if input.get("block", false):
-		input_buffer.append(Actions.BLOCK)
+		_add_to_buffer(Actions.BLOCK)
 		_try_state_transition(State.BLOCK)
 	if input.get("shoot", false):
-		input_buffer.append(Actions.SHOOT)
+		_add_to_buffer(Actions.SHOOT)
 		_try_state_transition(State.SHOOT)
 	if input.get("feint", false):
-		input_buffer.append(Actions.FEINT)
+		_add_to_buffer(Actions.FEINT)
 		_try_state_transition(State.FEINT)
 
 	if move_dir != 0:
-		input_buffer.append(move_dir)
+		_add_to_buffer(move_dir)
 		_try_state_transition(State.WALK)
 		return
 	#
@@ -388,7 +387,7 @@ func _handle_shoot_state() -> void:
 			state_timer = shoot_active_h_time
 			shoot_state = 2
 		2: #falling
-			state_timer = stats_data["recovery_miss_time"]
+			state_timer = shoot_data["recovery_miss_time"]
 			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
 			shoot_state = 3

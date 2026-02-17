@@ -1,13 +1,24 @@
-extends ScrollContainer
-@onready var box = $box
+extends VBoxContainer
+var num_of_moves = 0
+var max_moves = UI.input_buffer.size()
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
 #
-#func _process(delta) -> void:
+func _network_process(input: Dictionary) -> void:
+	if num_of_moves < max_moves:
+		num_of_moves +=1
+		add_child(new_move_scene.instantiate())
+	else:
+		var children = get_children()
+		children[-1].queue_free()
+		
+	pass
 #
 	#var player = $"../soloNetworkTest/P1"
 	#if player:

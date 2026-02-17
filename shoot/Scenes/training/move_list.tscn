@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://n5xyxy27sjl0"]
+
+[ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://Scenes/training/move_list.gd" id="1_m8bkk"]
+[ext_resource type="PackedScene" uid="uid://d1hrs4woq0g0c" path="res://Scenes/training/move_cell.tscn" id="2_fr3s8"]
+
+[node name="Control" type="Control" unique_id=1983681394]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="move_list" type="CanvasLayer" parent="." unique_id=438122795]
+follow_viewport_enabled = true
+
+[node name="Panel" type="Panel" parent="move_list" unique_id=1035525598]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 116.0
+grow_vertical = 2
+
+[node name="box" type="VBoxContainer" parent="move_list/Panel" unique_id=296382817]
+layout_mode = 0
+offset_right = 116.0
+offset_bottom = 23.0
+size_flags_horizontal = 3
+size_flags_vertical = 2
+alignment = 2
+script = ExtResource("1_m8bkk")
+
+[node name="Label" parent="move_list/Panel/box" unique_id=1363936779 instance=ExtResource("2_fr3s8")]
+layout_mode = 2

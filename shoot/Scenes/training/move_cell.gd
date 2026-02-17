@@ -1,9 +1,8 @@
-extends HBoxContainer
-
-@onready var label = $RichTextLabel
+extends Label
+var move_name: String
 var move_id : int = SyncManager.input_tick
 
-#func add(move: String, buffer: Dictionary) -> void:
+#func add(move_id: int, move: String, buffer: Dictionary) -> void:
 	#for option in move:
 		#var move_name = option
 		#if option == move or option > 0:
@@ -16,7 +15,19 @@ var move_id : int = SyncManager.input_tick
 # Called when the node enters the scene tree for the first time.
 
 #
-#func _network_process(input: Dictionary) -> void:
-	#if move_id + 60 == SyncManager.current_tick:
-		#queue_free()
-	#pass
+func _ready() -> void: 
+	if UI.input_buffer.size() <= 0:
+		return
+		
+	match UI.input_buffer[-1]:
+		-1:
+			text = "Walk_B"
+		1:
+			text = "Walk_F"
+		2:
+			text = "Block"
+		3:
+			text = "Shoot"
+		4:
+			text = "Feint"
+	
