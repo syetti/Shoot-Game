@@ -17,28 +17,20 @@ var state_timer = 0
 
 
 
-
+var knockback_time = 0
 var shoot_prep_time: int = 15
 var shoot_active_h_time: int = 5
 
 var shoot_cooldown := 0
 
-#
-var stun_time = 60
 var stun_timer = 0
-
-#Think in frames
-
-## Gamefeel
+###Global Variables
 var hitstop = 0
-var knockback_distance: float = 50
-var knockback_time: float = 15
-
 ##Blocking
 var block_prep_time: int = 5
 var block_active_time: int = 20
 var block_cooldown_time: int = 20
-
+var stun_time = 0
 var stuffed_stun_time: float = 10
 var has_connected: bool = false
 
@@ -125,7 +117,9 @@ func _network_spawn(data: Dictionary) -> void:
 
 	walk_speed = stats_data["speed"]["walk_speed"]
 	hitstop = stats_data["combat"]["hitstop_frames"]
-
+	knockback_time = stats_data["combat"]["knockback_time"]
+	stun_time = stats_data["combat"]["stun_time"]
+	
 	if fixed_facing_dir == 1:
 		$Sprite.flip_h = true
 	else:
@@ -170,8 +164,7 @@ func _network_process(input: Dictionary) -> void:
 	if reaction_window > 0:
 		check_reaction()
 		reaction_window -= 1
-	if stun_timer > 0:
-		stun_timer -= 1
+
 
 		#(?)Don't shoot at feint
 	###  MOVE
@@ -182,7 +175,7 @@ func _network_process(input: Dictionary) -> void:
 	if fatigue_bar_val >= 3:
 		fatigue_bar_val = 0
 		current_state = State.STUN
-		stun_timer = stun_time
+		state_timer = stats_data["combat"]["stun_time"]
 
 	fatigue_bar.value = fatigue_bar_val
 
