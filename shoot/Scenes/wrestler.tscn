@@ -234,6 +234,10 @@ size = Vector2(120, 36)
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_da70j")
+dummy_block = null
+dummy_feint = null
+dummy_walkfwd = null
+dummy_walkbck = null
 
 [node name="IdleCollision" type="CollisionShape2D" parent="." unique_id=1660789225]
 position = Vector2(0, 23)
