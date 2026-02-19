@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://n5xyxy27sjl0"]
 
 [ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://Scenes/training/move_list.gd" id="1_m8bkk"]
-[ext_resource type="PackedScene" uid="uid://d1hrs4woq0g0c" path="res://Scenes/training/move_cell.tscn" id="2_fr3s8"]
 
 [node name="Control" type="Control" unique_id=1983681394]
 layout_mode = 3
@@ -28,6 +27,3 @@ size_flags_horizontal = 3
 size_flags_vertical = 2
 alignment = 2
 script = ExtResource("1_m8bkk")
-
-[node name="Label" parent="move_list/Panel/box" unique_id=1363936779 instance=ExtResource("2_fr3s8")]
-layout_mode = 2

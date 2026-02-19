@@ -136,7 +136,7 @@ func _network_spawn(data: Dictionary) -> void:
 
 
 func _network_process(input: Dictionary) -> void:
-	UI.input_buffer.append_array(input_buffer)
+	
 	if state_timer > 0:
 		state_timer -= 1
 
@@ -220,7 +220,7 @@ func _try_state_transition(new_state: State) -> bool:
 		_on_state_enter(new_state)
 		return true
 	else:
-		if OS.is_debug_build():
+		if OS.is_debug_build(): 
 			push_warning("Invalid transition: " + State.keys()[current_state]+ "-> " + State.keys()[new_state])
 		return false
 
@@ -268,6 +268,7 @@ func _add_to_buffer(action: int) -> void:
 		return
 
 	input_buffer.append(action)
+	UI.input_buffer.append(action)
 	print(input_buffer)
 
 

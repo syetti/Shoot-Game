@@ -14,12 +14,8 @@ var move_id : int = SyncManager.input_tick
 
 # Called when the node enters the scene tree for the first time.
 
-#
-func _ready() -> void: 
-	if UI.input_buffer.size() <= 0:
-		return
-		
-	match UI.input_buffer[-1]:
+func update_move( move: int) ->void:
+	match move:
 		-1:
 			text = "Walk_B"
 		1:
@@ -30,4 +26,7 @@ func _ready() -> void:
 			text = "Shoot"
 		4:
 			text = "Feint"
+func _ready() -> void: 
+	
+	
 	

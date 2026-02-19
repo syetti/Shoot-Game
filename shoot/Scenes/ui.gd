@@ -4,6 +4,7 @@ var input_buffer: Array = [ ]
 var current_state = 0
 var max_moves_displayed = 10
 var current_moves_displayed = 0
+var move_list_spawned = false
 
 @onready var move_list_scene = preload("res://Scenes/training/move_list.tscn")
 enum UI_STATES{
@@ -18,9 +19,10 @@ func _ready() -> void:
 	current_state = UI_STATES.TRAINING
 
 
-func _network_process(input: Dictionary) -> void:
+func _physics_process(delta: float) -> void:
 	
-	if input_buffer.size() > 5:
+	
+	while input_buffer.size() > 5:
 		input_buffer.pop_front()
 		
 	match current_state:
@@ -36,8 +38,10 @@ func _network_process(input: Dictionary) -> void:
 
 
 func _handle_training():
-	var move_list = move_list_scene.instantiate()
-	add_child(move_list)
+	if not move_list_spawned:
+		var move_list = move_list_scene.instantiate()
+		add_child(move_list)
+		move_list_spawned = true
 	return
 func _handle_paused():
 	return

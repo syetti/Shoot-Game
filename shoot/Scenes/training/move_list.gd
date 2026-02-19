@@ -1,6 +1,6 @@
 extends VBoxContainer
 var num_of_moves = 0
-var max_moves = UI.input_buffer.size()
+var max_moves = 10
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
 
@@ -9,14 +9,25 @@ var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
 func _ready() -> void:
 	pass # Replace with function body.
 
-#
-func _network_process(input: Dictionary) -> void:
-	if num_of_moves < max_moves:
-		num_of_moves +=1
+
+func _physics_process(delta: float) -> void:
+	
+	for move in UI.input_buffer:
 		add_child(new_move_scene.instantiate())
-	else:
 		var children = get_children()
-		children[-1].queue_free()
+		children[move].update_moves = UI.input_buffer
+	if UI.input_buffer:
+		while num_of_moves < max_moves:
+			num_of_moves +=1
+			add_child(new_move_scene.instantiate())
+			
+		if num_of_moves >= max_moves:
+			var children = get_children()
+			
+			children[0].queue_free()
+			num_of_moves -=1
+			
+		#
 		
 	pass
 #
