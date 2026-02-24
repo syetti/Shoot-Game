@@ -72,10 +72,28 @@ var block_state: int
 var throw_state: int
 var feint_state: int
 
+<<<<<<< Updated upstream
 ###Major States
 enum awareness_state {
 	PLAYER,
 	DUMMY,
+=======
+const VALID_TRANSITIONS: Dictionary = {
+	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
+	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
+	State.SHOOT: [State.IDLE, State.STUN],
+	State.BLOCK: [State.IDLE],
+	State.FEINT: [State.IDLE, State.STUN]
+	}
+	
+const ACTION_VALID_TRANSITIONS: Dictionary = {
+	-1: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, 1],
+	1: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, -1],
+	Actions.BLOCK:[Actions.SHOOT, Actions.FEINT],
+	Actions.SHOOT:[Actions.FEINT, Actions.BLOCK],
+	Actions.FEINT:[Actions.SHOOT,Actions.BLOCK]
+
+>>>>>>> Stashed changes
 }
 
 enum hit_state {
@@ -93,6 +111,18 @@ enum State {
 	FEINT,
 }
 
+<<<<<<< Updated upstream
+=======
+enum Actions {
+	#Index -1 and 1 are reserved for movement
+	WALKR = 1,
+	WALKL = -1,
+	BLOCK = 2,
+	SHOOT = 3,
+	FEINT = 4,
+}
+
+>>>>>>> Stashed changes
 var current_state = State.IDLE
 @onready var anims = $Anims
 @onready var detect = $Area2D
@@ -237,6 +267,73 @@ func _get_local_input() -> Dictionary:
 	return input
 
 
+<<<<<<< Updated upstream
+=======
+func _try_state_transition(new_state: State) -> bool:
+	if new_state in VALID_TRANSITIONS[current_state]:
+		_on_state_exit(current_state)
+		current_state = new_state
+		_on_state_enter(new_state)
+		return true
+	else:
+		if OS.is_debug_build(): 
+			push_warning("Invalid transition: " + State.keys()[current_state]+ "-> " + State.keys()[new_state])
+		return false
+
+func _on_state_enter(state: State) -> void:
+	match state:
+		State.IDLE:
+			velocity.x = 0
+			anims.play("idle")
+		State.SHOOT:
+			shoot_state = 0
+			has_connected = false
+			velocity.x = 0
+		State.BLOCK:
+			block_state = 0
+		State.STUN:
+			stun_timer = stun_time
+			#anims.play("stunned")
+		State.FEINT:
+			feint_state = 0
+
+
+#reset variables on exit so that next transition to the state is clean
+func _on_state_exit(state: State) -> void:
+	match state:
+		State.SHOOT:
+			shoot_state = 0
+			has_connected = false
+			velocity.x = 0
+		State.BLOCK:
+			block_state = 0
+		State.FEINT:
+			feint_state = 0
+
+
+func _add_to_buffer(action: Actions) -> void:
+	#keep buffer size
+	if input_buffer.size() > 5:
+		input_buffer.pop_front()
+
+	if action == 0:
+		return
+
+	# Don't add duplicate consecutive actions
+	if input_buffer.size() > 0 and input_buffer[-1] == action:
+		return
+
+	#Use valid transitions to handle input_buffer s
+	if input_buffer.size()<1 :
+		input_buffer.append(action)
+		return
+	if action in ACTION_VALID_TRANSITIONS[input_buffer[-1]]:
+		input_buffer.append(action)
+	UI.input_buffer = input_buffer
+	print(input_buffer)
+
+
+>>>>>>> Stashed changes
 func _save_state() -> Dictionary:
 	return {
 		position = position,
@@ -464,6 +561,7 @@ func find_opp() -> Node2D:
 
 #check input buffer for reactions
 func check_reaction() -> bool:
+<<<<<<< Updated upstream
 	# Print the current state AND the target state
 	if reaction_window > 0:
 		if input_buffer.size() > 0:
@@ -471,4 +569,17 @@ func check_reaction() -> bool:
 				fatigue_bar_val += 1
 				reaction_window = 0
 				return true
+=======
+	if reaction_window <= 0:
+		return false
+
+	if input_buffer.size() <= 0:
+		return false
+
+	if input_buffer[-1] == Actions.FEINT:
+		fatigue_bar_val += 1
+		reaction_window = 0
+		return true
+
+>>>>>>> Stashed changes
 	return false
