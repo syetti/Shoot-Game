@@ -25,6 +25,7 @@ config/icon="res://icon.svg"
 Global="res://Global.gd"
 SyncManager="*uid://xohxvtt4jjfo"
 Networking="res://Networking.gd"
+UI="*uid://cs5enfem1nuq5"
 
 [display]
 
