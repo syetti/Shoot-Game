@@ -72,12 +72,7 @@ var block_state: int
 var throw_state: int
 var feint_state: int
 
-<<<<<<< Updated upstream
 ###Major States
-enum awareness_state {
-	PLAYER,
-	DUMMY,
-=======
 const VALID_TRANSITIONS: Dictionary = {
 	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
 	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
@@ -92,8 +87,6 @@ const ACTION_VALID_TRANSITIONS: Dictionary = {
 	Actions.BLOCK:[Actions.SHOOT, Actions.FEINT],
 	Actions.SHOOT:[Actions.FEINT, Actions.BLOCK],
 	Actions.FEINT:[Actions.SHOOT,Actions.BLOCK]
-
->>>>>>> Stashed changes
 }
 
 enum hit_state {
@@ -111,8 +104,6 @@ enum State {
 	FEINT,
 }
 
-<<<<<<< Updated upstream
-=======
 enum Actions {
 	#Index -1 and 1 are reserved for movement
 	WALKR = 1,
@@ -122,7 +113,7 @@ enum Actions {
 	FEINT = 4,
 }
 
->>>>>>> Stashed changes
+
 var current_state = State.IDLE
 @onready var anims = $Anims
 @onready var detect = $Area2D
