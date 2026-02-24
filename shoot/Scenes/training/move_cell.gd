@@ -21,12 +21,12 @@ func update_move( move: int) ->void:
 		1:
 			text = "Walk_F"
 		2:
-			text = "Block"
+			text = "BLOKC"
 		3:
-			text = "Shoot"
+			text = "SHOOT"
 		4:
-			text = "Feint"
+			text = "FEINT"
 func _ready() -> void: 
 	
-	
+	pass
 	

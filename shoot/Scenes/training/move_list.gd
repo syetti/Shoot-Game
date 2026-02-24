@@ -1,6 +1,7 @@
 extends VBoxContainer
 var num_of_moves = 0
-var max_moves = 10
+var max_moves = 6
+
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
 
@@ -9,26 +10,32 @@ var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-func _physics_process(delta: float) -> void:
+func populate_moves() -> void:
+	#if UI.input_buffer.size() > 0 and UI.input_buffer[-1] == UI.input_buffer[UI.input_buffer.size()-1]:
+		#return
+		#
+	if UI.input_buffer.size() == 0:
+		return
 	
-	for move in UI.input_buffer:
+	for move in UI.input_buffer.size():
 		add_child(new_move_scene.instantiate())
 		var children = get_children()
-		children[move].update_moves = UI.input_buffer
-	if UI.input_buffer:
-		while num_of_moves < max_moves:
-			num_of_moves +=1
-			add_child(new_move_scene.instantiate())
-			
-		if num_of_moves >= max_moves:
-			var children = get_children()
-			
-			children[0].queue_free()
-			num_of_moves -=1
-			
-		#
+		children[move].update_move(UI.input_buffer[move]) 
 		
+		
+	
+		
+		
+func _physics_process(delta: float) -> void:
+	var children = get_children()
+	
+	if children.size() > max_moves:
+		children[0].queue_free()
+		
+	populate_moves()
+	
+	
+	
 	pass
 #
 	#var player = $"../soloNetworkTest/P1"

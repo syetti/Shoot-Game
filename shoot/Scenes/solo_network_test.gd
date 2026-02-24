@@ -8,12 +8,12 @@ func _ready():
 	peer.create_server(9999) 
 	multiplayer.multiplayer_peer = peer
 	SyncManager.network_adaptor = DummyNetworkAdaptor.new()
-	# 2. CRITICAL FIX: Connect the signal!
-	# Without this line, _on_SyncManager_sync_started NEVER runs.
+	
 	SyncManager.sync_started.connect(_on_SyncManager_sync_started)
 	
 	# 3. Start the simulation
 	print("Starting Solo Test Mode...")
+	
 	# This will trigger the 'sync_started' signal once the manager is ready
 	SyncManager.start()
 
