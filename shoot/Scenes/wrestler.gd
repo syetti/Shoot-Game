@@ -87,13 +87,12 @@ const ACTION_VALID_TRANSITIONS: Dictionary = {
 	Actions.BLOCK:[Actions.SHOOT, Actions.FEINT],
 	Actions.SHOOT:[Actions.FEINT, Actions.BLOCK],
 	Actions.FEINT:[Actions.SHOOT,Actions.BLOCK]
+
 }
 
-enum hit_state {
-	HIT,
-	BLOCKED,
-	INVUNERABLE,
-}
+###Major States
+
+
 
 enum State {
 	IDLE,
