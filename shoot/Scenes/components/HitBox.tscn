@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://887gjhtbc8se"]
+
+[ext_resource type="Shape2D" uid="uid://by15itblkg2ol" path="res://Scenes/components/hitbox_shape.tres" id="1_6ri7w"]
+[ext_resource type="Script" uid="uid://oq4rb4h6kvmt" path="res://Scenes/components/hit_box.gd" id="1_xfnhy"]
+
+[node name="HitBox" type="Area2D" unique_id=1809496298]
+script = ExtResource("1_xfnhy")
+
+[node name="HitBoxCollision" type="CollisionShape2D" parent="." unique_id=69550650]
+position = Vector2(-1, 14)
+shape = ExtResource("1_6ri7w")
+disabled = true
+debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

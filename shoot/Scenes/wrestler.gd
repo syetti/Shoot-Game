@@ -3,7 +3,7 @@ extends CharacterBody2D
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int = -1
-var stats_data: Dictionary
+
 var input_buffer = []
 #Dummy Variables
 var dummy = false
@@ -11,7 +11,8 @@ var dummy = false
 @export var dummy_feint = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
-
+@export var game_data: PackedScene
+var stats_data: Dictionary = game_data.stats_data
 ###Timers
 var state_timer = 0
 
@@ -57,12 +58,11 @@ var shoot_state: int
 var block_state: int
 var feint_state: int
 
-<<<<<<< Updated upstream
 ###Major States
 enum awareness_state {
 	PLAYER,
 	DUMMY,
-=======
+	}
 const VALID_TRANSITIONS: Dictionary = {
 	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
 	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
@@ -72,11 +72,12 @@ const VALID_TRANSITIONS: Dictionary = {
 	}
 	
 const ACTION_VALID_TRANSITIONS: Dictionary = {
-	-1: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, 1],
-	1: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, -1],
-	Actions.BLOCK:[Actions.SHOOT, Actions.FEINT],
-	Actions.SHOOT:[Actions.FEINT, Actions.BLOCK],
-	Actions.FEINT:[Actions.SHOOT,Actions.BLOCK]
+	-1: [1, Actions.IDLE],
+	Actions.IDLE: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, 1, -1],
+	1: [1],
+	Actions.BLOCK:[Actions.IDLE],
+	Actions.SHOOT:[Actions.IDLE],
+	Actions.FEINT:[Actions.IDLE]
 
 }
 
@@ -96,6 +97,7 @@ enum State {
 enum Actions {
 	#Index -1 and 1 are reserved for movement
 	WALKR = 1,
+	IDLE = 0,
 	WALKL = -1,
 	BLOCK = 2,
 	SHOOT = 3,
@@ -112,6 +114,7 @@ var fatigue_bar_charge_time = 120 #2 secs
 var found_opp = false
 var opp: Node2D
 var feinted = false
+var past_action: Actions = 0
 
 var walk_speed: float = 0.0
 
@@ -125,12 +128,6 @@ func _network_spawn(data: Dictionary) -> void:
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
 	shoot_collision.disabled = true
-
-	var stat_file = FileAccess.open("res://resources/data/character_stats.json", FileAccess.READ)
-	var json = JSON.new()
-	json.parse(stat_file.get_as_text())
-	stats_data = json.data["character_stats"]
-	stat_file.close()
 
 	walk_speed = stats_data["speed"]["walk_speed"]
 	hitstop = stats_data["combat"]["hitstop_frames"]
@@ -223,8 +220,6 @@ func _get_local_input() -> Dictionary:
 	return input
 
 
-<<<<<<< Updated upstream
-=======
 func _try_state_transition(new_state: State) -> bool:
 	if new_state in VALID_TRANSITIONS[current_state]:
 		_on_state_exit(current_state)
@@ -271,25 +266,32 @@ func _add_to_buffer(action: Actions) -> void:
 	#keep buffer size
 	if input_buffer.size() > 5:
 		input_buffer.pop_front()
-
+	
+	
 	if action == 0:
 		return
 
-	# Don't add duplicate consecutive actions
-	if input_buffer.size() > 0 and input_buffer[-1] == action:
+	if past_action == action: 
 		return
+		
+	if past_action == 0:
+		past_action = action
+	
+	
 
 	#Use valid transitions to handle input_buffer s
-	if input_buffer.size()<1 :
-		input_buffer.append(action)
+	
+		
+	if action not in ACTION_VALID_TRANSITIONS[past_action]:
 		return
-	if action in ACTION_VALID_TRANSITIONS[input_buffer[-1]]:
-		input_buffer.append(action)
-	UI.input_buffer = input_buffer
+	
+	input_buffer.append(action)
 	print(input_buffer)
 
+	past_action = action
+	UI.input_buffer = input_buffer
 
->>>>>>> Stashed changes
+
 func _save_state() -> Dictionary:
 	return {
 		position = position,
@@ -525,20 +527,13 @@ func find_opp() -> Node2D:
 
 #check input buffer for reactions
 func check_reaction() -> bool:
-	# Print the current state AND the target state
-	if reaction_window > 0:
-		if input_buffer.size() > 0:
-			if input_buffer[-1]["block"]:
-				fatigue_bar_val += 1
-				reaction_window = 0
-				return true
 	if reaction_window <= 0:
 		return false
 
 	if input_buffer.size() <= 0:
 		return false
 
-	if input_buffer[-1] == Actions.FEINT:
+	if input_buffer[-1] == Actions.BLOCK:
 		fatigue_bar_val += 1
 		reaction_window = 0
 		return true

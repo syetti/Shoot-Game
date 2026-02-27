@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://xr00k45gbxkl"]
+[gd_scene format=3 uid="uid://duwlwwo00c1kr"]
 
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="1_rmh2y"]
 [ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://Scenes/solo_network_test.gd" id="2_4cldr"]

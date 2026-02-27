@@ -21,7 +21,7 @@ func update_move( move: int) ->void:
 		1:
 			text = "Walk_F"
 		2:
-			text = "BLOKC"
+			text = "BLOCK"
 		3:
 			text = "SHOOT"
 		4:
