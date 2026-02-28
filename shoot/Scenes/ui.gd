@@ -1,6 +1,4 @@
-extends Control
-
-var input_buffer: Array = [ ]
+extends CanvasLayer
 
 
 var current_state = 0
@@ -8,7 +6,7 @@ var max_moves_displayed = 10
 var current_moves_displayed = 0
 var move_list_spawned = false
 
-@onready var move_list_scene = preload("res://Scenes/training/move_list.tscn")
+
 enum UI_STATES{
 	MAIN_MENU,
 	IN_MATCH,
@@ -22,9 +20,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	
-	
-	
+
 	match current_state:
 		UI_STATES.MAIN_MENU:
 			_handle_main_menu()
@@ -42,6 +38,7 @@ func _handle_training():
 		return
 	var move_list = move_list_scene.instantiate()
 	add_child(move_list)
+	move_list.set_anchors_and_offsets_preset(Control.PRESET_LEFT_WIDE)
 	move_list_spawned = true
 	return
 func _handle_paused():

@@ -12,7 +12,7 @@ func _ready() -> void:
 
 func populate_moves() -> void:
 	
-	#if UI.input_buffer.size() > 0 and UI.input_buffer[-1] == UI.input_buffer[UI.input_buffer.size()-1]:
+	#if GM.input_buffer.size() > 0 and GM.input_buffer[-1] == GM.input_buffer[GM.input_buffer.size()-1]:
 		#return
 		#
 	var children = get_children()
@@ -21,16 +21,16 @@ func populate_moves() -> void:
 		children[0].queue_free()
 		return
 		
-	if UI.input_buffer.size() == 0:
+	if GM.input_buffer.size() == 0:
 		return
 		
 	
-	for i in range(last_displayed_index + 1, UI.input_buffer.size()):
+	for i in range(last_displayed_index + 1, GM.input_buffer.size()):
 		var new_move = new_move_scene.instantiate()
 		add_child(new_move)
-		new_move.update_move(UI.input_buffer[i])  # unique entry per label
+		new_move.update_move(GM.input_buffer[i])  # unique entry per label
 	
-	last_displayed_index = UI.input_buffer.size() - 1
+	last_displayed_index = GM.input_buffer.size() - 1
 		
 	
 		

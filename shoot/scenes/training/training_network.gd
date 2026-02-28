@@ -27,7 +27,7 @@ func _on_SyncManager_sync_started():
 func _spawn_players():
 	var p1_data = {
 		"position": Vector2(300, 0), 
-		"fixed_facing_dir": 1,
+		"fixed_facing_dir": -1,
 		"peer_id": 1,
 		
 	}
@@ -52,7 +52,7 @@ func _spawn_dummy():
 	
 	var d_data = {
 		"position": Vector2(-300, 0), 
-		"fixed_facing_dir": -1,
+		"fixed_facing_dir": 1,
 		"peer_id": d_id,
 		"dummy_state": true 
 	}

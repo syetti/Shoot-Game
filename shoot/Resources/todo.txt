@@ -1,5 +1,5 @@
-- optimize state machine (this is dumb for speed but good theory-wise)
-- add scrolling movelist... extend input buffer and make input_buffer display
+- optimize state machine (this is dumb for speed but good theory-wise) DONE!!!
+- add scrolling movelist... extend input buffer and make input_buffer display DONE!!!!
 - add shadows
 - reimport all anims
 	- add win anim

@@ -37,7 +37,7 @@
 	  "knockback_time": 15.0,
 	  "reaction_window_time": 60.0
 	},
-	"resources": {
+	"fatigue": {
 	  "fatigue_bar_max": 3,
 	  "fatigue_charge_time": 120
 	}

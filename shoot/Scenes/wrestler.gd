@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
-var fixed_facing_dir: int = -1
+var fixed_facing_dir: int
 
 var input_buffer = []
 #Dummy Variables
@@ -11,8 +11,9 @@ var dummy = false
 @export var dummy_feint = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
-@export var game_data: PackedScene
-var stats_data: Dictionary = game_data.stats_data
+@export var game_data_scene: PackedScene
+
+var stats_data: Dictionary 
 ###Timers
 var state_timer = 0
 
@@ -50,71 +51,43 @@ var feint_cooldown = 0
 ###
 
 ### Minor States
-enum ShootState {
-	HIT = 4,
-	KNOCKBACK = 5,
-}
 var shoot_state: int
 var block_state: int
 var feint_state: int
 
 ###Major States
-enum awareness_state {
-	PLAYER,
-	DUMMY,
-	}
+
+enum State {
+	IDLE = 0,
+	SHOOT = 2,
+	BLOCK = 3,
+	WALK = 4,
+	STUN,
+	FEINT = 6,
+}
+
 const VALID_TRANSITIONS: Dictionary = {
 	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
-	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN],
+	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.IDLE],
 	State.SHOOT: [State.IDLE, State.STUN],
 	State.BLOCK: [State.IDLE],
 	State.FEINT: [State.IDLE, State.STUN]
 	}
-	
-const ACTION_VALID_TRANSITIONS: Dictionary = {
-	-1: [1, Actions.IDLE],
-	Actions.IDLE: [Actions.SHOOT, Actions.BLOCK, Actions.FEINT, 1, -1],
-	1: [1],
-	Actions.BLOCK:[Actions.IDLE],
-	Actions.SHOOT:[Actions.IDLE],
-	Actions.FEINT:[Actions.IDLE]
+###
 
-}
-
-###Major States
-
-
-
-enum State {
-	IDLE,
-	SHOOT,
-	BLOCK,
-	WALK,
-	STUN,
-	FEINT,
-}
-
-enum Actions {
-	#Index -1 and 1 are reserved for movement
-	WALKR = 1,
-	IDLE = 0,
-	WALKL = -1,
-	BLOCK = 2,
-	SHOOT = 3,
-	FEINT = 4,
-}
 
 var current_state = State.IDLE
 @onready var anims = $Anims
 @onready var detect = $Area2D
 @onready var fatigue_bar = $fatigue_bar
-@onready var shoot_collision = $"ShootCollision"
+@onready var shoot_collision = $"HitBox"
+@onready var game_manager = $"/root/GameManager"
 var fatigue_bar_val = 0
 var fatigue_bar_charge_time = 120 #2 secs
 var found_opp = false
 var opp: Node2D
 var feinted = false
-var past_action: Actions = 0
+var past_state: State = State.IDLE
 
 var walk_speed: float = 0.0
 
@@ -128,13 +101,16 @@ func _network_spawn(data: Dictionary) -> void:
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
 	shoot_collision.disabled = true
+	var game_data = game_data_scene.instantiate()
+	add_child(game_data)
+	stats_data = game_data.stats["character_stats"]
 
 	walk_speed = stats_data["speed"]["walk_speed"]
 	hitstop = stats_data["combat"]["hitstop_frames"]
 	knockback_time = stats_data["combat"]["knockback_time"]
 	stun_time = stats_data["combat"]["stun_time"]
 	
-	if fixed_facing_dir == 1:
+	if fixed_facing_dir == -1:
 		$Sprite.flip_h = true
 	else:
 		$Sprite.flip_h = false
@@ -144,6 +120,7 @@ func _network_spawn(data: Dictionary) -> void:
 
 
 func _network_process(input: Dictionary) -> void:
+	
 	
 	if state_timer > 0:
 		state_timer -= 1
@@ -188,7 +165,7 @@ func _network_process(input: Dictionary) -> void:
 
 	if fatigue_bar_val >= 3:
 		fatigue_bar_val = 0
-		current_state = State.STUN
+		_try_state_transition(State.STUN)
 		state_timer = stats_data["combat"]["stun_time"]
 
 	fatigue_bar.value = fatigue_bar_val
@@ -205,17 +182,13 @@ func _get_local_input() -> Dictionary:
 
 	if Input.is_action_pressed("block"):
 		input["block"] = true
-		_add_to_buffer(Actions.BLOCK)
 	if Input.is_action_just_pressed("shoot"):
 		input["shoot"] = true
-		_add_to_buffer(Actions.SHOOT)
 	if Input.is_action_just_pressed("feint"):
-		_add_to_buffer(Actions.FEINT)
 		input["feint"] = true
 
 	var move_val = Input.get_axis("left", "right")
 	input["move_x"] = move_val
-	_add_to_buffer(move_val)
 
 	return input
 
@@ -232,6 +205,7 @@ func _try_state_transition(new_state: State) -> bool:
 		return false
 
 func _on_state_enter(state: State) -> void:
+	_add_to_buffer(state)
 	match state:
 		State.IDLE:
 			velocity.x = 0
@@ -240,14 +214,16 @@ func _on_state_enter(state: State) -> void:
 			shoot_state = 0
 			has_connected = false
 			velocity.x = 0
+			
 		State.BLOCK:
 			block_state = 0
+			
 		State.STUN:
 			stun_timer = stun_time
 			#anims.play("stunned")
 		State.FEINT:
 			feint_state = 0
-
+	
 
 #reset variables on exit so that next transition to the state is clean
 func _on_state_exit(state: State) -> void:
@@ -262,34 +238,26 @@ func _on_state_exit(state: State) -> void:
 			feint_state = 0
 
 
-func _add_to_buffer(action: Actions) -> void:
+func _add_to_buffer(state: State) -> void:
 	#keep buffer size
-	if input_buffer.size() > 5:
+	while input_buffer.size() > 5:
 		input_buffer.pop_front()
 	
+	if state == State.IDLE:
+		past_state = State.IDLE
 	
-	if action == 0:
+	if state == State.WALK:
 		return
 
-	if past_action == action: 
+	if state == past_state: 
 		return
-		
-	if past_action == 0:
-		past_action = action
-	
-	
 
-	#Use valid transitions to handle input_buffer s
+	input_buffer.append(state)
 	
-		
-	if action not in ACTION_VALID_TRANSITIONS[past_action]:
-		return
+	GM.input_buffer = input_buffer
 	
-	input_buffer.append(action)
-	print(input_buffer)
+	past_state = state
 
-	past_action = action
-	UI.input_buffer = input_buffer
 
 
 func _save_state() -> Dictionary:
@@ -327,17 +295,13 @@ func _handle_idle_state(input: Dictionary) -> void:
 	#Movement Transition
 	var move_dir: int = input.get("move_x", 0)
 	if input.get("block", false):
-		_add_to_buffer(Actions.BLOCK)
 		_try_state_transition(State.BLOCK)
 	if input.get("shoot", false):
-		_add_to_buffer(Actions.SHOOT)
 		_try_state_transition(State.SHOOT)
 	if input.get("feint", false):
-		_add_to_buffer(Actions.FEINT)
 		_try_state_transition(State.FEINT)
 
 	if move_dir != 0:
-		_add_to_buffer(move_dir)
 		_try_state_transition(State.WALK)
 		return
 	#
@@ -346,12 +310,12 @@ func _handle_idle_state(input: Dictionary) -> void:
 func _handle_walk_state(input: Dictionary) -> void:
 	# Handle movement inputs
 	var move_dir = input.get("move_x", 0)
-
+	_add_to_buffer(move_dir * fixed_facing_dir)
 	if move_dir != 0:
 		move(move_dir)
 	else:
 		velocity.x = 0
-		current_state = State.IDLE
+		_try_state_transition(State.IDLE)
 
 
 func _handle_block_state(input: Dictionary) -> void:
@@ -372,7 +336,7 @@ func _handle_block_state(input: Dictionary) -> void:
 				state_timer = block_active_time
 				block_state = 2
 		2:
-			current_state = State.IDLE
+			_try_state_transition(State.IDLE)
 			block_state = 0
 
 
@@ -390,7 +354,7 @@ func _handle_shoot_state() -> void:
 	if state_timer > 0:
 		if shoot_state == 2:
 			_check_shoot_collision()
-			velocity.x = -fixed_facing_dir * (speed * speed_ramp)
+			velocity.x = fixed_facing_dir * (speed * speed_ramp)
 
 			return
 
@@ -414,7 +378,7 @@ func _handle_shoot_state() -> void:
 			shoot_state = 3
 		3: #fell
 			shoot_collision.disabled = true
-			current_state = State.IDLE
+			_try_state_transition(State.IDLE)
 			velocity.x = 0
 			shoot_state = 0
 		4: #hit
@@ -461,7 +425,7 @@ func _handle_stun_state() -> void:
 
 		#anims.play("stunned")
 	else:
-		current_state = State.IDLE
+		_try_state_transition(State.IDLE)
 	pass
 
 
@@ -485,7 +449,7 @@ func _handle_feint_state() -> void:
 			feint_state = 2
 		2:
 			feint_state = 0
-			current_state = State.IDLE
+			_try_state_transition(State.IDLE)
 
 	pass
 
@@ -503,10 +467,11 @@ func try_feint() -> void:
 func move(move_dir: int):
 	velocity.x = move_dir * walk_speed
 	if move_dir == 0:
-		current_state = State.IDLE
-	if move_dir == fixed_facing_dir:
+		_try_state_transition(State.IDLE)
+	if move_dir*fixed_facing_dir == fixed_facing_dir:
 		anims.play("walk_f")
 	else:
+		
 		anims.play("walk_b")
 
 
@@ -533,14 +498,16 @@ func check_reaction() -> bool:
 	if input_buffer.size() <= 0:
 		return false
 
-	if input_buffer[-1] == Actions.BLOCK:
+	if input_buffer[-1] == State.BLOCK:
 		fatigue_bar_val += 1
 		reaction_window = 0
 		return true
-
-
 	return false
-
-
+	
+	
+func get_fatigue_data(stat: String) -> Dictionary:
+	return stats_data["fatigue"].get(stat, { })
+func get_combat_data(stat: String) -> Dictionary:
+	return stats_data["combat"].get(stat, { })
 func get_move_data(move_name: String) -> Dictionary:
 	return stats_data["moves"].get(move_name, { })

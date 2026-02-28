@@ -1,25 +1,19 @@
 [gd_scene format=3 uid="uid://n5xyxy27sjl0"]
 
-[ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://Scenes/training/move_list.gd" id="1_m8bkk"]
+[ext_resource type="Script" uid="uid://co6qxahrgb02h" path="res://scenes/training/move_list.gd" id="1_m8bkk"]
 
-[node name="Control" type="Control" unique_id=1983681394]
+[node name="move_list" type="Control" unique_id=497292497]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 
-[node name="move_list" type="CanvasLayer" parent="." unique_id=438122795]
-follow_viewport_enabled = true
-
-[node name="Panel" type="Panel" parent="move_list" unique_id=1035525598]
+[node name="Panel" type="Panel" parent="." unique_id=1035525598]
+layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 116.0
+offset_right = 118.0
 grow_vertical = 2
 
-[node name="box" type="VBoxContainer" parent="move_list/Panel" unique_id=296382817]
+[node name="box" type="VBoxContainer" parent="Panel" unique_id=296382817]
 layout_mode = 0
 offset_right = 116.0
 offset_bottom = 23.0

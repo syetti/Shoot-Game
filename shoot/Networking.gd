@@ -10,10 +10,10 @@ signal server_disconnected
 
 
 func _ready() -> void:
-
-	client_button.pressed.connect(_on_client_button_pressed)
-	server_button.pressed.connect(_on_server_button_pressed)
-	
+#
+	#client_button.pressed.connect(_on_client_button_pressed)
+	#server_button.pressed.connect(_on_server_button_pressed)
+	#
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
