@@ -81,7 +81,7 @@ var current_state = State.IDLE
 @onready var detect = $Area2D
 @onready var fatigue_bar = $fatigue_bar
 @onready var shoot_collision = $"HitBox"
-@onready var game_manager = $"/root/GameManager"
+
 var fatigue_bar_val = 0
 var fatigue_bar_charge_time = 120 #2 secs
 var found_opp = false
@@ -97,12 +97,14 @@ func _ready() -> void:
 
 
 func _network_spawn(data: Dictionary) -> void:
+	if $Sprite.position != Vector2.ZERO:
+		print("HURTBOX OFFSET: ", $Sprite.position)
 	position = data.get("position", Vector2(180, 400))
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
 	shoot_collision.disabled = true
 	var game_data = game_data_scene.instantiate()
-	add_child(game_data)
+	add_child(game_data) 
 	stats_data = game_data.stats["character_stats"]
 
 	walk_speed = stats_data["speed"]["walk_speed"]
@@ -159,7 +161,7 @@ func _network_process(input: Dictionary) -> void:
 
 		#(?)Don't shoot at feint
 	###  MOVE
-	move_and_slide()
+	move_and_collide(velocity)
 
 	###Stuff I want to player to be able to do regardless of state ( I don't want to write the same thing in idle and walk lol)###
 
@@ -341,21 +343,16 @@ func _handle_block_state(input: Dictionary) -> void:
 
 
 func _handle_shoot_state() -> void:
+	
 	var shoot_data = get_move_data("shoot")
 	var total_frames = float(shoot_data["active_hit_time"])
-	var current_frame_progress = total_frames - state_timer
-	var time = current_frame_progress / total_frames
-
-	var speed = shoot_data["shoot_distance"] / (total_frames / 60.0)
+	var shot_speed = shoot_data["shoot_distance"] / (total_frames / 60.0)
 	var knockback_speed = (stats_data["combat"]["knockback_distance"]) / (total_frames / 60.0)
-	var speed_ramp = lerpf(0.2, 4, ease(time, 0.2))
-	var knockback_ramp = lerpf(0, 2.3, ease(time, -1.8))
 
 	if state_timer > 0:
 		if shoot_state == 2:
 			_check_shoot_collision()
-			velocity.x = fixed_facing_dir * (speed * speed_ramp)
-
+			velocity.x = fixed_facing_dir * shot_speed
 			return
 
 		return
@@ -372,6 +369,7 @@ func _handle_shoot_state() -> void:
 			state_timer = shoot_active_h_time
 			shoot_state = 2
 		2: #falling
+			$HurtBox.position = Vector2.ZERO
 			state_timer = shoot_data["recovery_miss_time"]
 			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
@@ -394,7 +392,7 @@ func _handle_shoot_state() -> void:
 			shoot_state = 3
 		6: #knockback
 			state_timer = knockback_time
-			velocity.x = fixed_facing_dir * (knockback_speed * knockback_ramp)
+			velocity.x = -fixed_facing_dir * knockback_speed 
 			shoot_state = 5
 
 	return
@@ -471,7 +469,6 @@ func move(move_dir: int):
 	if move_dir*fixed_facing_dir == fixed_facing_dir:
 		anims.play("walk_f")
 	else:
-		
 		anims.play("walk_b")
 
 
