@@ -32,7 +32,7 @@ var hitstop = 0
 var block_prep_time: int = 5
 var block_active_time: int = 20
 var block_cooldown_time: int = 20
-var stun_time = 0
+var stunned_time = 30
 var stuffed_stun_time: float = 10
 var has_connected: bool = false
 
@@ -43,10 +43,10 @@ var reaction_window_time: float = 60.0
 
 ##Feint
 var feint_prep_time = 3
-var feint_active_time = 3
+var feint_active_time = 13
 var feint_recovery_time = 7
 var feint_cooldown_time = 80
-var feint_cooldown = 0
+
 
 ###
 
@@ -62,7 +62,7 @@ enum State {
 	SHOOT = 2,
 	BLOCK = 3,
 	WALK = 4,
-	STUN,
+	STUN = 5,
 	FEINT = 6,
 }
 
@@ -70,8 +70,9 @@ const VALID_TRANSITIONS: Dictionary = {
 	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK],
 	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.IDLE],
 	State.SHOOT: [State.IDLE, State.STUN],
-	State.BLOCK: [State.IDLE],
-	State.FEINT: [State.IDLE, State.STUN]
+	State.BLOCK: [State.IDLE, State.STUN],
+	State.FEINT: [State.IDLE, State.STUN],
+	State.STUN:  [State.IDLE]
 	}
 ###
 
@@ -86,7 +87,7 @@ var fatigue_bar_val = 0
 var fatigue_bar_charge_time = 120 #2 secs
 var found_opp = false
 var opp: Node2D
-var feinted = false
+
 var past_state: State = State.IDLE
 
 var walk_speed: float = 0.0
@@ -97,8 +98,7 @@ func _ready() -> void:
 
 
 func _network_spawn(data: Dictionary) -> void:
-	if $Sprite.position != Vector2.ZERO:
-		print("HURTBOX OFFSET: ", $Sprite.position)
+
 	position = data.get("position", Vector2(180, 400))
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
@@ -110,7 +110,7 @@ func _network_spawn(data: Dictionary) -> void:
 	walk_speed = stats_data["speed"]["walk_speed"]
 	hitstop = stats_data["combat"]["hitstop_frames"]
 	knockback_time = stats_data["combat"]["knockback_time"]
-	stun_time = stats_data["combat"]["stun_time"]
+	stunned_time = stats_data["combat"]["stunned_time"]
 	
 	if fixed_facing_dir == -1:
 		$Sprite.flip_h = true
@@ -130,6 +130,7 @@ func _network_process(input: Dictionary) -> void:
 	if dummy:
 		input = {
 			"block": dummy_block,
+			"feint" : dummy_feint,
 		}
 
 	### Major States
@@ -151,24 +152,20 @@ func _network_process(input: Dictionary) -> void:
 	if shoot_cooldown > 0:
 		shoot_cooldown -= 1
 
-	if feint_cooldown > 0:
-		feint_cooldown -= 1
-
 	if reaction_window > 0:
 		check_reaction()
 		reaction_window -= 1
 
 
-		#(?)Don't shoot at feint
+	
 	###  MOVE
 	move_and_collide(velocity)
 
 	###Stuff I want to player to be able to do regardless of state ( I don't want to write the same thing in idle and walk lol)###
 
-	if fatigue_bar_val >= 3:
+	if fatigue_bar_val > 3:
 		fatigue_bar_val = 0
 		_try_state_transition(State.STUN)
-		state_timer = stats_data["combat"]["stun_time"]
 
 	fatigue_bar.value = fatigue_bar_val
 
@@ -221,8 +218,8 @@ func _on_state_enter(state: State) -> void:
 			block_state = 0
 			
 		State.STUN:
-			stun_timer = stun_time
-			#anims.play("stunned")
+			stun_timer = stunned_time
+			anims.play("stun_anim/stun")
 		State.FEINT:
 			feint_state = 0
 	
@@ -418,32 +415,33 @@ func _check_shoot_collision() -> bool:
 
 
 func _handle_stun_state() -> void:
+	
 	if stun_timer > 0:
-		print("im so stunned")
-
-		#anims.play("stunned")
-	else:
-		_try_state_transition(State.IDLE)
+		anims.play("stun_anim/stun")
+		stun_timer -=1
+		return
+		
+	_try_state_transition(State.IDLE)
 	pass
 
 
 func _handle_feint_state() -> void:
+	
+		
 	if state_timer > 0:
 		return
 
 	match feint_state:
 		0:
-			#anims.play("feint_anim/faint_p")
+			anims.play("feint_anim/feint_p")
 			state_timer = feint_prep_time
 			feint_state = 1
 		1:
-			#anims.play("feint_anim/faint_a")
+			anims.play("feint_anim/feint_a")
+			state_timer = feint_active_time
 			opp = find_opp()
 			if opp and opp != self:
 				opp.try_feint()
-			else:
-				feint_cooldown = feint_cooldown_time
-			state_timer = feint_active_time
 			feint_state = 2
 		2:
 			feint_state = 0
@@ -455,6 +453,8 @@ func _handle_feint_state() -> void:
 func try_hit() -> bool:
 	if current_state == State.BLOCK:
 		return false
+	print("im hit ahhh")
+	anims.play("stun_anim/hit")
 	return true
 
 
@@ -466,7 +466,7 @@ func move(move_dir: int):
 	velocity.x = move_dir * walk_speed
 	if move_dir == 0:
 		_try_state_transition(State.IDLE)
-	if move_dir*fixed_facing_dir == fixed_facing_dir:
+	if move_dir == fixed_facing_dir:
 		anims.play("walk_f")
 	else:
 		anims.play("walk_b")
@@ -474,7 +474,8 @@ func move(move_dir: int):
 
 func find_opp() -> Node2D:
 	if found_opp:
-		return null
+		
+		return opp
 
 	var targets = detect.get_overlapping_bodies()
 	if not targets:
@@ -489,22 +490,17 @@ func find_opp() -> Node2D:
 
 #check input buffer for reactions
 func check_reaction() -> bool:
-	if reaction_window <= 0:
-		return false
 
 	if input_buffer.size() <= 0:
 		return false
 
-	if input_buffer[-1] == State.BLOCK:
+	if current_state == State.BLOCK:
 		fatigue_bar_val += 1
 		reaction_window = 0
 		return true
 	return false
 	
 	
-func get_fatigue_data(stat: String) -> Dictionary:
-	return stats_data["fatigue"].get(stat, { })
-func get_combat_data(stat: String) -> Dictionary:
-	return stats_data["combat"].get(stat, { })
+
 func get_move_data(move_name: String) -> Dictionary:
 	return stats_data["moves"].get(move_name, { })

@@ -1,6 +1,6 @@
 extends VBoxContainer
 var num_of_moves = 0
-var max_moves = 6
+var max_moves = 25
 var last_displayed_index = -1
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
@@ -17,7 +17,7 @@ func populate_moves() -> void:
 		#
 	var children = get_children()
 	
-	if children.size() >= max_moves:
+	if children.size() > max_moves:
 		children[0].queue_free()
 		return
 		

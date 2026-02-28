@@ -8,7 +8,7 @@
 	},
 	"moves": {
 	  "shoot": {
-		"shoot_distance": 5.0,
+		"shoot_distance": 10.0,
 		"prep_time": 15,
 		"active_hit_time": 5,
 		"recovery_miss_time": 26,
@@ -30,7 +30,7 @@
 	  }
 	},
 	"combat": {
-	  "stun_time": 60,
+	  "stunned_time": 75,
 	  "stuffed_stun_time": 10,
 	  "hitstop_frames": 10,
 	  "knockback_distance": 50.0,

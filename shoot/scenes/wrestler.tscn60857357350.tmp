@@ -274,47 +274,6 @@ _data = {
 &"shoot_r": SubResource("Animation_4u3dw")
 }
 
-[sub_resource type="Animation" id="Animation_tqnk5"]
-resource_name = "hit"
-length = 0.083335005
-loop_mode = 1
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.06666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [53, 54]
-}
-
-[sub_resource type="Animation" id="Animation_8c5c7"]
-length = 0.50000167
-loop_mode = 1
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [47, 52]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_tqnk5"]
-_data = {
-&"hit": SubResource("Animation_tqnk5"),
-&"stun": SubResource("Animation_8c5c7")
-}
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
 radius = 1184.1221
 
@@ -333,7 +292,6 @@ libraries/ = SubResource("AnimationLibrary_jl2re")
 libraries/block_anim = SubResource("AnimationLibrary_ujqbw")
 libraries/feint_anim = SubResource("AnimationLibrary_8c5c7")
 libraries/shoot_anim = SubResource("AnimationLibrary_7diys")
-libraries/stun_anim = SubResource("AnimationLibrary_tqnk5")
 script = ExtResource("2_04xvm")
 metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
