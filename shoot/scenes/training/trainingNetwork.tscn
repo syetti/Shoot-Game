@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cmmxe115f88ql"]
+
+[ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://scenes/training/training_network.gd" id="1_d7k0g"]
+
+[node name="soloNetworkTest" type="Node" unique_id=1933073793]
+script = ExtResource("1_d7k0g")

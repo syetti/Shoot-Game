@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://xr00k45gbxkl"]
+
+[ext_resource type="Script" uid="uid://d4iki31v5aipw" path="res://scenes/training/training_manager.gd" id="1_8bhhr"]
+[ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://scenes/wrestlingMat.tscn" id="1_rmh2y"]
+[ext_resource type="PackedScene" uid="uid://cmmxe115f88ql" path="res://scenes/training/trainingNetwork.tscn" id="2_h7qca"]
+[ext_resource type="PackedScene" uid="uid://n5xyxy27sjl0" path="res://scenes/training/move_list.tscn" id="2_nqhew"]
+
+[node name="training_manager" type="Node" unique_id=2043757785]
+script = ExtResource("1_8bhhr")
+training_network_scene = ExtResource("2_h7qca")
+move_list_scene = ExtResource("2_nqhew")
+metadata/_edit_horizontal_guides_ = [319.0, 316.0]
+metadata/_edit_vertical_guides_ = [-301.0, 302.0]
+
+[node name="wrestlingMat" parent="." unique_id=808622029 instance=ExtResource("1_rmh2y")]
+position = Vector2(-576, -100)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1311500585]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://teh77pd0ah27"]
+[gd_scene format=3 uid="uid://teh77pd0ah27"]
 
 [ext_resource type="Script" uid="uid://v0atxsjld47v" path="res://addons/delta_rollback/log_inspector/ProgressDialog.gd" id="1"]
 

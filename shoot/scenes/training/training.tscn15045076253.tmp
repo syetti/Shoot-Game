@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://xr00k45gbxkl"]
+
+[ext_resource type="Script" uid="uid://bax40e6w2or02" path="res://game_manager.gd" id="1_1f724"]
+[ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://scenes/wrestlingMat.tscn" id="1_rmh2y"]
+[ext_resource type="Script" uid="uid://c6npaw3w67x2c" path="res://scenes/solo_network_test.gd" id="2_4cldr"]
+[ext_resource type="PackedScene" uid="uid://cs5enfem1nuq5" path="res://scenes/ui.tscn" id="3_qyxhr"]
+
+[node name="GameManager" type="Node" unique_id=198998078]
+script = ExtResource("1_1f724")
+metadata/_custom_type_script = "uid://bax40e6w2or02"
+metadata/_edit_horizontal_guides_ = [319.0, 316.0]
+metadata/_edit_vertical_guides_ = [-301.0, 302.0]
+
+[node name="wrestlingMat" parent="." unique_id=808622029 instance=ExtResource("1_rmh2y")]
+position = Vector2(-576, -100)
+
+[node name="soloNetworkTest" type="Node" parent="." unique_id=357611242]
+script = ExtResource("2_4cldr")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
+
+[node name="UI" parent="." unique_id=1770421172 instance=ExtResource("3_qyxhr")]
+follow_viewport_enabled = true

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d1hrs4woq0g0c"]
+
+[ext_resource type="Script" uid="uid://doa4h5dsdsjxn" path="res://Scenes/training/move_cell.gd" id="1_j0fc7"]
+
+[node name="Label" type="Label" unique_id=1363936779]
+offset_right = 56.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+script = ExtResource("1_j0fc7")
