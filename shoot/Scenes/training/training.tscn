@@ -4,17 +4,20 @@
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://scenes/wrestlingMat.tscn" id="1_rmh2y"]
 [ext_resource type="PackedScene" uid="uid://cmmxe115f88ql" path="res://scenes/training/trainingNetwork.tscn" id="2_h7qca"]
 [ext_resource type="PackedScene" uid="uid://n5xyxy27sjl0" path="res://scenes/training/move_list.tscn" id="2_nqhew"]
+[ext_resource type="PackedScene" uid="uid://dw8oedahhtwn4" path="res://scenes/background.tscn" id="5_nqhew"]
 
 [node name="training_manager" type="Node" unique_id=2043757785]
 script = ExtResource("1_8bhhr")
 training_network_scene = ExtResource("2_h7qca")
 move_list_scene = ExtResource("2_nqhew")
-metadata/_edit_horizontal_guides_ = [319.0, 316.0]
-metadata/_edit_vertical_guides_ = [-301.0, 302.0]
+background = ExtResource("5_nqhew")
+metadata/_edit_horizontal_guides_ = [319.0, 316.0, 106.0, -330.0]
+metadata/_edit_vertical_guides_ = [-301.0, 302.0, 406.0, 418.0, -423.0]
 
 [node name="wrestlingMat" parent="." unique_id=808622029 instance=ExtResource("1_rmh2y")]
-position = Vector2(-576, -100)
+position = Vector2(-463, -159)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1311500585]
+layer = 0

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cvsh6bxxmixmu"]
 
-[ext_resource type="Script" uid="uid://bax40e6w2or02" path="res://game_manager.gd" id="1_hhs47"]
+[ext_resource type="Script" uid="uid://bax40e6w2or02" path="res://scenes/components/game_manager.gd" id="1_hhs47"]
 [ext_resource type="PackedScene" uid="uid://xr00k45gbxkl" path="res://scenes/training/training.tscn" id="2_fn6vj"]
 [ext_resource type="PackedScene" uid="uid://cmmxe115f88ql" path="res://scenes/training/trainingNetwork.tscn" id="3_uleui"]
 

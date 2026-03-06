@@ -1,24 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmptjr1mlrtb4"]
+[gd_scene format=3 uid="uid://dmptjr1mlrtb4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ph31m"]
-size = Vector2(1150, 20)
+size = Vector2(924, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_edq5k"]
 size = Vector2(9, 421)
 
-[node name="wrestlingMat" type="Node2D"]
+[node name="wrestlingMat" type="Node2D" unique_id=1292016925]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=358801482]
 position = Vector2(579, 431)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(-3, 0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=141857144]
+position = Vector2(-116, 0)
 shape = SubResource("RectangleShape2D_ph31m")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(577, -220.5)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=936788658]
+position = Vector2(350, -220.5)
 shape = SubResource("RectangleShape2D_edq5k")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" unique_id=1596558342]
 position = Vector2(-584, -219)
 shape = SubResource("RectangleShape2D_edq5k")
