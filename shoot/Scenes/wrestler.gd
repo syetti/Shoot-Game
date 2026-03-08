@@ -16,39 +16,12 @@ var dummy = false
 var stats_data: Dictionary 
 ###Timers
 var state_timer = 0
-
-
-
-var knockback_time = 0
-var shoot_prep_time: int = 15
-var shoot_active_h_time: int = 5
-
-var shoot_cooldown := 0
-
 var stun_timer = 0
 ###Global Variables
-var hitstop = 0
-##Blocking
-var block_prep_time: int = 5
-var block_active_time: int = 20
-var block_cooldown_time: int = 20
-var stunned_time = 30
-var stuffed_stun_time: float = 10
+
 var has_connected: bool = false
-
-var reaction_window: float = 0.0
-var reaction_window_time: float = 60.0
-
-##
-
-##Feint
-var feint_prep_time = 3
-var feint_active_time = 13
-var feint_recovery_time = 7
-var feint_cooldown_time = 80
-
-
-###
+var reaction_window: int
+var Data: GameData
 
 ### Minor States
 var shoot_state: int
@@ -82,8 +55,8 @@ var current_state = State.IDLE
 @onready var fatigue_bar = $fatigue_bar
 @onready var shoot_collision = $HitBox
 
-var fatigue_bar_val = 0
-var fatigue_bar_charge_time = 120 #2 secs
+
+var fatigue_bar_val: int = 0
 var found_opp = false
 var opp: Node2D
 
@@ -91,7 +64,6 @@ var past_state: State = State.IDLE
 var has_been_hit: bool = false
 var has_been_stunned : bool = false
 
-var walk_speed: float = 0.0
 var collider: KinematicCollision2D
 var combat_stats : Dictionary
 func _ready() -> void:
@@ -104,26 +76,15 @@ func _network_spawn(data: Dictionary) -> void:
 	fixed_facing_dir = data.get("fixed_facing_dir", 1)
 	dummy = data.get("dummy_state", false)
 	shoot_collision.disabled = true
-	var game_data = game_data_scene.instantiate()
-	add_child(game_data) 
-	stats_data = game_data.stats["character_stats"]
 
-	combat_stats = stats_data["combat"]
-	walk_speed = stats_data["speed"]["walk_speed"]
-	
-	stunned_time = stats_data["combat"]["stunned_time"]
-	
-	if fixed_facing_dir == -1:
-		$Sprite.flip_h = true
-	else:
-		$Sprite.flip_h = false
+	$Sprite.flip_h = true if fixed_facing_dir == -1 else false
 
 	var owner_id = data.get("peer_id", 1)
 	set_multiplayer_authority(owner_id)
 
 
 func _network_process(input: Dictionary) -> void:
-	
+	Data = GameData.new()
 	if state_timer > 0:
 		state_timer -= 1
 
@@ -151,8 +112,6 @@ func _network_process(input: Dictionary) -> void:
 			_handle_hit_state()
 
 	# Update timers
-	if shoot_cooldown > 0:
-		shoot_cooldown -= 1
 
 	if reaction_window > 0:
 		check_reaction()
@@ -218,7 +177,7 @@ func _on_state_enter(state: State) -> void:
 			block_state = 0
 			
 		State.STUN:
-			stun_timer = stunned_time
+			stun_timer = Data.combat_stunned_time
 			anims.play("stun_anim/stun")
 		State.FEINT:
 			feint_state = 0
@@ -327,7 +286,7 @@ func _handle_block_state(input: Dictionary) -> void:
 	match block_state:
 		0:
 			anims.play("block_anim/block_p")
-			state_timer = block_prep_time
+			state_timer = Data.moves_block_prep_time
 			block_state = 1
 		1:
 			anims.play("block_anim/block_a")
@@ -335,7 +294,7 @@ func _handle_block_state(input: Dictionary) -> void:
 			if is_holding:
 				block_state = 1
 			else:
-				state_timer = block_active_time
+				state_timer = Data.moves_block_active_time
 				block_state = 2
 		2:
 			_try_state_transition(State.IDLE)
@@ -343,11 +302,9 @@ func _handle_block_state(input: Dictionary) -> void:
 
 
 func _handle_shoot_state() -> void:
-	
-	var shoot_data = get_move_data("shoot")
-	var total_frames = float(shoot_data["active_hit_time"])
-	var shot_speed = shoot_data["shoot_distance"] / (total_frames / 60.0)
-	var knockback_speed = (stats_data["combat"]["knockback_distance"]) / (total_frames / 60.0)
+	var total_frames = float(Data.moves_shoot_active_time)
+	var shot_speed = Data.moves_shoot_distance / (total_frames / 60)
+	var knockback_speed = (Data.combat_knockback_distance) / (total_frames / 60)
 
 	if state_timer > 0:
 		if shoot_state == 2:
@@ -358,20 +315,20 @@ func _handle_shoot_state() -> void:
 			return
 
 		return
-	state_timer = hitstop
+	state_timer = Data.combat_hitstop_frames
 	match shoot_state:
 		0: #prepping
 			shoot_collision.disabled = true
 			anims.play("shoot_anim/shoot_p")
-			state_timer = shoot_data["prep_time"]
+			state_timer = Data.moves_shoot_prep_time
 			shoot_state = 1
 		1: #flying
 			shoot_collision.disabled = false
 			anims.play("shoot_anim/shoot_a")
-			state_timer =  shoot_data["active_hit_time"]
+			state_timer =  Data.moves_shoot_active_time
 			shoot_state = 2
 		2: #falling
-			state_timer = shoot_data["recovery_miss_time"]
+			state_timer = Data.moves_shoot_recovery_time
 			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
 			shoot_state = 3
@@ -380,17 +337,17 @@ func _handle_shoot_state() -> void:
 			_try_state_transition(State.IDLE)
 		4: #hit
 			velocity.x = 0
-			state_timer = combat_stats["hit_stop"]
+			state_timer = Data.combat_hit_anim_time
 			#anims.play("celly")
 			shoot_collision.disabled = true
 			_try_state_transition(State.IDLE)
 		5: #blocked
 			velocity.x = 0
 			anims.play("shoot_anim/shoot_r")
-			state_timer = shoot_data["recovery_miss_time"]
+			state_timer = Data.moves_shoot_recovery_time
 			shoot_state = 6
 		6: #knockback
-			state_timer = knockback_time
+			state_timer = Data.combat_knockback_time
 			velocity.x = -fixed_facing_dir * knockback_speed 
 			_try_state_transition(State.IDLE)
 
@@ -401,7 +358,7 @@ func _handle_hit_state() -> void:
 		return 
 	anims.play("stun_anim/hit")
 	if not has_been_hit:
-		state_timer = combat_stats["hit_anim_time"]
+		state_timer = Data.combat_hit_anim_time
 		has_been_hit = true
 		
 	if state_timer == 0:
@@ -428,7 +385,7 @@ func _handle_stun_state() -> void:
 		
 	anims.play("stun_anim/stun")
 	if not has_been_stunned:
-		state_timer = combat_stats["stunned_time"]
+		state_timer = Data.combat_stunned_time
 		has_been_stunned = true
 		
 	if state_timer == 0:
@@ -446,11 +403,11 @@ func _handle_feint_state() -> void:
 	match feint_state:
 		0:
 			anims.play("feint_anim/feint_p")
-			state_timer = feint_prep_time
+			state_timer = Data.moves_feint_prep_time
 			feint_state = 1
 		1:
 			anims.play("feint_anim/feint_a")
-			state_timer = feint_active_time
+			state_timer = Data.moves_feint_active_time
 			opp = find_opp()
 			if opp and opp != self:
 				opp.try_feint()
@@ -472,11 +429,11 @@ func try_hit() -> bool:
 
 
 func try_feint() -> void:
-	reaction_window = reaction_window_time
+	reaction_window = Data.combat_reaction_window_time
 
 
 func move(move_dir: int):
-	velocity.x = move_dir * walk_speed
+	velocity.x = move_dir * Data.speed_walk_speed
 	if move_dir == 0:
 		_try_state_transition(State.IDLE)
 	if move_dir == fixed_facing_dir:
@@ -512,6 +469,3 @@ func check_reaction() -> bool:
 		reaction_window = 0
 		return true
 	return false
-
-func get_move_data(move_name: String) -> Dictionary:
-	return stats_data["moves"].get(move_name, { })
