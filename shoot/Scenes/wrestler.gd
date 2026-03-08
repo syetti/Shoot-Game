@@ -5,20 +5,21 @@ extends CharacterBody2D
 var fixed_facing_dir: int
 
 var input_buffer = []
+
+
 #Dummy Variables
 var dummy = false
 @export var dummy_block = false
 @export var dummy_feint = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
-@export var game_data_scene: PackedScene
 
-var stats_data: Dictionary 
+
 ###Timers
 var state_timer = 0
 var stun_timer = 0
-###Global Variables
 
+### Global Variables
 var has_connected: bool = false
 var reaction_window: int
 var Data: GameData
@@ -28,6 +29,7 @@ var shoot_state: int
 var block_state: int
 var feint_state: int
 
+### Major State
 enum State {
 	IDLE = 0,
 	SHOOT = 2,
