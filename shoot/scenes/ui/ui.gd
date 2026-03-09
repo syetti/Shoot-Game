@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 
+
 var current_state = 0
 var max_moves_displayed = 10
 var current_moves_displayed = 0

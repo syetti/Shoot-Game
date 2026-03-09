@@ -1,13 +1,12 @@
 [gd_scene format=3 uid="uid://c00otajcfr0y7"]
 
-[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://scenes/wrestler.gd" id="1_da70j"]
-[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="2_04xvm"]
-[ext_resource type="Shape2D" uid="uid://dha3xi5mvs08x" path="res://scenes/components/hurtbox_shape.tres" id="2_ddc1g"]
-[ext_resource type="PackedScene" uid="uid://cpro674k22lo0" path="res://scenes/components/GameData.tscn" id="2_dfwir"]
-[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="3_d6ntd"]
-[ext_resource type="Texture2D" uid="uid://dsofh008pg360" path="res://Sprites/Stun-Bar/StunBarBG.png" id="6_1huq6"]
-[ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_7r32w"]
-[ext_resource type="Shape2D" uid="uid://by15itblkg2ol" path="res://scenes/components/hitbox_shape.tres" id="8_7r32w"]
+[ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://scenes/wrestler/wrestler.gd" id="1_xe0xt"]
+[ext_resource type="Shape2D" uid="uid://dha3xi5mvs08x" path="res://scenes/components/hurtbox_shape.tres" id="2_gpx7x"]
+[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="3_lvqsm"]
+[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="4_x3ttl"]
+[ext_resource type="Texture2D" uid="uid://dsofh008pg360" path="res://Sprites/Stun-Bar/StunBarBG.png" id="5_e61iy"]
+[ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_ni7t6"]
+[ext_resource type="Shape2D" uid="uid://by15itblkg2ol" path="res://scenes/components/hitbox_shape.tres" id="7_72myw"]
 
 [sub_resource type="Animation" id="Animation_8iimx"]
 length = 0.001
@@ -323,12 +322,11 @@ z_index = 2
 z_as_relative = false
 collision_layer = 2
 collision_mask = 3
-script = ExtResource("1_da70j")
-game_data_scene = ExtResource("2_dfwir")
+script = ExtResource("1_xe0xt")
 
 [node name="HurtBox" type="CollisionShape2D" parent="." unique_id=1660789225]
 position = Vector2(-0.8993759, -0.23062515)
-shape = ExtResource("2_ddc1g")
+shape = ExtResource("2_gpx7x")
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
 libraries/ = SubResource("AnimationLibrary_jl2re")
@@ -336,13 +334,13 @@ libraries/block_anim = SubResource("AnimationLibrary_ujqbw")
 libraries/feint_anim = SubResource("AnimationLibrary_8c5c7")
 libraries/shoot_anim = SubResource("AnimationLibrary_7diys")
 libraries/stun_anim = SubResource("AnimationLibrary_tqnk5")
-script = ExtResource("2_04xvm")
+script = ExtResource("3_lvqsm")
 metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=131849878]
 position = Vector2(-5.684342e-14, 0)
 scale = Vector2(4, 4)
-texture = ExtResource("3_d6ntd")
+texture = ExtResource("4_x3ttl")
 hframes = 55
 region_rect = Rect2(0, 0, 32, 32)
 
@@ -365,11 +363,11 @@ offset_bottom = -63.865997
 grow_horizontal = 2
 max_value = 3.0
 nine_patch_stretch = true
-texture_under = ExtResource("6_1huq6")
-texture_progress = ExtResource("6_7r32w")
+texture_under = ExtResource("5_e61iy")
+texture_progress = ExtResource("6_ni7t6")
 
 [node name="HitBox" type="CollisionShape2D" parent="." unique_id=20392300]
 position = Vector2(-1, 14)
-shape = ExtResource("8_7r32w")
+shape = ExtResource("7_72myw")
 disabled = true
 debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

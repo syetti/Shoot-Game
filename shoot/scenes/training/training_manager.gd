@@ -12,7 +12,7 @@ func _ready() -> void:
 	add_child(training_network)
 	$UI.add_child(move_list)
 	move_list.set_anchors_and_offsets_preset(Control.PRESET_LEFT_WIDE)
-	$UI.add_child(bg)
+	#$UI.add_child(bg)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

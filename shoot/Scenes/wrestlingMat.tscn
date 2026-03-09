@@ -1,8 +1,5 @@
 [gd_scene format=3 uid="uid://dmptjr1mlrtb4"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ph31m"]
-size = Vector2(924, 20)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_edq5k"]
 size = Vector2(9, 421)
 
@@ -10,10 +7,6 @@ size = Vector2(9, 421)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=358801482]
 position = Vector2(579, 431)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=141857144]
-position = Vector2(-116, 0)
-shape = SubResource("RectangleShape2D_ph31m")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=936788658]
 position = Vector2(350, -220.5)

@@ -1,47 +1,42 @@
 {
-"character_stats": {
-	"speed": {
-		"walk_speed": 5,
-		"shoot_speed": 20,
-		"stuffed_speed": 2 
-	},
-	
-	"moves": {
-		"shoot": {
-		"shoot_distance": 9,
-		"prep_time": 15,
-		"active_hit_time": 5,
-		"recovery_miss_time": 26,
-		"root_time": 20,
-		
-		"total_frames": 46
-	},
-	
-	
-	"block": {
-		"prep_time": 5,
-		"active_time": 20
-
-	  },
-	  "feint": {
-		"prep_time": 3,
-		"active_time": 3,
-		"recovery_time": 7,
-		"cooldown_time": 80
-	  }
-	},
-	"combat": {
-		"stunned_time": 75,
-		"stuffed_stun_time": 10,
-		"hitstop_frames": 10,
-		"knockback_distance": 50,
-		"knockback_time": 15,
-		"reaction_window_time": 60,
-		"hit_anim_time": 20
-	},
-	"fatigue": {
-	  "fatigue_bar_max": 3,
-	  "fatigue_charge_time": 120
+	"character_stats": {
+		"speed": {
+			"walk_speed": 5.0,
+			"shoot_speed": 20.0,
+			"stuffed_speed": 2.0
+		},
+		"moves": {
+			"shoot": {
+				"shoot_distance": 300.0,
+				"prep_time": 15.0,
+				"active_time": 5.0,
+				"recovery_time": 26.0,
+				"root_time": 20.0,
+				"total_frames": 46.0
+			},
+			"block": {
+				"prep_time": 5.0,
+				"active_time": 20.0
+			},
+			"feint": {
+				"prep_time": 3.0,
+				"active_time": 3.0,
+				"recovery_time": 7.0,
+				"cooldown_time": 80.0
+			}
+		},
+		"combat": {
+			"stunned_time": 75.0,
+			"stuffed_stun_time": 10.0,
+			"hitstop_frames": 10.0,
+			"knockback_distance": 50.0,
+			"knockback_time": 15.0,
+			"reaction_window_time": 60.0,
+			"hit_anim_time": 20.0
+		},
+		"fatigue": {
+			"fatigue_bar_max": 3.0,
+			"fatigue_charge_time": 120.0
+		}
 	}
-  }
 }
