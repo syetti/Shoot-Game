@@ -347,7 +347,6 @@ func _handle_shoot_state() -> void:
 			shoot_state = MoveState.FALLEN
 		MoveState.FALLEN: #fell
 			shoot_collision.disabled = true
-			print(position)
 			_try_state_transition(State.IDLE)
 		MoveState.HIT: #hit
 			velocity.x = 0
@@ -465,7 +464,6 @@ func find_opp() -> Node2D:
 	if not targets:
 		return null
 	for target in targets:
-		print(target)
 		if target != self and target.has_method("try_feint"):
 			found_opp = true
 			opp = target

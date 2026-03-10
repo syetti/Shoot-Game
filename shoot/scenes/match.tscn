@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dxnk6jwtla12a"]
+
+[ext_resource type="Script" uid="uid://cwm40sx3sde2y" path="res://scenes/match_manager.gd" id="1_80q71"]
+
+[node name="World" type="Node" unique_id=1539638073 groups=["network_sync"]]
+script = ExtResource("1_80q71")

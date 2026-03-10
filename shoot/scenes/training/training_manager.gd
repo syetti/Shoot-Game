@@ -6,7 +6,7 @@ var current_moves_displayed = 0
 @export var background: PackedScene
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var bg = background.instantiate()
+	#var bg = background.instantiate()
 	var move_list = move_list_scene.instantiate()
 	var training_network = training_network_scene.instantiate()
 	add_child(training_network)

@@ -3,10 +3,13 @@ class_name GameManager extends Node
 var input_buffer: Array = [ ]
 
 @export var training_scene : PackedScene
-@export var training_network: PackedScene
+@export var match_scene: PackedScene
+@export var main_menu_scene: PackedScene
 var training_spawned: bool = false
 var level_state = 0
-	
+var child: Node
+
+
 enum GAME_STATES{
 	MAIN_MENU,
 	IN_MATCH,
@@ -21,14 +24,15 @@ var logging_enabled := true
 
 
 func _ready() -> void:
-	
 	level_state = GAME_STATES.TRAINING
 	#Global.match_countdown()
 	pass
 
 	#
-	
+
+
 func _on_scene_enter(scene_file: PackedScene) -> void:
+	get_child(0).queue_free()
 	var scene = scene_file.instantiate()
 	add_child(scene)
 	pass
@@ -50,6 +54,7 @@ func _handle_training():
 	if training_spawned == true:
 		return
 	_on_scene_enter(training_scene)
+	
 	training_spawned = true
 func _handle_paused():
 	return

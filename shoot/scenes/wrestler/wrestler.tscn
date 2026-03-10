@@ -363,6 +363,8 @@ offset_bottom = -29.865997
 grow_horizontal = 2
 max_value = 3.0
 nine_patch_stretch = true
+stretch_margin_left = 118
+stretch_margin_top = 12
 texture_under = ExtResource("5_e61iy")
 texture_progress = ExtResource("6_ni7t6")
 
