@@ -31,7 +31,6 @@ func _ready() -> void:
 func _on_scene_enter(scene_file: PackedScene) -> void:
 	var scene = scene_file.instantiate()
 	add_child(scene)
-	training_spawned = true
 	pass
 	
 func _physics_process(delta: float) -> void:
@@ -51,6 +50,7 @@ func _handle_training():
 	if training_spawned == true:
 		return
 	_on_scene_enter(training_scene)
+	training_spawned = true
 func _handle_paused():
 	return
 func _handle_in_match():

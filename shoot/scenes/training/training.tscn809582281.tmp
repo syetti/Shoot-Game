@@ -15,6 +15,7 @@ metadata/_edit_horizontal_guides_ = [319.0, 316.0, 106.0, -330.0]
 metadata/_edit_vertical_guides_ = [-301.0, 302.0, 406.0, 418.0, -423.0]
 
 [node name="wrestlingMat" parent="." unique_id=808622029 instance=ExtResource("1_rmh2y")]
+position = Vector2(-463, -159)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1159311546]
 

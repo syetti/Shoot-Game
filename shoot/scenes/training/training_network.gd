@@ -1,7 +1,6 @@
 extends Node
 const DummyNetworkAdaptor = preload("res://addons/delta_rollback/DummyNetworkAdaptor.gd")
-var wrestler = preload("res://Scenes/wrestler.tscn")
-var dummy = preload("res://Scenes/dummy.tscn")
+var wrestler = preload("uid://c00otajcfr0y7")
 func _ready():
 	# 1. Create a "Fake" Server
 	var peer = ENetMultiplayerPeer.new()
@@ -26,7 +25,7 @@ func _on_SyncManager_sync_started():
 		
 func _spawn_players():
 	var p1_data = {
-		"position": Vector2(400, 152), 
+		"position": Vector2(200, 100), 
 		"fixed_facing_dir": -1,
 		"peer_id": 1,
 		
@@ -51,7 +50,7 @@ func _spawn_dummy():
 	var d_id = 2
 	
 	var d_data = {
-		"position": Vector2(-400, 152), 
+		"position": Vector2(-200, 100), 
 		"fixed_facing_dir": 1,
 		"peer_id": d_id,
 		"dummy_state": true 

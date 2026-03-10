@@ -325,7 +325,7 @@ collision_mask = 3
 script = ExtResource("1_xe0xt")
 
 [node name="HurtBox" type="CollisionShape2D" parent="." unique_id=1660789225]
-position = Vector2(-0.8993759, -0.23062515)
+position = Vector2(1, 12)
 shape = ExtResource("2_gpx7x")
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
@@ -339,7 +339,7 @@ metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=131849878]
 position = Vector2(-5.684342e-14, 0)
-scale = Vector2(4, 4)
+scale = Vector2(2, 2)
 texture = ExtResource("4_x3ttl")
 hframes = 55
 region_rect = Rect2(0, 0, 32, 32)
@@ -357,9 +357,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -40.0
-offset_top = -72.0
+offset_top = -38.0
 offset_right = 40.0
-offset_bottom = -63.865997
+offset_bottom = -29.865997
 grow_horizontal = 2
 max_value = 3.0
 nine_patch_stretch = true
@@ -367,7 +367,7 @@ texture_under = ExtResource("5_e61iy")
 texture_progress = ExtResource("6_ni7t6")
 
 [node name="HitBox" type="CollisionShape2D" parent="." unique_id=20392300]
-position = Vector2(-1, 14)
+position = Vector2(0, 6)
 shape = ExtResource("7_72myw")
 disabled = true
 debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

@@ -1,6 +1,6 @@
 extends VBoxContainer
 var num_of_moves = 0
-var max_moves = 25
+var max_moves = 20
 var last_displayed_index = -1
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")

@@ -1,7 +1,7 @@
 {
 	"character_stats": {
 		"speed": {
-			"walk_speed": 5.0,
+			"walk_speed": 3.0,
 			"shoot_speed": 20.0,
 			"stuffed_speed": 2.0
 		},

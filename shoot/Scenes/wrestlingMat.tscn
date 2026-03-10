@@ -6,12 +6,11 @@ size = Vector2(9, 421)
 [node name="wrestlingMat" type="Node2D" unique_id=1292016925]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=358801482]
-position = Vector2(579, 431)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=936788658]
-position = Vector2(350, -220.5)
+position = Vector2(320, 0)
 shape = SubResource("RectangleShape2D_edq5k")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" unique_id=1596558342]
-position = Vector2(-584, -219)
+position = Vector2(-320, 0)
 shape = SubResource("RectangleShape2D_edq5k")
