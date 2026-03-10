@@ -32,7 +32,8 @@ func _ready() -> void:
 
 
 func _on_scene_enter(scene_file: PackedScene) -> void:
-	get_child(0).queue_free()
+	if get_children().size()>0:
+		get_child(0).queue_free()
 	var scene = scene_file.instantiate()
 	add_child(scene)
 	pass

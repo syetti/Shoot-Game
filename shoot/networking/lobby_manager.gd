@@ -46,6 +46,7 @@ var _webrtc_mp : WebRTCMultiplayerPeer
 
 var is_training_mode : bool = false   #training mode
 func _ready() -> void:
+	is_training_mode = true
 	set_process(false)
 
 func _process(_delta: float) -> void:
@@ -68,6 +69,8 @@ func _process(_delta: float) -> void:
 	if _webrtc_mp:
 		_webrtc_mp.poll()
 		_check_webrtc_connections()
+
+
 
 #training mode (single player)
 func start_training_mode() -> void:

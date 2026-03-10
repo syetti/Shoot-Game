@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dxnk6jwtla12a"]
 
-[ext_resource type="Script" uid="uid://cwm40sx3sde2y" path="res://scenes/match_manager.gd" id="1_80q71"]
+[ext_resource type="Script" uid="uid://cwm40sx3sde2y" path="res://Scenes/match_manager.gd" id="1_80q71"]
+[ext_resource type="PackedScene" uid="uid://bfk8vtyd6tucq" path="res://Scenes/ui/rounds.tscn" id="2_fxjlk"]
 
 [node name="World" type="Node" unique_id=1539638073 groups=["network_sync"]]
 script = ExtResource("1_80q71")
+round_markers_scene = ExtResource("2_fxjlk")

@@ -70,7 +70,7 @@ func _on_sync_error(msg: String) -> void:
 	push_error("SyncManager fatal error: " + msg)
 	SyncManager.stop()
 	LobbyManager.reset()
-	get_tree().change_scene_to_file("res://scenes/Lobby.tscn")
+	get_tree().change_scene_to_file("uid://ceb6r2vm8xu4o")
 
 func _on_peer_pinged(peer_id: int) -> void:
 	# Optional: display live ping in your HUD

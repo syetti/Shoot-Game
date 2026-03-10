@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://df1j4s8qujs41"]
 
-[ext_resource type="Script" uid="uid://djg1xq88a7aqc" path="res://scenes/menus/main_menu.gd" id="1_xqga4"]
+[ext_resource type="Script" uid="uid://djg1xq88a7aqc" path="res://Scenes/menus/main_menu.gd" id="1_xqga4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5
@@ -28,7 +28,7 @@ grow_vertical = 2
 script = ExtResource("1_xqga4")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=857546561]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(200, 210)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -36,14 +36,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
-offset_top = -150.0
+offset_top = -125.0
 offset_right = 100.0
-offset_bottom = 64.0
+offset_bottom = 75.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ukx7c")
 
 [node name="MenuContainer" type="VBoxContainer" parent="PanelContainer" unique_id=554934777]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MenuContainer" unique_id=1568089258]
@@ -59,25 +60,31 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1205566871]
+[node name="CreateButton" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1205566871]
 layout_mode = 2
 text = "Create Room"
 
-[node name="Button2" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=15610909]
+[node name="JoinButton" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=15610909]
 layout_mode = 2
 text = "Join Room
 "
 
-[node name="Button5" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1556006777]
+[node name="TrainingButton" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1556006777]
 layout_mode = 2
 text = "Training
 "
 
-[node name="Button3" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1435694963]
+[node name="LocalButton" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1435694963]
 layout_mode = 2
-text = "Start"
+text = "Local"
 
-[node name="Button4" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1887829773]
+[node name="ExitButton" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1887829773]
 layout_mode = 2
 text = "Exit
 "
+
+[connection signal="pressed" from="PanelContainer/MenuContainer/ButtonContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MenuContainer/ButtonContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MenuContainer/ButtonContainer/TrainingButton" to="." method="_on_training_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MenuContainer/ButtonContainer/LocalButton" to="." method="_on_local_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MenuContainer/ButtonContainer/ExitButton" to="." method="_on_exit_button_pressed"]

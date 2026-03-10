@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://ceb6r2vm8xu4o"]
+[gd_scene format=3 uid="uid://6wwyaa1odkf8"]
 
-[ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://scenes/lobby/lobby.gd" id="1_1ig7j"]
+[ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://Scenes/menus/lobby/join_lobby.gd" id="1_d12xk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5
@@ -12,17 +12,21 @@ expand_margin_left = 10.0
 expand_margin_top = 10.0
 expand_margin_right = 10.0
 
-[node name="Lobby" type="Control" unique_id=654519501]
+[sub_resource type="LabelSettings" id="LabelSettings_ubbun"]
+font_size = 10
+font_color = Color(1, 0, 0, 1)
+
+[node name="JoinLobby" type="Control" unique_id=654519501]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_1ig7j")
+script = ExtResource("1_d12xk")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=857546561]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 150)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,9 +34,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -107.5
-offset_top = -150.0
+offset_top = -75.0
 offset_right = 107.5
-offset_bottom = -47.0
+offset_bottom = 75.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ukx7c")
@@ -51,10 +55,18 @@ layout_mode = 2
 text = "Input Lobby Code:"
 
 [node name="LobbyCodeText" type="LineEdit" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
+unique_name_in_owner = true
 layout_mode = 2
-text = "12345"
-max_length = 5
+text = "1234"
+max_length = 4
 expand_to_text_length = true
+
+[node name="ErrorLabel" type="Label" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=1557347280]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Please enter a valid room code."
+label_settings = SubResource("LabelSettings_ubbun")
 
 [node name="JoinRoomButton" type="Button" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=15610909]
 layout_mode = 2
@@ -64,3 +76,6 @@ text = "Join Room
 [node name="ExitLobbyOptionsButton" type="Button" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=1780727922]
 layout_mode = 2
 text = "Exit To Menu"
+
+[connection signal="pressed" from="PanelContainer/HBoxContainer/LobbyOptionsContainer/JoinRoomButton" to="." method="_on_join_room_button_pressed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/LobbyOptionsContainer/ExitLobbyOptionsButton" to="." method="_on_exit_lobby_options_button_pressed"]
