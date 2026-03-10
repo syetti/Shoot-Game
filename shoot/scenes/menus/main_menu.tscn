@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://df1j4s8qujs41"]
+
+[ext_resource type="Script" uid="uid://djg1xq88a7aqc" path="res://scenes/menus/main_menu.gd" id="1_xqga4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ig7j"]
+bg_color = Color(0.054973133, 0.12032207, 0.12484241, 1)
+border_color = Color(3.657937e-06, 0.9009636, 0.9930031, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[node name="MainMenu" type="Control" unique_id=654519501]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xqga4")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=857546561]
+custom_minimum_size = Vector2(200, 250)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -150.0
+offset_right = 100.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ukx7c")
+
+[node name="MenuContainer" type="VBoxContainer" parent="PanelContainer" unique_id=554934777]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MenuContainer" unique_id=1568089258]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ig7j")
+
+[node name="Label" type="Label" parent="PanelContainer/MenuContainer/PanelContainer" unique_id=697299873]
+layout_mode = 2
+text = "SHOOT"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="PanelContainer/MenuContainer" unique_id=1237050887]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1205566871]
+layout_mode = 2
+text = "Create Room"
+
+[node name="Button2" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=15610909]
+layout_mode = 2
+text = "Join Room
+"
+
+[node name="Button5" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1556006777]
+layout_mode = 2
+text = "Training
+"
+
+[node name="Button3" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1435694963]
+layout_mode = 2
+text = "Start"
+
+[node name="Button4" type="Button" parent="PanelContainer/MenuContainer/ButtonContainer" unique_id=1887829773]
+layout_mode = 2
+text = "Exit
+"

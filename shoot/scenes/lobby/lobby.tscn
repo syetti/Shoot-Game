@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://ceb6r2vm8xu4o"]
+
+[ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://scenes/lobby/lobby.gd" id="1_1ig7j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+
+[node name="Lobby" type="Control" unique_id=654519501]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1ig7j")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=857546561]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.5
+offset_top = -150.0
+offset_right = 107.5
+offset_bottom = -47.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ukx7c")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=2088451275]
+layout_mode = 2
+
+[node name="LobbyOptionsContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=1639667480]
+layout_mode = 2
+
+[node name="LobbyCodeContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=2016064719]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=1588743407]
+layout_mode = 2
+text = "Input Lobby Code:"
+
+[node name="LobbyCodeText" type="LineEdit" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
+layout_mode = 2
+text = "12345"
+max_length = 5
+expand_to_text_length = true
+
+[node name="JoinRoomButton" type="Button" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=15610909]
+layout_mode = 2
+text = "Join Room
+"
+
+[node name="ExitLobbyOptionsButton" type="Button" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer" unique_id=1780727922]
+layout_mode = 2
+text = "Exit To Menu"

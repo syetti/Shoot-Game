@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bax40e6w2or02" path="res://scenes/components/game_manager.gd" id="1_hhs47"]
 [ext_resource type="PackedScene" uid="uid://xr00k45gbxkl" path="res://scenes/training/training.tscn" id="2_fn6vj"]
-[ext_resource type="PackedScene" uid="uid://cmmxe115f88ql" path="res://scenes/training/trainingNetwork.tscn" id="3_uleui"]
+[ext_resource type="PackedScene" path="res://scenes/match.tscn" id="3_gp6hv"]
 
 [node name="GameManager" type="Node" unique_id=604988351]
 script = ExtResource("1_hhs47")
 training_scene = ExtResource("2_fn6vj")
-training_network = ExtResource("3_uleui")
+match_scene = ExtResource("3_gp6hv")

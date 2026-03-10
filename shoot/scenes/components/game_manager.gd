@@ -6,6 +6,7 @@ var input_buffer: Array = [ ]
 @export var match_scene: PackedScene
 @export var main_menu_scene: PackedScene
 var training_spawned: bool = false
+var match_spawned: bool = false
 var level_state = 0
 var child: Node
 
@@ -26,8 +27,7 @@ var logging_enabled := true
 func _ready() -> void:
 	level_state = GAME_STATES.TRAINING
 	#Global.match_countdown()
-	pass
-
+	
 	#
 
 
@@ -59,6 +59,11 @@ func _handle_training():
 func _handle_paused():
 	return
 func _handle_in_match():
+	if match_spawned == true:
+		return
+	_on_scene_enter(match_scene)
+	match_spawned = true	
+
 	return
 func _handle_main_menu():
 	return 

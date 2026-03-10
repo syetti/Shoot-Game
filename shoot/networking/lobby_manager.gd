@@ -10,38 +10,42 @@ signal room_joined(code: String)
 signal room_error(message: String)
 signal player_joined(peer_id: int)
 signal player_left(peer_id: int)
+signal webrtc_connected
 signal game_starting
 
 # Config — edit these as needed
 ## Use wss:// (TLS) for HTML5 export and HTTPS.
 ## Use ws://  for local development.
 const SIGNAL_URL := "ws://localhost:9080"   # Change to vps ip/domain and port if not local
+const MAX_PLAYERS := 2   # LobbyManager supports up to 2 total players
+
 
 const ICE_SERVERS := [
 	
-    { "urls": "stun:stun.l.google.com:19302" },
-    { "urls": "stun:stun.l.google.com:5349" },
-    { "urls": "stun:stun1.l.google.com:3478" },
-    { "urls": "stun:stun1.l.google.com:5349" },
-    { "urls": "stun:stun2.l.google.com:19302" },
-    { "urls": "stun:stun2.l.google.com:5349" },
-    { "urls": "stun:stun3.l.google.com:3478" },
-    { "urls": "stun:stun3.l.google.com:5349" },
-    { "urls": "stun:stun4.l.google.com:19302" },
-    { "urls": "stun:stun4.l.google.com:5349" },
+	{ "urls": "stun:stun.l.google.com:19302" },
+	{ "urls": "stun:stun.l.google.com:5349" },
+	{ "urls": "stun:stun1.l.google.com:3478" },
+	{ "urls": "stun:stun1.l.google.com:5349" },
+	{ "urls": "stun:stun2.l.google.com:19302" },
+	{ "urls": "stun:stun2.l.google.com:5349" },
+	{ "urls": "stun:stun3.l.google.com:3478" },
+	{ "urls": "stun:stun3.l.google.com:5349" },
+	{ "urls": "stun:stun4.l.google.com:19302" },
+	{ "urls": "stun:stun4.l.google.com:5349" },
 ]
 
 var my_id : int = -1
 var current_room : String = ""
 var is_host : bool = false
 var peers : Dictionary = {}   # peer_id → WebRTCPeerConnection
+var _connected_peers : Array[int] = []
+
 
 var _ws : WebSocketPeer
 var _webrtc_mp : WebRTCMultiplayerPeer
+
 var is_training_mode : bool = false   #training mode
 func _ready() -> void:
-
-        
 	set_process(false)
 
 func _process(_delta: float) -> void:
@@ -61,15 +65,20 @@ func _process(_delta: float) -> void:
 		WebSocketPeer.STATE_CLOSED:
 			_on_ws_closed()
 
+	if _webrtc_mp:
+		_webrtc_mp.poll()
+		_check_webrtc_connections()
 
 #training mode (single player)
 func start_training_mode() -> void:
 	is_training_mode = true
 
-# api
+#-----api
 func connect_to_server() -> void:
+	is_training_mode = false
 	_ws = WebSocketPeer.new()
 	_webrtc_mp = WebRTCMultiplayerPeer.new()
+	multiplayer.multiplayer_peer = _webrtc_mp
 
 	var err := _ws.connect_to_url(SIGNAL_URL)
 	if err != OK:
@@ -87,12 +96,22 @@ func join_room(code: String) -> void:
 func start_game() -> void:
 	if not is_host:
 		return
+	if _connected_peers.size() < (MAX_PLAYERS - 1):
+		room_error.emit("Still connecting — please wait a moment")
+		return
 	_send({ "type": "start_game" })
 
 func reset() -> void:
+	is_training_mode = false
+
+	if SyncManager.started:
+		SyncManager.stop()
+	SyncManager.clear_peers()
+
 	for conn in peers.values():
 		conn.close()
 	peers.clear()
+	_connected_peers.clear()
 
 	if _webrtc_mp:
 		_webrtc_mp.close()
@@ -105,6 +124,24 @@ func reset() -> void:
 	current_room = ""
 	is_host = false
 	set_process(false)
+
+
+
+# ── WebRTC connection state watcher ───────────────────────────────────────────
+## Runs each frame. Watches each peer's WebRTCPeerConnection until it reaches
+## STATE_CONNECTED, meaning the ICE and DTLS handshakes are both complete and
+## data channels are open. Only after this point is it safe to add the peer to
+## SyncManager and call SyncManager.start().
+func _check_webrtc_connections() -> void:
+	for pid in peers:
+		if pid in _connected_peers:
+			continue
+		var conn : WebRTCPeerConnection = peers[pid]
+		if conn.get_connection_state() == WebRTCPeerConnection.STATE_CONNECTED:
+			_connected_peers.append(pid)
+			print("LobbyManager: WebRTC connected to peer %d" % pid)
+			if _connected_peers.size() >= (MAX_PLAYERS - 1):
+				webrtc_connected.emit()
 
 #signal message handler
 func _handle_signal(msg: Dictionary) -> void:
@@ -182,7 +219,13 @@ func _remove_peer(peer_id: int) -> void:
 	if peers.has(peer_id):
 		peers[peer_id].close()
 		peers.erase(peer_id)
-	_webrtc_mp.remove_peer(peer_id)
+	_connected_peers.erase(peer_id)
+
+	if _webrtc_mp:
+		_webrtc_mp.remove_peer(peer_id)
+	
+	if SyncManager.started:
+		SyncManager.remove_peer(peer_id)
 
 func _on_session_created(peer_id: int, type: String, sdp: String) -> void:
 	peers[peer_id].set_local_description(type, sdp)
