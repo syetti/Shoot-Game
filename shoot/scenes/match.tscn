@@ -1,8 +1,12 @@
-[gd_scene format=3 uid="uid://dxnk6jwtla12a"]
+[gd_scene format=3 uid="uid://5drda1j5h5xd"]
 
-[ext_resource type="Script" path="res://Scenes/match_manager.gd" id="1_80q71"]
-[ext_resource type="PackedScene" path="res://Scenes/ui/rounds.tscn" id="2_fxjlk"]
+[ext_resource type="Script" uid="uid://bj7qmaax1lmab" path="res://scenes/match_manager.gd" id="1_80q71"]
+[ext_resource type="PackedScene" uid="uid://bfk8vtyd6tucq" path="res://scenes/ui/rounds.tscn" id="2_t0cgm"]
 
-[node name="World" type="Node" unique_id=1539638073 groups=["network_sync"]]
+[node name="World" type="Node" unique_id=360022064]
 script = ExtResource("1_80q71")
-round_markers_scene = ExtResource("2_fxjlk")
+round_markers_scene = ExtResource("2_t0cgm")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1141370942]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1272129574]
