@@ -1,8 +1,11 @@
 extends Node
 @export var round_markers_scene: PackedScene
+
 var round_markers: Node
 var rounds: Array[Node]
 var wrestler = preload("uid://c00otajcfr0y7")
+var current_round = 0
+signal reset_hit
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -19,33 +22,45 @@ func _ready() -> void:
 	# so SyncManager already knows about all peers.
 	if multiplayer.is_server():
 		#wait for p2 to connect before starting the match
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.25).timeout
+
 		SyncManager.start()
 
 
 
 	
 
-func change_round(winner: CharacterBody2D, round: int) -> void: 
+
+
+
+func change_round(winner: CharacterBody2D, curr_round: int) -> void: 
 	var player_color: Color = winner.modulate
-	rounds[round].modulate = player_color
+	rounds[curr_round].modulate = player_color
 	pass
 	
 func _reset_player_pos() -> void:
+	$P1.position.x = 160
+	$P2.position.x = -160
 	pass
+
 func _round_start() -> void:
 	pass
+
+func _on_been_hit(winner: CharacterBody2D) -> void:
+	change_round(winner, (current_round+1))
+	_reset_player_pos()
+	reset_hit.emit()
+	
 
 ### Networking callbacks
 func _on_sync_started() -> void:
 
 	round_markers = round_markers_scene.instantiate()
-	add_child(round_markers)
+	$UI.add_child(round_markers)
 	rounds = round_markers.get_child(0).get_children()
 
-
 	if multiplayer.is_server():
-		
+
 		print("Connected")
 		_spawn_players()
 	

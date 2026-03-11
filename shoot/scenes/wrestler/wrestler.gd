@@ -6,7 +6,7 @@ var fixed_facing_dir: int
 
 var input_buffer = []
 
-
+signal _been_hit(winner: CharacterBody2D, )
 #Dummy Variables
 var dummy = false
 @export var dummy_block = false
@@ -372,6 +372,7 @@ func _handle_hit_state() -> void:
 	anims.play("stun_anim/hit")
 	if not has_been_hit:
 		state_timer = Data.combat_hit_anim_time
+		_been_hit.emit(opp)
 		has_been_hit = true
 		
 	if state_timer == 0:

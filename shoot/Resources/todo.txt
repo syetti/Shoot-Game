@@ -23,9 +23,9 @@
 		- D : Right
 		- S : Block
 
---Win - shoot or throw opp
+--Win - shoot opponent
 
---Lose - get thrown or shot on
+--Lose - get shot on
 
 --Options:
 	Shoot:
@@ -39,11 +39,6 @@
 
 --Frame Data:
 	-Will be updated later...
-
-- handle block logic
-- redo sprite legs. ugly.
-- add animation for hitting opp
-- differentiate dummy and player2
 
 --MUSIC
 -Anything

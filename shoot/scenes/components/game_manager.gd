@@ -25,10 +25,18 @@ var logging_enabled := true
 
 
 func _ready() -> void:
-	level_state = GAME_STATES.TRAINING
+
 	#Global.match_countdown()
-	
+	pass
+
 	#
+
+func on_start_training():
+	level_state = GAME_STATES.TRAINING
+	return
+	
+func on_game_starting():
+	level_state = GAME_STATES.IN_MATCH
 
 
 func _on_scene_enter(scene_file: PackedScene) -> void:
@@ -55,15 +63,16 @@ func _handle_training():
 	if training_spawned == true:
 		return
 	_on_scene_enter(training_scene)
-	
 	training_spawned = true
+
 func _handle_paused():
 	return
 func _handle_in_match():
 	if match_spawned == true:
 		return
 	_on_scene_enter(match_scene)
-	match_spawned = true	
+	match_spawned = true
+
 
 	return
 func _handle_main_menu():

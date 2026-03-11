@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://df1j4s8qujs41"]
+[gd_scene format=3 uid="uid://g50mrmljb3rf"]
 
-[ext_resource type="Script" uid="uid://djg1xq88a7aqc" path="res://Scenes/menus/main_menu.gd" id="1_xqga4"]
+[ext_resource type="Script" uid="uid://cbtjkwamtv04p" path="res://scenes/menus/main_menu.gd" id="1_xqga4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5

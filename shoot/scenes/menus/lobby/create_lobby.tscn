@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://ceb6r2vm8xu4o"]
+
+[ext_resource type="Script" uid="uid://b81slxiru7m8n" path="res://scenes/menus/lobby/create_lobby.gd" id="1_2pcy3"]
+[ext_resource type="Texture2D" uid="uid://bwb411p3nocs1" path="res://Sprites/ui/CopyToClipboard.png" id="2_1ui4k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bayp"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.7764706, 0.18431373, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 20
+shadow_size = 2
+anti_aliasing = false
+
+[node name="CreateLobby" type="Control" unique_id=654519501]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2pcy3")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=857546561]
+custom_minimum_size = Vector2(200, 250)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.5
+offset_top = -125.0
+offset_right = 107.5
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ukx7c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1300754650]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer" unique_id=1348248803]
+layout_mode = 2
+
+[node name="LobbyOptionsContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1639667480]
+layout_mode = 2
+
+[node name="LobbyCodeContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer" unique_id=2016064719]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=1588743407]
+layout_mode = 2
+text = "Lobby Code:"
+
+[node name="LobbyCodeText" type="LineEdit" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
+unique_name_in_owner = true
+layout_mode = 2
+max_length = 4
+editable = false
+expand_to_text_length = true
+
+[node name="CopyToClipboardButton" type="TextureButton" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=168806743]
+layout_mode = 2
+size_flags_horizontal = 8
+texture_normal = ExtResource("2_1ui4k")
+stretch_mode = 3
+
+[node name="PlayerListContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1103173]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/PlayerListContainer" unique_id=1373712425]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3bayp")
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PlayerListContainer/PlayerPanel" unique_id=1263168928]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Players:"
+
+[node name="HostIdLine" type="LineEdit" parent="PanelContainer/VBoxContainer/PlayerListContainer" unique_id=1689737165]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1234"
+max_length = 4
+editable = false
+
+[node name="PlayerIdLine" type="LineEdit" parent="PanelContainer/VBoxContainer/PlayerListContainer" unique_id=259268203]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1234"
+max_length = 4
+editable = false
+
+[node name="StartGameButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=751858308]
+layout_mode = 2
+text = "Start Game"
+
+[node name="ExitLobbyOptionsButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1780727922]
+layout_mode = 2
+text = "Exit To Menu"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/ExitLobbyOptionsButton" to="." method="_on_exit_lobby_options_button_pressed"]
