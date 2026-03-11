@@ -15,7 +15,6 @@ func _ready() -> void:
 	SyncManager.sync_regained.connect(_on_sync_regained)
 	SyncManager.sync_error.connect(_on_sync_error)
 	SyncManager.peer_pinged_back.connect(_on_peer_pinged)
-
 	# Only the host calls SyncManager.start(). The addon propagates the
 	# sync_started signal to all peers automatically via RPC.
 	# By this point, setup_sync_manager() has already been called in Lobby.gd,
@@ -33,8 +32,8 @@ func _ready() -> void:
 
 
 
-func change_round(winner: CharacterBody2D, curr_round: int) -> void: 
-	var player_color: Color = winner.modulate
+func change_round(pid: int, curr_round: int) -> void: 
+	var player_color: Color = $pid.modulate
 	rounds[curr_round].modulate = player_color
 	pass
 	
@@ -46,8 +45,8 @@ func _reset_player_pos() -> void:
 func _round_start() -> void:
 	pass
 
-func _on_been_hit(winner: CharacterBody2D) -> void:
-	change_round(winner, (current_round+1))
+func _on_been_hit(pid: int) -> void:
+	change_round(pid, (current_round+1))
 	_reset_player_pos()
 	reset_hit.emit()
 	
@@ -110,6 +109,6 @@ func _spawn_players():
 		
 	}
 	
-	SyncManager.spawn("P", self, wrestler, p1_data, true)
-	SyncManager.spawn("P", self, wrestler, p2_data, true)
+	SyncManager.spawn(str(host_id), self, wrestler, p1_data, false)
+	SyncManager.spawn(str(client_id), self, wrestler, p2_data, false)
 	

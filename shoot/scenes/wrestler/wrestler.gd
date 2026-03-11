@@ -1,4 +1,4 @@
-extends CharacterBody2D
+class_name wrestler extends CharacterBody2D
 
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
@@ -6,7 +6,7 @@ var fixed_facing_dir: int
 
 var input_buffer = []
 
-signal _been_hit(winner: CharacterBody2D, )
+signal _been_hit(pid: int)
 #Dummy Variables
 var dummy = false
 @export var dummy_block = false
@@ -83,6 +83,7 @@ func _ready() -> void:
 
 
 func _network_spawn(data: Dictionary) -> void:
+	
 	Data = GameData.new()
 	Data._scan_into_vars()
 	position = data.get("position", Vector2(180, 400))
@@ -372,7 +373,8 @@ func _handle_hit_state() -> void:
 	anims.play("stun_anim/hit")
 	if not has_been_hit:
 		state_timer = Data.combat_hit_anim_time
-		_been_hit.emit(opp)
+		opp = find_opp()
+		_been_hit.emit(int(opp.name))
 		has_been_hit = true
 		
 	if state_timer == 0:
@@ -458,14 +460,13 @@ func move(move_dir: int):
 
 func find_opp() -> Node2D:
 	if found_opp:
-		
 		return opp
 
 	var targets = detect.get_overlapping_bodies()
 	if not targets:
 		return null
 	for target in targets:
-		if target != self and target.has_method("try_feint"):
+		if target != self and target.get_script().get_global_name() == "wrestler":
 			found_opp = true
 			opp = target
 	return opp

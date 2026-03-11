@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://41xc5bqrcd11"]
 
-[ext_resource type="Script" uid="uid://bj7qmaax1lmab" path="res://scenes/match_manager.gd" id="1_80q71"]
+[ext_resource type="Script" uid="uid://bj7qmaax1lmab" path="res://Scenes/match_manager.gd" id="1_80q71"]
 [ext_resource type="PackedScene" uid="uid://bfk8vtyd6tucq" path="res://Scenes/ui/rounds.tscn" id="2_t0cgm"]
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://Scenes/wrestlingMat.tscn" id="3_6sxb0"]
 
