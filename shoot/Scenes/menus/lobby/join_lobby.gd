@@ -12,14 +12,20 @@ func _process(delta: float) -> void:
 
 
 func _on_join_room_button_pressed() -> void:
-	if %LobbyCodeText.get_text() == "":
+	if %LobbyCodeText.text == "":
 		%ErrorLabel.show()
-		pass
+		return
+	
+	if not LobbyManager.is_room_available(%LobbyCodeText.text):
+		%ErrorLabel.show()
+		return
+		
 	LobbyManager.join_room(%LobbyCodeText.text)
 	%ErrorLabel.hide()
 	self.queue_free()
 	
 
 func _on_exit_lobby_options_button_pressed() -> void:
-	self.queue_free()
 	return_to_menu.emit()
+	self.queue_free()
+	

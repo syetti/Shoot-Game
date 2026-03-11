@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://6wwyaa1odkf8"]
 
-[ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://Scenes/menus/lobby/join_lobby.gd" id="1_d12xk"]
+[ext_resource type="Script" uid="uid://cdtgyj1nx0i5h" path="res://scenes/menus/lobby/join_lobby.gd" id="1_d12xk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5
