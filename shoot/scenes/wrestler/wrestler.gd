@@ -1,12 +1,17 @@
 class_name wrestler extends CharacterBody2D
 
+
+#ADD BEEN_HIT STATE TO PLAY ANIM and HIT state to call signal
+#Confused function purposes
+
+
 # 1 = Facing Right (Player 1)
 # -1 = Facing Left (Player 2)
 var fixed_facing_dir: int
 
 var input_buffer = []
 
-signal _been_hit(pid: int)
+signal player_hit(attacker_name: String, player_color: Color)
 #Dummy Variables
 var dummy = false
 @export var dummy_block = false
@@ -14,6 +19,7 @@ var dummy = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
 
+signal hit_target(player_color: Color)
 
 ###Timers
 var state_timer = 0
@@ -374,8 +380,8 @@ func _handle_hit_state() -> void:
 	if not has_been_hit:
 		state_timer = Data.combat_hit_anim_time
 		opp = find_opp()
-		_been_hit.emit(int(opp.name))
 		has_been_hit = true
+		player_hit.emit(name, get_modulate())
 		
 	if state_timer == 0:
 		_try_state_transition(State.IDLE)

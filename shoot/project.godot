@@ -23,7 +23,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 SyncManager="*uid://xohxvtt4jjfo"
-Networking="res://Networking.gd"
 GM="*uid://cvsh6bxxmixmu"
 LobbyManager="*uid://dncitc3vkimx6"
 

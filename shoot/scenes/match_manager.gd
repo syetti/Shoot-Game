@@ -5,10 +5,13 @@ var round_markers: Node
 var rounds: Array[Node]
 var wrestler = preload("uid://c00otajcfr0y7")
 var current_round = 0
-signal reset_hit
+
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	SyncManager.sync_started.connect(_on_sync_started)
 	SyncManager.sync_stopped.connect(_on_sync_stopped)
 	SyncManager.sync_lost.connect(_on_sync_lost)
@@ -32,28 +35,31 @@ func _ready() -> void:
 
 
 
-func change_round(pid: int, curr_round: int) -> void: 
-	var player_color: Color = $pid.modulate
-	rounds[curr_round].modulate = player_color
+func change_round(player_color: Color) -> void: 
+	rounds[current_round].modulate = player_color
+	_reset_player_pos()
 	pass
 	
 func _reset_player_pos() -> void:
-	$P1.position.x = 160
-	$P2.position.x = -160
+	$"-1".position.x = 160
+	$"1".position.x = -160
 	pass
 
 func _round_start() -> void:
 	pass
-
-func _on_been_hit(pid: int) -> void:
-	change_round(pid, (current_round+1))
-	_reset_player_pos()
-	reset_hit.emit()
+#
+#func _on_been_hit(pid: int) -> void:
+	#change_round()
+	#_reset_player_pos()
+	##reset_hit.emit()
 	
 
 ### Networking callbacks
 func _on_sync_started() -> void:
-
+	
+	$"-1".player_hit.connect(_on_player_hit)
+	$"1".player_hit.connect(_on_player_hit)
+	
 	round_markers = round_markers_scene.instantiate()
 	$UI.add_child(round_markers)
 	rounds = round_markers.get_child(0).get_children()
@@ -112,3 +118,6 @@ func _spawn_players():
 	SyncManager.spawn(str(host_id), self, wrestler, p1_data, false)
 	SyncManager.spawn(str(client_id), self, wrestler, p2_data, false)
 	
+func _on_player_hit(player_color: Color):
+	change_round(player_color)
+	pass
