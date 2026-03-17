@@ -57,8 +57,7 @@ func _round_start() -> void:
 ### Networking callbacks
 func _on_sync_started() -> void:
 	
-	$"-1".player_hit.connect(_on_player_hit)
-	$"1".player_hit.connect(_on_player_hit)
+	
 	
 	round_markers = round_markers_scene.instantiate()
 	$UI.add_child(round_markers)
@@ -117,7 +116,15 @@ func _spawn_players():
 	
 	SyncManager.spawn(str(host_id), self, wrestler, p1_data, false)
 	SyncManager.spawn(str(client_id), self, wrestler, p2_data, false)
+	_set_signals()
 	
-func _on_player_hit(player_color: Color):
+func _set_signals():
+	$"-1".player_hit.connect(_on_player_hit)
+	$"1".player_hit.connect(_on_player_hit)
+
+
+
+func _on_player_hit(attacker_name: String, player_color: Color):
 	change_round(player_color)
+	
 	pass

@@ -19,7 +19,6 @@ var dummy = false
 @export var dummy_walkfwd = false
 @export var dummy_walkbck = false
 
-signal hit_target(player_color: Color)
 
 ###Timers
 var state_timer = 0
@@ -44,6 +43,7 @@ enum State {
 	STUN = 5,
 	FEINT = 6,
 	HIT = 7,
+	BEEN_HIT= 8,
 }
 
 enum MoveState {
@@ -57,13 +57,14 @@ enum MoveState {
 	}
 
 const VALID_TRANSITIONS: Dictionary = {
-	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK, State.HIT],
-	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.IDLE, State.HIT],
-	State.SHOOT: [State.IDLE, State.STUN, State.HIT],
+	State.IDLE: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.WALK, State.HIT, State.BEEN_HIT],
+	State.WALK: [State.SHOOT, State.BLOCK, State.FEINT, State.STUN, State.IDLE, State.BEEN_HIT],
+	State.SHOOT: [State.IDLE, State.STUN, State.HIT, State.BEEN_HIT],
 	State.BLOCK: [State.IDLE, State.STUN],
-	State.FEINT: [State.IDLE, State.STUN, State.HIT],
+	State.FEINT: [State.IDLE, State.STUN, State.BEEN_HIT],
 	State.STUN:  [State.IDLE],
 	State.HIT: [State.IDLE],
+	State.BEEN_HIT: [State.IDLE]
 	}
 
 
@@ -130,6 +131,8 @@ func _network_process(input: Dictionary) -> void:
 			_handle_feint_state()
 		State.HIT:
 			_handle_hit_state()
+		State.BEEN_HIT:
+			_handle_been_hit_state()
 
 	# Update timers
 
@@ -337,43 +340,43 @@ func _handle_shoot_state() -> void:
 		return
 	state_timer = Data.combat_hitstop_frames
 	match shoot_state:
-		MoveState.PREP: #prepping
+		MoveState.PREP: 
 			shoot_collision.disabled = true
 			anims.play("shoot_anim/shoot_p")
 			state_timer = Data.moves_shoot_prep_time
 			shoot_state = MoveState.ACTIVE
-		MoveState.ACTIVE: #flying
+		MoveState.ACTIVE: 
 			shoot_collision.disabled = false
 			anims.play("shoot_anim/shoot_a")
 			state_timer =  Data.moves_shoot_active_time
 			shoot_state = MoveState.RECOVERY
-		MoveState.RECOVERY: #falling
+		MoveState.RECOVERY: 
 			state_timer = Data.moves_shoot_recovery_time
 			anims.play("shoot_anim/shoot_r")
 			velocity.x = 0
 			shoot_state = MoveState.FALLEN
-		MoveState.FALLEN: #fell
+		MoveState.FALLEN: 
 			shoot_collision.disabled = true
 			_try_state_transition(State.IDLE)
-		MoveState.HIT: #hit
+		MoveState.HIT: 
 			velocity.x = 0
 			state_timer = Data.combat_hit_anim_time
 			#anims.play("celly")
 			shoot_collision.disabled = true
-			_try_state_transition(State.IDLE)
-		MoveState.BLOCKED: #blocked
+			_try_state_transition(State.HIT)
+		MoveState.BLOCKED: 
 			velocity.x = 0
 			anims.play("shoot_anim/shoot_r")
 			state_timer = Data.moves_shoot_recovery_time
 			shoot_state = MoveState.KNOCKBACK
-		MoveState.KNOCKBACK: #knockback
+		MoveState.KNOCKBACK: 
 			state_timer = Data.combat_knockback_time
 			velocity.x = -fixed_facing_dir * knockback_speed 
 			_try_state_transition(State.IDLE)
 
 	return
 
-func _handle_hit_state() -> void:
+func _handle_been_hit_state() -> void:
 	if state_timer > 0:
 		return 
 	anims.play("stun_anim/hit")
@@ -381,10 +384,8 @@ func _handle_hit_state() -> void:
 		state_timer = Data.combat_hit_anim_time
 		opp = find_opp()
 		has_been_hit = true
-		player_hit.emit(name, get_modulate())
+	_try_state_transition(State.IDLE)
 		
-	if state_timer == 0:
-		_try_state_transition(State.IDLE)
 
 func _check_shoot_collision() -> bool:
 	if has_connected:
@@ -440,12 +441,16 @@ func _handle_feint_state() -> void:
 
 	pass
 
+func _handle_hit_state() -> void:
+	player_hit.emit(name, get_modulate())
+	_try_state_transition(State.IDLE)
+	pass
 
 func try_hit() -> bool:
 	
 	if current_state == State.BLOCK:
 		return false
-	_try_state_transition(State.HIT)
+	_try_state_transition(State.BEEN_HIT)
 	
 	return true
 
