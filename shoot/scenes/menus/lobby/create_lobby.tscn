@@ -119,5 +119,6 @@ text = "Start Game"
 layout_mode = 2
 text = "Exit To Menu"
 
+[connection signal="pressed" from="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer/CopyToClipboardButton" to="." method="_on_copy_to_clipboard_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/ExitLobbyOptionsButton" to="." method="_on_exit_lobby_options_button_pressed"]

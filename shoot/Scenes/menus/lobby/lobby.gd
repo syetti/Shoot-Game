@@ -9,3 +9,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_copy_to_clipboard_button_pressed() -> void:
+	DisplayServer.clipboard_set(%LobbyCodeText.text)
