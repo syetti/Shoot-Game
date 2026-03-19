@@ -31,6 +31,10 @@ func _ready() -> void:
 
 	#
 
+func change_state(state: GAME_STATES):
+	level_state = state
+	pass
+
 func on_start_training():
 	level_state = GAME_STATES.TRAINING
 	return
@@ -45,6 +49,7 @@ func _on_scene_enter(scene_file: PackedScene) -> void:
 	var scene = scene_file.instantiate()
 	add_child(scene)
 	pass
+
 	
 func _physics_process(delta: float) -> void:
 	
