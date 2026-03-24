@@ -1,4 +1,4 @@
-class_name wrestler extends CharacterBody2D
+extends CharacterBody2D
 
 
 #ADD BEEN_HIT STATE TO PLAY ANIM and HIT state to call signal
@@ -33,6 +33,7 @@ var Data: GameData
 var shoot_state: int
 var block_state: int
 var feint_state: int
+var been_hit_state: int
 
 ### Major State
 enum State {
@@ -84,7 +85,8 @@ var has_been_hit: bool = false
 var has_been_stunned : bool = false
 
 var collider: KinematicCollision2D
-var combat_stats : Dictionary
+
+var score = 0
 func _ready() -> void:
 	pass
 
@@ -188,7 +190,6 @@ func _on_state_enter(state: State) -> void:
 	match state:
 		State.IDLE:
 			velocity.x = 0
-			anims.play("idle")
 		State.SHOOT:
 			shoot_state = 0
 			has_connected = false
@@ -201,6 +202,11 @@ func _on_state_enter(state: State) -> void:
 			anims.play("stun_anim/stun")
 		State.FEINT:
 			feint_state = 0
+		State.BEEN_HIT:
+			been_hit_state = 0
+		State.HIT:
+			pass
+		
 	
 
 #reset variables on exit so that next transition to the state is clean
@@ -214,6 +220,9 @@ func _on_state_exit(state: State) -> void:
 			block_state = 0
 		State.FEINT:
 			feint_state = 0
+		State.BEEN_HIT:
+			been_hit_state = 0
+		
 
 
 func _add_to_buffer(state: State) -> void:
@@ -333,7 +342,9 @@ func _handle_shoot_state() -> void:
 		if shoot_state == MoveState.RECOVERY:
 			velocity.x = fixed_facing_dir * shot_speed
 			if _check_shoot_collision():
+				print("hit")
 				shoot_state = MoveState.HIT
+				_try_state_transition(State.HIT)
 			shoot_state = MoveState.RECOVERY
 			return
 
@@ -361,9 +372,10 @@ func _handle_shoot_state() -> void:
 		MoveState.HIT: 
 			velocity.x = 0
 			state_timer = Data.combat_hit_anim_time
+			_try_state_transition(State.HIT)
 			#anims.play("celly")
 			shoot_collision.disabled = true
-			_try_state_transition(State.HIT)
+			
 		MoveState.BLOCKED: 
 			velocity.x = 0
 			anims.play("shoot_anim/shoot_r")
@@ -377,14 +389,24 @@ func _handle_shoot_state() -> void:
 	return
 
 func _handle_been_hit_state() -> void:
+	
 	if state_timer > 0:
 		return 
-	anims.play("stun_anim/hit")
+	match been_hit_state:
+		MoveState.PREP:
+			anims.play("stun_anim/hit")
+			state_timer = Data.combat_hit_anim_time
+			been_hit_state = MoveState.ACTIVE
+		MoveState.ACTIVE:
+			been_hit_state = MoveState.RECOVERY
+		MoveState.RECOVERY:
+			_try_state_transition(State.IDLE)
+	
+	
 	if not has_been_hit:
 		state_timer = Data.combat_hit_anim_time
 		opp = find_opp()
 		has_been_hit = true
-	_try_state_transition(State.IDLE)
 		
 
 func _check_shoot_collision() -> bool:
@@ -398,7 +420,7 @@ func _check_shoot_collision() -> bool:
 		return false
 
 	var res = object.try_hit()
-	has_connected = false
+	has_connected = true
 	return res
 
 
@@ -436,29 +458,26 @@ func _handle_feint_state() -> void:
 				opp.try_feint()
 			feint_state = MoveState.RECOVERY
 		MoveState.RECOVERY:
-
 			_try_state_transition(State.IDLE)
 
 	pass
 
 func _handle_hit_state() -> void:
-	player_hit.emit(name, get_modulate())
+	player_hit.emit(name, $Sprite.modulate)
 	_try_state_transition(State.IDLE)
 	pass
 
 func try_hit() -> bool:
-	
 	if current_state == State.BLOCK:
 		return false
 	_try_state_transition(State.BEEN_HIT)
-	
+
 	return true
 
 
 func try_feint() -> void:
 	reaction_window = Data.combat_reaction_window_time
-
-
+	
 func move(move_dir: int):
 	velocity.x = move_dir * Data.speed_walk_speed
 	if move_dir == 0:

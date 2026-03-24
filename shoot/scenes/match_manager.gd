@@ -3,9 +3,11 @@ extends Node
 
 var round_markers: Node
 var rounds: Array[Node]
+var max_rounds = 3
 var wrestler = preload("uid://c00otajcfr0y7")
 var current_round = 0
-
+var p1_score = 0
+var p2_score = 0
 
 
 
@@ -31,7 +33,12 @@ func _ready() -> void:
 
 
 	
-
+func _up_score(name: String):
+	get_node(name).score +=1
+	pass
+func _reset_scores():
+	$"1".score = 0
+	$"-1".score = 0
 
 
 
@@ -47,13 +54,6 @@ func _reset_player_pos() -> void:
 
 func _round_start() -> void:
 	pass
-#
-#func _on_been_hit(pid: int) -> void:
-	#change_round()
-	#_reset_player_pos()
-	##reset_hit.emit()
-	
-
 ### Networking callbacks
 func _on_sync_started() -> void:
 	
@@ -117,7 +117,11 @@ func _spawn_players():
 	SyncManager.spawn(str(host_id), self, wrestler, p1_data, false)
 	SyncManager.spawn(str(client_id), self, wrestler, p2_data, false)
 	_set_signals()
-	
+	_color_players()
+func _color_players():
+	$"1/Sprite".modulate = Color("#5696D1")
+	$"-1/Sprite".modulate = Color("#FFFF")
+
 func _set_signals():
 	$"-1".player_hit.connect(_on_player_hit)
 	$"1".player_hit.connect(_on_player_hit)
@@ -125,6 +129,13 @@ func _set_signals():
 
 
 func _on_player_hit(attacker_name: String, player_color: Color):
-	change_round(player_color)
+	if current_round == max_rounds:
+		pass
+	print(attacker_name)
+	print(current_round)
+	if current_round < max_rounds:
+		print(rounds[current_round].modulate)
+		rounds[current_round].modulate = player_color
+		current_round += 1
 	
 	pass

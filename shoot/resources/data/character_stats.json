@@ -19,8 +19,8 @@
 				"active_time": 20.0
 			},
 			"feint": {
-				"prep_time": 3.0,
-				"active_time": 3.0,
+				"prep_time": 10.0,
+				"active_time": 10.0,
 				"recovery_time": 7.0,
 				"cooldown_time": 80.0
 			}
@@ -32,7 +32,7 @@
 			"knockback_distance": 50.0,
 			"knockback_time": 15.0,
 			"reaction_window_time": 60.0,
-			"hit_anim_time": 20.0
+			"hit_anim_time": 40.0
 		},
 		"fatigue": {
 			"fatigue_bar_max": 3.0,
