@@ -34,6 +34,7 @@ var shoot_state: int
 var block_state: int
 var feint_state: int
 var been_hit_state: int
+var hit_state: int
 
 ### Major State
 enum State {
@@ -222,6 +223,8 @@ func _on_state_exit(state: State) -> void:
 			feint_state = 0
 		State.BEEN_HIT:
 			been_hit_state = 0
+		State.HIT:
+			hit_state = 0
 		
 
 
@@ -388,26 +391,6 @@ func _handle_shoot_state() -> void:
 
 	return
 
-func _handle_been_hit_state() -> void:
-	
-	if state_timer > 0:
-		return 
-	match been_hit_state:
-		MoveState.PREP:
-			anims.play("stun_anim/hit")
-			state_timer = Data.combat_hit_anim_time
-			been_hit_state = MoveState.ACTIVE
-		MoveState.ACTIVE:
-			been_hit_state = MoveState.RECOVERY
-		MoveState.RECOVERY:
-			_try_state_transition(State.IDLE)
-	
-	
-	if not has_been_hit:
-		state_timer = Data.combat_hit_anim_time
-		opp = find_opp()
-		has_been_hit = true
-		
 
 func _check_shoot_collision() -> bool:
 	if has_connected:
@@ -461,10 +444,46 @@ func _handle_feint_state() -> void:
 			_try_state_transition(State.IDLE)
 
 	pass
+	
+func _handle_been_hit_state() -> void:
+	
+	if state_timer > 0:
+		return 
+	match been_hit_state:
+		MoveState.PREP:
+			anims.play("stun_anim/hit")
+			state_timer = Data.combat_hit_anim_time
+			been_hit_state = MoveState.RECOVERY
+		MoveState.RECOVERY:
+			_try_state_transition(State.IDLE)
+	
+	
+	if not has_been_hit:
+		state_timer = Data.combat_hit_anim_time
+		opp = find_opp()
+		has_been_hit = true
+		
+
 
 func _handle_hit_state() -> void:
-	player_hit.emit(name, $Sprite.modulate)
-	_try_state_transition(State.IDLE)
+	
+	if state_timer > 0:
+		return
+		
+	match hit_state:
+		MoveState.PREP:
+			player_hit.emit(name, $Sprite.modulate)
+			anims.play("shoot_anim/hit_stop")
+			state_timer = Data.combat_hitstop_frames
+			hit_state = MoveState.RECOVERY
+		MoveState.RECOVERY:
+			_try_state_transition(State.IDLE)
+		pass
+	
+	
+	
+	
+	
 	pass
 
 func try_hit() -> bool:
