@@ -10,12 +10,21 @@ var match_spawned: bool = false
 var level_state = 0
 var child: Node
 
+var lobby_state: int
+
+enum LOBBY_STATES{
+	CREATE,
+	JOIN
+}
+
+
 
 enum GAME_STATES{
 	MAIN_MENU,
 	IN_MATCH,
 	PAUSED,
-	TRAINING
+	TRAINING,
+	LOBBY
 }
 #
 #@onready var announcer = $"/root/Main/UI/Announcer"
@@ -62,6 +71,8 @@ func _physics_process(delta: float) -> void:
 			_handle_paused()
 		GAME_STATES.TRAINING:
 			_handle_training()
+		GAME_STATES.LOBBY:
+			_handle_lobby()
 	pass
 
 func _handle_training():
@@ -79,6 +90,14 @@ func _handle_in_match():
 	match_spawned = true
 
 
+	return
+	
+func _handle_lobby():
+	match lobby_state:
+		LOBBY_STATES.CREATE:
+			LobbyManager.create_room()
+		LOBBY_STATES.JOIN:
+			pass
 	return
 func _handle_main_menu():
 	return 

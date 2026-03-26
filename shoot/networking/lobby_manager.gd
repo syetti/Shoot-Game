@@ -48,7 +48,7 @@ var is_training_mode : bool = false   #training mode
 func _ready() -> void:
 	is_training_mode = true
 	set_process(false)
-
+	connect_to_server()
 func _process(_delta: float) -> void:
 	if not _ws:
 		return
@@ -151,6 +151,7 @@ func _handle_signal(msg: Dictionary) -> void:
 	match msg.get("type", ""):
 
 		"connected":
+			print("lobby connected")
 			my_id = msg.id
 			is_host = false
 			_webrtc_mp.create_mesh(my_id)
@@ -161,6 +162,7 @@ func _handle_signal(msg: Dictionary) -> void:
 			current_room = msg.code
 			is_host = true
 			room_created.emit(msg.code)
+			print("room_created")
 
 		"room_joined":
 			current_room = msg.code

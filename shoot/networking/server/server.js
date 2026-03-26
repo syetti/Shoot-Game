@@ -34,7 +34,7 @@ if (certIndex !== -1 && keyIndex !== -1) {
 }
 
 const PORT = 9080;
-const MAX_ROOMS   = 100;
+const MAX_ROOMS   = 2;
 const MAX_PLAYERS = 2;   
 
 

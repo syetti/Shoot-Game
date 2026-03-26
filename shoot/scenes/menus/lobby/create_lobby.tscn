@@ -69,18 +69,31 @@ size_flags_horizontal = 4
 layout_mode = 2
 text = "Lobby Code:"
 
-[node name="LobbyCodeText" type="LineEdit" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
-unique_name_in_owner = true
+[node name="Panel" type="Panel" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=408160001]
+custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
-max_length = 4
-editable = false
-expand_to_text_length = true
 
-[node name="CopyToClipboardButton" type="TextureButton" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=168806743]
+[node name="LobbyCodeText" type="Label" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer/Panel" unique_id=480613881]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -11.5
+offset_right = 19.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 1
+text = "A667"
+
+[node name="CopyToClipboardButton" type="Button" parent="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=174435025]
 layout_mode = 2
-size_flags_horizontal = 8
-texture_normal = ExtResource("2_1ui4k")
-stretch_mode = 3
+icon = ExtResource("2_1ui4k")
 
 [node name="PlayerListContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1103173]
 layout_mode = 2
@@ -119,5 +132,6 @@ text = "Start Game"
 layout_mode = 2
 text = "Exit To Menu"
 
+[connection signal="pressed" from="PanelContainer/VBoxContainer/LobbyOptionsContainer/LobbyCodeContainer/CopyToClipboardButton" to="." method="_on_copy_to_clipboard_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/ExitLobbyOptionsButton" to="." method="_on_exit_lobby_options_button_pressed"]
