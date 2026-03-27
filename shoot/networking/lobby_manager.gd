@@ -20,6 +20,7 @@ const SIGNAL_URL := "ws://localhost:9080"   # Change to vps ip/domain and port i
 const MAX_PLAYERS := 2   # LobbyManager supports up to 2 total players
 
 
+
 const ICE_SERVERS := [
 	
 	{ "urls": "stun:stun.l.google.com:19302" },
@@ -39,7 +40,7 @@ var current_room : String = ""
 var is_host : bool = false
 var peers : Dictionary = {}   # peer_id → WebRTCPeerConnection
 var _connected_peers : Array[int] = []
-
+var rooms : Array[String] 
 
 var _ws : WebSocketPeer
 var _webrtc_mp : WebRTCMultiplayerPeer
@@ -49,12 +50,13 @@ func _ready() -> void:
 	is_training_mode = true
 	set_process(false)
 	connect_to_server()
+	
 func _process(_delta: float) -> void:
 	if not _ws:
 		return
 
 	_ws.poll()
-
+	
 	match _ws.get_ready_state():
 		WebSocketPeer.STATE_OPEN:
 			while _ws.get_available_packet_count() > 0:
@@ -64,6 +66,7 @@ func _process(_delta: float) -> void:
 					_handle_signal(msg)
 
 		WebSocketPeer.STATE_CLOSED:
+			print("closed")
 			_on_ws_closed()
 
 	if _webrtc_mp:
@@ -81,7 +84,7 @@ func connect_to_server() -> void:
 	is_training_mode = false
 	_ws = WebSocketPeer.new()
 	_webrtc_mp = WebRTCMultiplayerPeer.new()
-	multiplayer.multiplayer_peer = _webrtc_mp
+	
 
 	var err := _ws.connect_to_url(SIGNAL_URL)
 	if err != OK:
@@ -103,6 +106,7 @@ func start_game() -> void:
 		room_error.emit("Still connecting — please wait a moment")
 		return
 	_send({ "type": "start_game" })
+	GM.start_match()
 
 func reset() -> void:
 	is_training_mode = false
@@ -151,7 +155,7 @@ func _handle_signal(msg: Dictionary) -> void:
 	match msg.get("type", ""):
 
 		"connected":
-			print("lobby connected")
+			print("connected to server")
 			my_id = msg.id
 			is_host = false
 			_webrtc_mp.create_mesh(my_id)
@@ -160,6 +164,7 @@ func _handle_signal(msg: Dictionary) -> void:
 
 		"room_created":
 			current_room = msg.code
+			rooms.append(current_room)
 			is_host = true
 			room_created.emit(msg.code)
 			print("room_created")
@@ -249,7 +254,6 @@ func _handle_offer(peer_id: int, sdp: String) -> void:
 	if not peers.has(peer_id):
 		_create_peer_connection(peer_id)
 	peers[peer_id].set_remote_description("offer", sdp)
-	peers[peer_id].create_answer()
 
 func _handle_answer(peer_id: int, sdp: String) -> void:
 	if peers.has(peer_id):

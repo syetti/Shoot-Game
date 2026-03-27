@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://6wwyaa1odkf8"]
 
-[ext_resource type="Script" uid="uid://cdtgyj1nx0i5h" path="res://scenes/menus/lobby/join_lobby.gd" id="1_d12xk"]
+[ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://scenes/menus/lobby/join_lobby.gd" id="1_d12xk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5
@@ -57,7 +57,6 @@ text = "Input Lobby Code:"
 [node name="LobbyCodeText" type="LineEdit" parent="PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
 unique_name_in_owner = true
 layout_mode = 2
-text = "1234"
 max_length = 4
 expand_to_text_length = true
 

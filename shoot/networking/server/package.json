@@ -4,10 +4,11 @@
   "description": "WebRTC signaling server for Godot shoot game.",
   "main": "server.js",
   "scripts": {
-	"start": "node server.js",
-	"start:tls": "node server.js --cert /etc/letsencrypt/live/yourdomain/fullchain.pem --key /etc/letsencrypt/live/yourdomain/privkey.pem"
+    "start": "node server.js",
+    "start:tls": "node server.js --cert /etc/letsencrypt/live/yourdomain/fullchain.pem --key /etc/letsencrypt/live/yourdomain/privkey.pem"
   },
   "dependencies": {
-	"ws": "^8.16.0"
+    "websocket": "^1.0.35",
+    "ws": "^8.20.0"
   }
 }

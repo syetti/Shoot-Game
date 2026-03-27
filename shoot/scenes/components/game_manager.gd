@@ -5,6 +5,7 @@ var input_buffer: Array = [ ]
 @export var training_scene : PackedScene
 @export var match_scene: PackedScene
 @export var main_menu_scene: PackedScene
+var lobby_scene = preload("uid://ceb6r2vm8xu4o")
 var training_spawned: bool = false
 var match_spawned: bool = false
 var level_state = 0
@@ -48,17 +49,17 @@ func on_start_training():
 	level_state = GAME_STATES.TRAINING
 	return
 	
-func on_game_starting():
-	level_state = GAME_STATES.IN_MATCH
 
 
 func _on_scene_enter(scene_file: PackedScene) -> void:
-	if get_children().size()>0:
-		get_child(0).queue_free()
 	var scene = scene_file.instantiate()
 	add_child(scene)
 	pass
-
+	
+func start_match():
+	_on_scene_enter(match_scene)
+	level_state = GAME_STATES.IN_MATCH
+	pass
 	
 func _physics_process(delta: float) -> void:
 	
@@ -84,19 +85,18 @@ func _handle_training():
 func _handle_paused():
 	return
 func _handle_in_match():
-	if match_spawned == true:
+	if match_spawned:
 		return
-	_on_scene_enter(match_scene)
+	start_match()
 	match_spawned = true
-
-
-	return
+	pass
 	
 func _handle_lobby():
 	match lobby_state:
 		LOBBY_STATES.CREATE:
 			LobbyManager.create_room()
 		LOBBY_STATES.JOIN:
+			_on_scene_enter(lobby_scene)
 			pass
 	return
 func _handle_main_menu():

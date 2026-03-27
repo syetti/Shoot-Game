@@ -27,15 +27,15 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		#wait for p2 to connect before starting the match
 		await get_tree().create_timer(0.25).timeout
-
 		SyncManager.start()
 
 
 
 	
-func _up_score(name: String):
-	get_node(name).score +=1
+func _up_score(p_name: String):
+	get_node(p_name).score +=1
 	pass
+	
 func _reset_scores():
 	$"1".score = 0
 	$"-1".score = 0
@@ -56,9 +56,7 @@ func _round_start() -> void:
 	pass
 ### Networking callbacks
 func _on_sync_started() -> void:
-	
-	
-	
+
 	round_markers = round_markers_scene.instantiate()
 	$UI.add_child(round_markers)
 	rounds = round_markers.get_child(0).get_children()
