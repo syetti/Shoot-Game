@@ -19,14 +19,10 @@ func _on_join_room_button_pressed() -> void:
 	
 	
 
-func _on_exit_lobby_options_button_pressed() -> void:
-	return_to_menu.emit()
-	self.queue_free()
 
 func _on_room_joined(code: String):
 	GM.level_state = GM.GAME_STATES.LOBBY
-	GM.lobby_state = GM.LOBBY_STATES.JOIN
-	queue_free()
+	
 	return
 func _on_room_error(msg: String):
 	match msg:

@@ -2,26 +2,22 @@ class_name GameManager extends Node
 
 var input_buffer: Array = [ ]
 
-@export var training_scene : PackedScene
-@export var match_scene: PackedScene
-@export var main_menu_scene: PackedScene
+var training_scene : PackedScene = preload("uid://xr00k45gbxkl")
+var match_scene: PackedScene = preload("uid://41xc5bqrcd11")
+var menu_scene: PackedScene = preload("uid://c58ryso8l8kog")
 var lobby_scene = preload("uid://ceb6r2vm8xu4o")
+
+
 var training_spawned: bool = false
-var match_spawned: bool = false
+var match_started: bool = false
 var level_state = 0
 var child: Node
 
-var lobby_state: int
 
-enum LOBBY_STATES{
-	CREATE,
-	JOIN
-}
 
 
 
 enum GAME_STATES{
-	MAIN_MENU,
 	IN_MATCH,
 	PAUSED,
 	TRAINING,
@@ -35,7 +31,7 @@ var logging_enabled := true
 
 
 func _ready() -> void:
-
+	level_state = GAME_STATES.LOBBY
 	#Global.match_countdown()
 	pass
 
@@ -54,6 +50,7 @@ func on_start_training():
 func _on_scene_enter(scene_file: PackedScene) -> void:
 	var scene = scene_file.instantiate()
 	add_child(scene)
+	
 	pass
 	
 func start_match():
@@ -64,16 +61,13 @@ func start_match():
 func _physics_process(delta: float) -> void:
 	
 	match level_state:
-		GAME_STATES.MAIN_MENU:
-			_handle_main_menu()
 		GAME_STATES.IN_MATCH:
 			_handle_in_match()
 		GAME_STATES.PAUSED:
 			_handle_paused()
 		GAME_STATES.TRAINING:
 			_handle_training()
-		GAME_STATES.LOBBY:
-			_handle_lobby()
+
 	pass
 
 func _handle_training():
@@ -83,43 +77,12 @@ func _handle_training():
 	training_spawned = true
 
 func _handle_paused():
+	_on_scene_enter(menu_scene)
 	return
+	
 func _handle_in_match():
-	if match_spawned:
+	if match_started:
 		return
 	start_match()
-	match_spawned = true
+	match_started = true
 	pass
-	
-func _handle_lobby():
-	match lobby_state:
-		LOBBY_STATES.CREATE:
-			LobbyManager.create_room()
-		LOBBY_STATES.JOIN:
-			_on_scene_enter(lobby_scene)
-			pass
-	return
-func _handle_main_menu():
-	return 
-
-#func match_countdown():
-	#match_time.show()
-	#var i: int = 3
-	#while(i > 0):
-		#match_time.set_text(str(i))
-		#await get_tree().create_timer(1).timeout 
-		#i-=1
-	#match_time.set_text("SHOOT!")
-	#await get_tree().create_timer(1).timeout 
-	#player_can_move = true
-	#match_time.hide()
-	#
-#func takedown(player):
-	#announcer.show()
-	#announcer.set_text("TAKEDOWN %s! " % player)
-	#await get_tree().create_timer(0.3).timeout 
-#
-#func match_over(winner):
-	#announcer.show()
-	#announcer.set_text("MATCH OVER! \n %s HAS WON!", winner)
-	#

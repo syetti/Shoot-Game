@@ -16,15 +16,6 @@ func _process(delta: float) -> void:
 
 
 
-func _on_create_button_pressed() -> void:
-	LobbyManager.create_room()
-	pass # Replace with function body.
-
-
-func _on_join_button_pressed() -> void:
-	pass # Replace with function body.
-
-
 func _on_training_button_pressed() -> void:
 	pass # Replace with function body.
 

@@ -46,6 +46,9 @@ var _ws : WebSocketPeer
 var _webrtc_mp : WebRTCMultiplayerPeer
 
 var is_training_mode : bool = false   #training mode
+
+var player_names : Dictionary = {} # peer_id : name
+
 func _ready() -> void:
 	is_training_mode = true
 	set_process(false)
@@ -132,9 +135,11 @@ func reset() -> void:
 	is_host = false
 	set_process(false)
 
+func send_player_info(player_name : String) -> void:
+	player_names[my_id] = player_name
+	_send({"type": "player_info", "name" : player_name})
 
-
-# ── WebRTC connection state watcher ───────────────────────────────────────────
+#  WebRTC connection state watcher 
 ## Runs each frame. Watches each peer's WebRTCPeerConnection until it reaches
 ## STATE_CONNECTED, meaning the ICE and DTLS handshakes are both complete and
 ## data channels are open. Only after this point is it safe to add the peer to
@@ -177,6 +182,8 @@ func _handle_signal(msg: Dictionary) -> void:
 			var pid : int = msg.peer_id
 			_create_peer_connection(pid)
 			player_joined.emit(pid)
+			if player_names.has(my_id):
+				_send({ "type": "player_info", "name": player_names[my_id]})
 
 		"peer_disconnected":
 			var pid : int = msg.peer_id
@@ -201,6 +208,11 @@ func _handle_signal(msg: Dictionary) -> void:
 
 		"start_game":
 			game_starting.emit()
+		
+		"player_info":
+			var pid : int = msg.source
+			player_names[pid] = msg.name
+			player_joined.emit(pid)
 
 # WebRTC peer management
 func _create_peer_connection(peer_id: int) -> void:
