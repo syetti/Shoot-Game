@@ -275,11 +275,6 @@ shape = SubResource("RectangleShape2D_edq5k")
 position = Vector2(-316.75, 0)
 shape = SubResource("RectangleShape2D_edq5k")
 
-[node name="Background" type="Sprite2D" parent="." unique_id=1163687608]
-scale = Vector2(2, 2)
-texture = ExtResource("1_0o31u")
-hframes = 7
-
 [node name="Controls" type="Node2D" parent="." unique_id=888036410]
 z_index = 1
 scale = Vector2(2, 2)
@@ -289,7 +284,7 @@ script = ExtResource("2_cka0j")
 position = Vector2(-108.5, 44)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"w_hit"
-frame_progress = 0.050078556
+frame_progress = 0.6965811
 
 [node name="p2_left" type="AnimatedSprite2D" parent="Controls" unique_id=1724901216]
 position = Vector2(-125.5, 54)
@@ -300,6 +295,8 @@ animation = &"a_hit"
 position = Vector2(-108.5, 55.5)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"s_hit"
+frame = 1
+frame_progress = 0.054584812
 
 [node name="p2_right" type="AnimatedSprite2D" parent="Controls" unique_id=1980711667]
 position = Vector2(-91.5, 54)
@@ -329,3 +326,10 @@ position = Vector2(-91.5, 54)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"right_hit"
 offset = Vector2(214, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=390845443]
+position = Vector2(-2.4999847, -6)
+scale = Vector2(2.3535714, 2.3666666)
+texture = ExtResource("1_0o31u")
+hframes = 7
+frame = 1

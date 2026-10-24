@@ -1,7 +1,7 @@
 {
 	"character_stats": {
 		"match_timer": {
-			"normal_match": 180
+			"normal_match": 90
 		},
 		"speed": {
 			"walk_speed": 4,
@@ -12,7 +12,7 @@
 			"buffer_window": 10,
 			"shoot": {
 				"shoot_distance": 210,
-				"prep_time": 10,
+				"prep_time": 20,
 				"active_time": 5,
 				"recovery_time": 40
 			},

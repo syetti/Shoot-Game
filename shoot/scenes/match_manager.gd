@@ -208,6 +208,8 @@ func start_round() -> void:
 	p2.reset_player()
 	_reset_player_pos()
 	match_timer.start()
+	$fbar1.value = 0
+	$fbar2.value = 0
 
 func _update_round() -> void: 
 	var best_of_rounds = round(total_rounds/2)+1 
