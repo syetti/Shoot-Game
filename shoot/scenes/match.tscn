@@ -3,6 +3,17 @@
 [ext_resource type="Script" uid="uid://bj7qmaax1lmab" path="res://scenes/match_manager.gd" id="1_80q71"]
 [ext_resource type="PackedScene" uid="uid://bfk8vtyd6tucq" path="res://scenes/ui/rounds.tscn" id="2_t0cgm"]
 [ext_resource type="PackedScene" uid="uid://dmptjr1mlrtb4" path="res://scenes/wrestlingMat.tscn" id="3_6sxb0"]
+[ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="5_mv342"]
+[ext_resource type="Texture2D" uid="uid://dsofh008pg360" path="res://Sprites/Stun-Bar/StunBarBG.png" id="6_6dstc"]
+[ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="7_et4mf"]
+
+[sub_resource type="Animation" id="Animation_6dstc"]
+resource_name = "startup"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_et4mf"]
+_data = {
+&"startup": SubResource("Animation_6dstc")
+}
 
 [node name="World" type="Node" unique_id=360022064]
 script = ExtResource("1_80q71")
@@ -13,3 +24,34 @@ round_markers_scene = ExtResource("2_t0cgm")
 [node name="UI" type="CanvasLayer" parent="." unique_id=1272129574]
 
 [node name="wrestlingMat" parent="." unique_id=1292016925 instance=ExtResource("3_6sxb0")]
+
+[node name="NetworkAnimationPlayer" type="AnimationPlayer" parent="." unique_id=224045873]
+libraries/ = SubResource("AnimationLibrary_et4mf")
+script = ExtResource("5_mv342")
+metadata/_custom_type_script = "uid://7pefdhcr1asv"
+
+[node name="Node2D" type="Node2D" parent="." unique_id=432346566]
+
+[node name="fbar1" type="TextureProgressBar" parent="." unique_id=1784374009]
+top_level = true
+custom_minimum_size = Vector2(118, 12)
+offset_left = -288.0
+offset_top = -120.0
+offset_right = -61.83333
+offset_bottom = -97.0
+max_value = 2.0
+nine_patch_stretch = true
+texture_under = ExtResource("6_6dstc")
+texture_progress = ExtResource("7_et4mf")
+
+[node name="fbar2" type="TextureProgressBar" parent="." unique_id=1101154934]
+top_level = true
+custom_minimum_size = Vector2(118, 12)
+offset_left = 56.0
+offset_top = -120.0
+offset_right = 282.0
+offset_bottom = -97.0
+max_value = 2.0
+nine_patch_stretch = true
+texture_under = ExtResource("6_6dstc")
+texture_progress = ExtResource("7_et4mf")

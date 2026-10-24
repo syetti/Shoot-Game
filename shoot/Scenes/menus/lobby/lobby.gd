@@ -2,12 +2,12 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	LobbyManager.create_room()
+	# Room creation is triggered by the Create button (menu_ui.gd), not here —
+	# this node lives inside MenuUI and is ready long before the user asks
+	# for a room.
 	LobbyManager.connect("room_created", _on_room_created)
 	LobbyManager.connect("player_joined", _on_player_joined)
 	LobbyManager.connect("player_left", _on_player_left)
-
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,9 +34,10 @@ func _on_room_created(code: String):
 	
 	
 func _on_start_game_button_pressed() -> void:
-	GM.change_state(GM.GAME_STATES.IN_MATCH)#IN-GAME State
+	# LobbyManager switches GM into the match state for every peer (including
+	# us) once the room is actually ready — calling change_state here as well
+	# would instantiate the match scene twice.
 	LobbyManager.start_game()
-	queue_free()
 
 func _on_player_joined(pid: int):
 	print(pid, " joined")
@@ -44,6 +45,7 @@ func _on_player_joined(pid: int):
 	pass
 	
 func _on_player_left(pid: int):
+	
 	pass
 
 

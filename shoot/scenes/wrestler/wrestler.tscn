@@ -3,9 +3,8 @@
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://scenes/wrestler/wrestler.gd" id="1_xe0xt"]
 [ext_resource type="Shape2D" uid="uid://dha3xi5mvs08x" path="res://scenes/components/hurtbox_shape.tres" id="2_gpx7x"]
 [ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="3_lvqsm"]
-[ext_resource type="Texture2D" uid="uid://cdsl552scy31a" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="4_x3ttl"]
-[ext_resource type="Texture2D" uid="uid://dsofh008pg360" path="res://Sprites/Stun-Bar/StunBarBG.png" id="5_e61iy"]
-[ext_resource type="Texture2D" uid="uid://ccncaobetf5db" path="res://Sprites/Stun-Bar/StunBarBar.png" id="6_ni7t6"]
+[ext_resource type="Texture2D" uid="uid://ci078qavi2cxi" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="4_x3ttl"]
+[ext_resource type="Texture2D" uid="uid://dtngykg8qaf4u" path="res://Sprites/Wrestler/Wrestler-Sheet-Shoot-A.png" id="6_1htxc"]
 [ext_resource type="Shape2D" uid="uid://by15itblkg2ol" path="res://scenes/components/hitbox_shape.tres" id="7_72myw"]
 
 [sub_resource type="Animation" id="Animation_8iimx"]
@@ -33,6 +32,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_pbqa5"]
@@ -130,7 +141,6 @@ _data = {
 
 [sub_resource type="Animation" id="Animation_xf3h2"]
 length = 0.5000167
-loop_mode = 1
 step = 0.16666667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -142,7 +152,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [38, 39]
+"values": [37, 38]
 }
 
 [sub_resource type="Animation" id="Animation_lmj65"]
@@ -158,7 +168,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [35, 37]
+"values": [34, 36]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ujqbw"]
@@ -180,11 +190,11 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.21666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [43, 45]
+"values": [44, 45]
 }
 
 [sub_resource type="Animation" id="Animation_f7fur"]
-length = 0.21666834
+length = 0.25000167
 step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -193,16 +203,45 @@ tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.21666834),
+"times": PackedFloat32Array(0, 0.25),
 "transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [39, 43]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [40, 42]
+"values": [Vector2(-5.684342e-14, 0), Vector2(-6, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_uim55"]
+length = 0.50000167
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [46, 53]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8c5c7"]
 _data = {
 &"feint_a": SubResource("Animation_1huq6"),
-&"feint_p": SubResource("Animation_f7fur")
+&"feint_p": SubResource("Animation_f7fur"),
+&"feint_r": SubResource("Animation_uim55")
 }
 
 [sub_resource type="Animation" id="Animation_xe777"]
@@ -224,7 +263,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_ba55o"]
-length = 0.083335005
+length = 0.001
 step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -292,9 +331,8 @@ _data = {
 &"shoot_r": SubResource("Animation_4u3dw")
 }
 
-[sub_resource type="Animation" id="Animation_tqnk5"]
-resource_name = "hit"
-length = 0.083335005
+[sub_resource type="Animation" id="Animation_ftgj6"]
+length = 0.41666836
 loop_mode = 1
 step = 0.016666668
 tracks/0/type = "value"
@@ -304,10 +342,52 @@ tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.06666667),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [53]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_tqnk5"]
+resource_name = "hit"
+length = 0.41666836
+loop_mode = 1
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [53, 54]
+"values": [54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_8c5c7"]
@@ -324,17 +404,33 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [47, 52]
+"values": [56, 60]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tqnk5"]
 _data = {
-&"hit": SubResource("Animation_tqnk5"),
+&"hit_anim1": SubResource("Animation_ftgj6"),
+&"hit_anim2": SubResource("Animation_tqnk5"),
 &"stun": SubResource("Animation_8c5c7")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_da70j"]
-radius = 1184.1221
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_32qwl"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_qjojg"]
+_data = [Vector2(0.0027700886, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.48591554), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uim55"]
+curve = SubResource("Curve_qjojg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3c5ox"]
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_uim55")
+anim_speed_max = 3.6499999
 
 [node name="Wrestler" type="CharacterBody2D" unique_id=1523320001 groups=["network_sync"]]
 z_index = 2
@@ -360,32 +456,17 @@ metadata/_custom_type_script = "uid://7pefdhcr1asv"
 position = Vector2(-5.684342e-14, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("4_x3ttl")
-hframes = 55
+hframes = 63
 region_rect = Rect2(0, 0, 32, 32)
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1839895748]
-visible = false
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=726653416]
-shape = SubResource("CircleShape2D_da70j")
-
-[node name="fatigue_bar" type="TextureProgressBar" parent="." unique_id=1879679904]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -40.0
-offset_top = -38.0
-offset_right = 40.0
-offset_bottom = -29.865997
-grow_horizontal = 2
-max_value = 3.0
-nine_patch_stretch = true
-stretch_margin_left = 118
-stretch_margin_top = 12
-texture_under = ExtResource("5_e61iy")
-texture_progress = ExtResource("6_ni7t6")
+[node name="afterimg" type="GPUParticles2D" parent="Sprite" unique_id=148757624]
+material = SubResource("CanvasItemMaterial_32qwl")
+position = Vector2(2.842171e-14, 0)
+emitting = false
+amount = 25
+texture = ExtResource("6_1htxc")
+lifetime = 0.12
+process_material = SubResource("ParticleProcessMaterial_3c5ox")
 
 [node name="HitBox" type="CollisionShape2D" parent="." unique_id=20392300]
 position = Vector2(0, 6)

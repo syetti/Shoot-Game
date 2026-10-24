@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://chynanmtqhp5w" path="res://scenes/menus/lobby/menu_ui.gd" id="1_u178o"]
 [ext_resource type="Texture2D" uid="uid://bwb411p3nocs1" path="res://Sprites/ui/CopyToClipboard.png" id="2_u178o"]
 [ext_resource type="Script" uid="uid://bdqhlcbc7hbas" path="res://scenes/menus/lobby/join_lobby.gd" id="3_7oq2k"]
-[ext_resource type="Script" uid="uid://cbtjkwamtv04p" path="res://scenes/menus/main_menu.gd" id="4_57d3p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukx7c"]
 corner_radius_top_left = 5
@@ -175,7 +174,6 @@ layout_mode = 2
 text = "Exit To Menu"
 
 [node name="JoinLobby" type="Control" parent="." unique_id=507224447]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,7 +211,8 @@ layout_mode = 2
 layout_mode = 2
 text = "Input Lobby Code:"
 
-[node name="LobbyCodeText" type="LineEdit" parent="JoinLobby/PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
+[node name="JoinLobbyCodeText" type="LineEdit" parent="JoinLobby/PanelContainer/HBoxContainer/LobbyOptionsContainer/LobbyCodeContainer" unique_id=2041525653]
+unique_name_in_owner = true
 layout_mode = 2
 max_length = 4
 expand_to_text_length = true
@@ -235,13 +234,13 @@ layout_mode = 2
 text = "Exit To Menu"
 
 [node name="MainMenu" type="Control" parent="." unique_id=1442226244]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("4_57d3p")
 
 [node name="PanelContainer" type="PanelContainer" parent="MainMenu" unique_id=87755642]
 custom_minimum_size = Vector2(200, 220)
@@ -346,7 +345,8 @@ text = "Connecting. . ."
 [connection signal="pressed" from="JoinLobby/PanelContainer/HBoxContainer/LobbyOptionsContainer/ExitLobbyOptionsButton" to="." method="_on_exit_lobby_options_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/TrainingButton" to="." method="_on_training_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/TrainingButton" to="MainMenu" method="_on_training_button_pressed"]
-[connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/LocalButton" to="MainMenu" method="_on_local_button_pressed"]
+[connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/LocalButton" to="." method="_on_local_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="MainMenu/PanelContainer/MenuContainer/ButtonContainer/ExitButton" to="MainMenu" method="_on_exit_button_pressed"]

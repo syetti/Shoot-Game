@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://ddyk4hj2v1tiu"]
+
+[ext_resource type="Texture2D" uid="uid://djjvcctobo3mg" path="res://Sprites/HIT.png" id="1_eh35e"]
+[ext_resource type="Texture2D" uid="uid://l3nyqtw052io" path="res://icon.svg" id="2_a3w44"]
+[ext_resource type="FontFile" uid="uid://ds5d6phan21de" path="res://scenes/ui/skeleboom.ttf" id="3_v2fs0"]
+
+[sub_resource type="Animation" id="Animation_v2fs0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-758, 246)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("mouth:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.015686275)]
+}
+
+[sub_resource type="Animation" id="Animation_527tb"]
+resource_name = "fly in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.56666666, 0.76666665, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-758, 246), Vector2(-44, 246), Vector2(23, 246), Vector2(670, 246)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("mouth:modulate")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.9, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.87058824), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uirxa"]
+_data = {
+&"RESET": SubResource("Animation_v2fs0"),
+&"fly in": SubResource("Animation_527tb")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_3c5ox"]
+font = ExtResource("3_v2fs0")
+font_size = 52
+
+[node name="control" type="Control" unique_id=1975718328]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="tint" type="TextureRect" parent="." unique_id=384642829]
+modulate = Color(0, 0, 0, 0.5803922)
+layout_mode = 0
+offset_left = -5.0
+offset_top = -140.0
+offset_right = 648.0
+offset_bottom = 513.0
+texture = ExtResource("2_a3w44")
+
+[node name="mouth" type="TextureRect" parent="." unique_id=330891323]
+modulate = Color(1, 1, 1, 0.015686275)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+texture = ExtResource("1_eh35e")
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+
+[node name="slide" type="AnimationPlayer" parent="." unique_id=541137068]
+deterministic = true
+libraries/ = SubResource("AnimationLibrary_uirxa")
+
+[node name="Label" type="Label" parent="." unique_id=1724312164]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -758.0
+offset_top = -114.0
+offset_right = -758.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Player 1 	
+Wins!"
+label_settings = SubResource("LabelSettings_3c5ox")
+horizontal_alignment = 1
+vertical_alignment = 1

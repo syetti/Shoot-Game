@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cjh2j6ala2mnv"]
+
+[ext_resource type="Texture2D" uid="uid://ci078qavi2cxi" path="res://Sprites/Wrestler/Wrestler-Sheet-Full.png" id="1_347uo"]
+[ext_resource type="Script" uid="uid://ffbm1wrmlfoe" path="res://tween.gd" id="2_ypda0"]
+
+[node name="Sprite2D" type="Sprite2D" unique_id=452557864]
+texture = ExtResource("1_347uo")
+hframes = 64
+frame = 26
+script = ExtResource("2_ypda0")

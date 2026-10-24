@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csdyvx72hbj5l"
-path="res://.godot/imported/Wrestler-Shoot-Anim.png-f22387dae68ceb4312d2276592ca959e.ctex"
+uid="uid://bhj7jom782yt2"
+path="res://.godot/imported/s_key.png-05ca555bc7b196bcd9983e3eadafaa92.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Wrestler/Wrestler-Shoot-Anim.png"
-dest_files=["res://.godot/imported/Wrestler-Shoot-Anim.png-f22387dae68ceb4312d2276592ca959e.ctex"]
+source_file="res://Sprites/keycaps/s_key.png"
+dest_files=["res://.godot/imported/s_key.png-05ca555bc7b196bcd9983e3eadafaa92.ctex"]
 
 [params]
 
@@ -37,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

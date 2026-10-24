@@ -35,12 +35,21 @@ const ICE_SERVERS := [
 	{ "urls": "stun:stun4.l.google.com:5349" },
 ]
 
+## Mesh/multiplayer peer ID. The host is ALWAYS mesh ID 1 so that
+## multiplayer.is_server() and SyncManager's host checks hold regardless of
+## the order players connected to the signaling server.
 var my_id : int = -1
 var current_room : String = ""
 var is_host : bool = false
-var peers : Dictionary = {}   # peer_id → WebRTCPeerConnection
+var peers : Dictionary = {}   # mesh peer_id → WebRTCPeerConnection
 var _connected_peers : Array[int] = []
-var rooms : Array[String] 
+var rooms : Array[String]
+
+## ID assigned by the signaling server (used only for routing signal messages).
+var _signal_id : int = -1
+var _server_to_mesh : Dictionary = {}   # signaling ID → mesh ID
+var _mesh_to_server : Dictionary = {}   # mesh ID → signaling ID
+var _game_started : bool = false
 
 var _ws : WebSocketPeer
 var _webrtc_mp : WebRTCMultiplayerPeer
@@ -86,8 +95,6 @@ func start_training_mode() -> void:
 func connect_to_server() -> void:
 	is_training_mode = false
 	_ws = WebSocketPeer.new()
-	_webrtc_mp = WebRTCMultiplayerPeer.new()
-	
 
 	var err := _ws.connect_to_url(SIGNAL_URL)
 	if err != OK:
@@ -109,7 +116,17 @@ func start_game() -> void:
 		room_error.emit("Still connecting — please wait a moment")
 		return
 	_send({ "type": "start_game" })
-	GM.start_match()
+	_begin_match()
+
+## Single entry point into the match, used by both the host (locally) and
+## clients (via the relayed "start_game" message). Guarded so a server echo
+## of "start_game" back to the host can't start the match twice.
+func _begin_match() -> void:
+	if _game_started:
+		return
+	_game_started = true
+	game_starting.emit()
+	GM.change_state(GM.GAME_STATES.IN_MATCH)
 
 func reset() -> void:
 	is_training_mode = false
@@ -125,12 +142,18 @@ func reset() -> void:
 
 	if _webrtc_mp:
 		_webrtc_mp.close()
+		_webrtc_mp = null
 
 	if _ws:
 		_ws.close()
 		_ws = null
 
 	my_id = -1
+	_signal_id = -1
+	_server_to_mesh.clear()
+	_mesh_to_server.clear()
+	player_names.clear()
+	_game_started = false
 	current_room = ""
 	is_host = false
 	set_process(false)
@@ -160,35 +183,39 @@ func _handle_signal(msg: Dictionary) -> void:
 	match msg.get("type", ""):
 
 		"connected":
-			print("connected to server")
-			my_id = msg.id
+			print("connected to signaling server")
+			_signal_id = msg.id
 			is_host = false
-			_webrtc_mp.create_mesh(my_id)
-			multiplayer.multiplayer_peer = _webrtc_mp
 			connected_to_server.emit()
 
 		"room_created":
 			current_room = msg.code
 			rooms.append(current_room)
 			is_host = true
+			_setup_mesh(1)   # host is always mesh ID 1
 			room_created.emit(msg.code)
 			print("room_created")
 
 		"room_joined":
 			current_room = msg.code
+			is_host = false
+			_setup_mesh(2)   # 2-player rooms: the joiner is mesh ID 2
 			room_joined.emit(msg.code)
 
 		"peer_connected":
-			var pid : int = msg.peer_id
+			var pid : int = _mesh_id_for(msg.peer_id)
 			_create_peer_connection(pid)
 			player_joined.emit(pid)
 			if player_names.has(my_id):
 				_send({ "type": "player_info", "name": player_names[my_id]})
 
 		"peer_disconnected":
-			var pid : int = msg.peer_id
-			_remove_peer(pid)
-			player_left.emit(pid)
+			if _server_to_mesh.has(msg.peer_id):
+				var pid : int = _server_to_mesh[msg.peer_id]
+				_server_to_mesh.erase(msg.peer_id)
+				_mesh_to_server.erase(pid)
+				_remove_peer(pid)
+				player_left.emit(pid)
 
 		"room_closed":
 			room_error.emit("Host left the room")
@@ -198,23 +225,42 @@ func _handle_signal(msg: Dictionary) -> void:
 			room_error.emit(msg.get("message", "Unknown error"))
 
 		"offer":
-			_handle_offer(msg.source, msg.sdp)
+			_handle_offer(_mesh_id_for(msg.source), msg.sdp)
 
 		"answer":
-			_handle_answer(msg.source, msg.sdp)
+			_handle_answer(_mesh_id_for(msg.source), msg.sdp)
 
 		"candidate":
-			_handle_candidate(msg.source, msg.mid, msg.index, msg.sdp)
+			_handle_candidate(_mesh_id_for(msg.source), msg.mid, msg.index, msg.sdp)
 
 		"start_game":
-			game_starting.emit()
-		
+			_begin_match()
+
 		"player_info":
-			var pid : int = msg.source
+			var pid : int = _mesh_id_for(msg.source)
 			player_names[pid] = msg.name
 			player_joined.emit(pid)
 
 # WebRTC peer management
+
+## Creates the WebRTC mesh once our role (host/joiner) is known, so the host
+## always gets multiplayer unique ID 1. Signaling-server IDs are kept only
+## for routing messages over the WebSocket.
+func _setup_mesh(mesh_id: int) -> void:
+	my_id = mesh_id
+	_webrtc_mp = WebRTCMultiplayerPeer.new()
+	_webrtc_mp.create_mesh(my_id)
+	multiplayer.multiplayer_peer = _webrtc_mp
+
+func _mesh_id_for(server_id: int) -> int:
+	if not _server_to_mesh.has(server_id):
+		# 2-player rooms: the only remote peer is the joiner if we're the
+		# host, or the host if we joined.
+		var mesh_id := 2 if is_host else 1
+		_server_to_mesh[server_id] = mesh_id
+		_mesh_to_server[mesh_id] = server_id
+	return _server_to_mesh[server_id]
+
 func _create_peer_connection(peer_id: int) -> void:
 	if peers.has(peer_id):
 		return
@@ -251,12 +297,12 @@ func _remove_peer(peer_id: int) -> void:
 
 func _on_session_created(peer_id: int, type: String, sdp: String) -> void:
 	peers[peer_id].set_local_description(type, sdp)
-	_send({ "type": type, "target": peer_id, "sdp": sdp })
+	_send({ "type": type, "target": _mesh_to_server.get(peer_id, peer_id), "sdp": sdp })
 
 func _on_ice_candidate(peer_id: int, mid: String, index: int, sdp: String) -> void:
 	_send({
 		"type": "candidate",
-		"target": peer_id,
+		"target": _mesh_to_server.get(peer_id, peer_id),
 		"mid": mid,
 		"index": index,
 		"sdp": sdp,

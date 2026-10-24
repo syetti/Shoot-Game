@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://g8pj5gxkqwdx"
-path="res://.godot/imported/Wrestler-Walk-Back.png-da60b45d36194a4c914a672d785f82af.ctex"
+uid="uid://cr40w0bl7ksbm"
+path="res://.godot/imported/left_key.png-d32ad0f6150c97e04f87dcc77ec7c855.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Wrestler/Wrestler-Walk-Back.png"
-dest_files=["res://.godot/imported/Wrestler-Walk-Back.png-da60b45d36194a4c914a672d785f82af.ctex"]
+source_file="res://Sprites/keycaps/left_key.png"
+dest_files=["res://.godot/imported/left_key.png-d32ad0f6150c97e04f87dcc77ec7c855.ctex"]
 
 [params]
 
@@ -37,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

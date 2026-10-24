@@ -10,18 +10,19 @@ var lobby_scene = preload("uid://ceb6r2vm8xu4o")
 
 var training_spawned: bool = false
 var match_started: bool = false
-var level_state = 0
+var level_state = GAME_STATES.MENU
 var child: Node
-
-
+var curr_level_node: Node
+var play_mode: bool = false
 
 
 
 enum GAME_STATES{
+	IN_LOCAL_MATCH,
 	IN_MATCH,
 	PAUSED,
 	TRAINING,
-	LOBBY
+	MENU
 }
 #
 #@onready var announcer = $"/root/Main/UI/Announcer"
@@ -31,58 +32,66 @@ var logging_enabled := true
 
 
 func _ready() -> void:
-	level_state = GAME_STATES.LOBBY
+	if play_mode:
+		change_state(GAME_STATES.MENU)
 	#Global.match_countdown()
 	pass
 
 	#
 
 func change_state(state: GAME_STATES):
+	if level_state == state and curr_level_node != null:
+		return
+		
+	if curr_level_node != null:
+		curr_level_node.queue_free()
+		curr_level_node = null
+		
 	level_state = state
-	pass
-
-func on_start_training():
-	level_state = GAME_STATES.TRAINING
-	return
-	
-
-
-func _on_scene_enter(scene_file: PackedScene) -> void:
-	var scene = scene_file.instantiate()
-	add_child(scene)
-	
-	pass
-	
-func start_match():
-	_on_scene_enter(match_scene)
-	level_state = GAME_STATES.IN_MATCH
-	pass
-	
-func _physics_process(delta: float) -> void:
 	
 	match level_state:
+		GAME_STATES.IN_LOCAL_MATCH:
+			start_local_match()
 		GAME_STATES.IN_MATCH:
-			_handle_in_match()
-		GAME_STATES.PAUSED:
-			_handle_paused()
+			start_match()
 		GAME_STATES.TRAINING:
-			_handle_training()
-
+			start_training()
+		GAME_STATES.PAUSED:
+			#start_pause()
+			pass
+		GAME_STATES.MENU:
+			start_menu()
+			pass
+			
 	pass
 
-func _handle_training():
-	if training_spawned == true:
-		return
-	_on_scene_enter(training_scene)
-	training_spawned = true
+func _on_scene_enter(scene_file: PackedScene) -> Node:
+	var scene = scene_file.instantiate()
+	add_child(scene)
+	return scene
+	
+func start_match():
+	var curr_match = match_scene.instantiate()
+	curr_match.is_local_mode = false
+	add_child(curr_match)
+	curr_level_node = curr_match
+	
+func start_local_match():
+	var curr_match = match_scene.instantiate()
+	curr_match.is_local_mode = true
+	add_child(curr_match)
+	curr_level_node = curr_match
 
-func _handle_paused():
+func start_training():
+	var current_training = training_scene.instantiate()
+	add_child(current_training)
+	curr_level_node = current_training
+
+func start_menu():
+	var menu = menu_scene.instantiate()
+	add_child(menu)
+	curr_level_node = menu
+
+func start_paused():
 	_on_scene_enter(menu_scene)
 	return
-	
-func _handle_in_match():
-	if match_started:
-		return
-	start_match()
-	match_started = true
-	pass

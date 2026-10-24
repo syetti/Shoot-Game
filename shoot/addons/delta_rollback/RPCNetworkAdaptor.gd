@@ -19,14 +19,16 @@ func _remote_ping_back(msg: Dictionary) -> void:
 func send_remote_start(peer_id: int) -> void:
 	rpc_id(peer_id, "_remote_start")
 
-@rpc("any_peer", "unreliable")
+# Start/stop are one-shot session control messages — if one is dropped the
+# other peer is stranded, so unlike input ticks they must be reliable.
+@rpc("any_peer", "reliable")
 func _remote_start() -> void:
 	emit_signal("received_remote_start")
 
 func send_remote_stop(peer_id: int) -> void:
 	rpc_id(peer_id, "_remote_stop")
 
-@rpc("any_peer", "unreliable")
+@rpc("any_peer", "reliable")
 func _remote_stop() -> void:
 	emit_signal("received_remote_stop")
 

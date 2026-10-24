@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://bvl5kl6h5sxw2"]
+
+[ext_resource type="Texture2D" uid="uid://b3xfh45wcw1sx" path="res://Sprites/Stun-Bar/StunBarBackground.png" id="1_1qj0j"]
+[ext_resource type="Script" uid="uid://dtcic8te1bvu0" path="res://scenes/ui/rematch_scene.gd" id="1_c3dvj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3c5ox"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_34555"]
+texture = ExtResource("1_1qj0j")
+texture_margin_left = 5.0
+texture_margin_right = 5.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 2
+modulate_color = Color(18.892157, 18.892157, 18.68087, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dayyu"]
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1qj0j"]
+texture = ExtResource("1_1qj0j")
+texture_margin_left = 5.0
+texture_margin_right = 5.0
+axis_stretch_vertical = 2
+modulate_color = Color(2.7349215, 4.5099597, 6.1466823, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32qwl"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="RematchScene" type="Control" unique_id=590398204]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c3dvj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=100989471]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -152.0
+offset_top = -45.0
+offset_right = 152.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=2029152216]
+layout_mode = 2
+text = "Rematch?"
+horizontal_alignment = 1
+
+[node name="Options" type="HBoxContainer" parent="VBoxContainer" unique_id=1928089024]
+layout_mode = 2
+alignment = 1
+
+[node name="exit_layout" type="VBoxContainer" parent="VBoxContainer/Options" unique_id=878741683]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer/Options/exit_layout" unique_id=1100585883]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3c5ox")
+
+[node name="exit" type="Label" parent="VBoxContainer/Options/exit_layout/Panel" unique_id=2062776472]
+unique_name_in_owner = true
+layout_mode = 2
+text = "EXIT"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Options/exit_layout" unique_id=1871341473]
+layout_mode = 2
+alignment = 1
+
+[node name="p1_e" type="Label" parent="VBoxContainer/Options/exit_layout/HBoxContainer" unique_id=7171177]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 0.7490196)
+theme_override_styles/normal = SubResource("StyleBoxTexture_34555")
+text = "1"
+label_settings = SubResource("LabelSettings_dayyu")
+horizontal_alignment = 1
+
+[node name="p2_e" type="Label" parent="VBoxContainer/Options/exit_layout/HBoxContainer" unique_id=1018030368]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_1qj0j")
+text = "2"
+label_settings = SubResource("LabelSettings_dayyu")
+
+[node name="yes_layout" type="VBoxContainer" parent="VBoxContainer/Options" unique_id=1235491657]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer/Options/yes_layout" unique_id=873789848]
+custom_minimum_size = Vector2(50, 0)
+custom_maximum_size = Vector2(-1, 35)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_32qwl")
+
+[node name="yes" type="Label" parent="VBoxContainer/Options/yes_layout/Panel" unique_id=1957078561]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "YES"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Options/yes_layout" unique_id=1423036374]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="p1_y" type="Label" parent="VBoxContainer/Options/yes_layout/HBoxContainer" unique_id=1431122224]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 0.7490196)
+theme_override_styles/normal = SubResource("StyleBoxTexture_34555")
+text = "1"
+label_settings = SubResource("LabelSettings_dayyu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="p2_y" type="Label" parent="VBoxContainer/Options/yes_layout/HBoxContainer" unique_id=88332936]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_1qj0j")
+text = "2"
+label_settings = SubResource("LabelSettings_dayyu")

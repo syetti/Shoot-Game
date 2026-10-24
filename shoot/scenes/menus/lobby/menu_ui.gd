@@ -6,6 +6,7 @@ extends Control
 @onready var join_lobby = $JoinLobby
 @onready var main_menu = $MainMenu
 @onready var connecting_screen = $ConnectingScreen
+
 var next_state: int
 var curr_state: int
 var connected = false
@@ -37,7 +38,6 @@ func _connecting_freeze() -> void:
 		get_tree().paused = false
 		connecting_screen.hide()
 		return
-	get_tree().paused = true
 	connecting_screen.show()
 	pass
 
@@ -53,7 +53,6 @@ func _process(delta: float) -> void:
 			_connecting_freeze()
 			create_lobby.show()
 		MENU_STATES.JOIN:
-			_connecting_freeze()
 			join_lobby.show()
 
 func _on_exit_lobby_options_button_pressed() -> void:
@@ -66,3 +65,11 @@ func _on_create_button_pressed() -> void:
 
 func _on_join_button_pressed() -> void:
 	_switch_state(MENU_STATES.JOIN)
+
+
+func _on_training_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_local_button_pressed() -> void:
+	GM.change_state(GM.GAME_STATES.IN_LOCAL_MATCH)
