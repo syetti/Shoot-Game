@@ -21,26 +21,27 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("mouth:modulate")
+tracks/1/path = NodePath("mouth:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0.015686275)]
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_527tb"]
 resource_name = "fly in"
+length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Label:position")
-tracks/0/interp = 2
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.56666666, 0.76666665, 1),
+"times": PackedFloat32Array(0, 0.19999999, 1.3333334, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-758, 246), Vector2(-44, 246), Vector2(23, 246), Vector2(670, 246)]
@@ -48,14 +49,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("mouth:modulate")
-tracks/1/interp = 0
+tracks/1/path = NodePath("mouth:position")
+tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.9, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.19999999, 1.3333334, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0.87058824), Color(1, 1, 1, 0)]
+"values": [Vector2(0, -300), Vector2(0, 0), Vector2(0, 0), Vector2(0, -300)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uirxa"]
@@ -86,11 +87,12 @@ offset_bottom = 513.0
 texture = ExtResource("2_a3w44")
 
 [node name="mouth" type="TextureRect" parent="." unique_id=330891323]
-modulate = Color(1, 1, 1, 0.015686275)
+modulate = Color(1, 1, 1, 0.8705882)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 6.1035156e-05
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4

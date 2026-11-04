@@ -7,7 +7,7 @@ const COLOR_P2 : Color = Color("#FFFFFF")
 var match_timer : Node
 @export var round_markers_scene: PackedScene
 var match_time_secs: int
-var total_rounds: int =  3
+var total_rounds: int =  4
 var round_markers: Node
 var rounds: Array[Node]
 var overtime_rounds = 1
@@ -69,13 +69,15 @@ func _setup_ui():
 	round_markers = round_markers_scene.instantiate()
 	$UI.add_child(round_markers)
 	var round_marker = $UI/Rounds/RoundsContainer/R1
-	for rounds in total_rounds - 1:
+	for i in total_rounds - 1:
 		round_markers.get_child(0).add_child(round_marker.duplicate())
 	rounds = round_markers.get_child(0).get_children()
 	win_screen = win_screen_scene.instantiate()
 	$UI.add_child(win_screen)
 	rematch = rematch_scene.instantiate()
 	$UI.add_child(rematch)
+	
+	_hide_menu_ui()
 	
 func _hide_match_ui():
 	round_markers.hide()
@@ -87,8 +89,14 @@ func _hide_menu_ui():
 	
 
 func _reset_player_pos() -> void:
-	p1.position.x = 160
-	p2.position.x = -160
+	p1.velocity = Vector2.ZERO
+	p2.velocity = Vector2.ZERO
+	
+	p1.position = Vector2(1000, 0)
+	p2.position = Vector2(-1000, 0)
+	
+	p1.position = Vector2(160, 0)
+	p2.position = Vector2(-160,0)
 	pass
 
 func _spawn_players() -> void:
@@ -188,7 +196,7 @@ func is_frozen() -> bool:
 	return freeze_ticks > 0
 
 func start_match() -> void:
-	
+	_hide_menu_ui()
 	current_round = 1
 	p1_score = 0
 	p2_score = 0
@@ -204,19 +212,20 @@ func start_match() -> void:
 func start_round() -> void:
 	frozen = false
 	win_screen.hide()
+	_reset_player_pos()
 	p1.reset_player()
 	p2.reset_player()
-	_reset_player_pos()
 	match_timer.start()
 	$fbar1.value = 0
 	$fbar2.value = 0
 
-func _update_round() -> void: 
+func _update_round(winner: int) -> void: 
+	var active_total : int = overtime_rounds if overtime else total_rounds
 	var best_of_rounds = round(total_rounds/2)+1 
 	if p1_score >= best_of_rounds or p2_score >= best_of_rounds:
 		_end_match()
 		return
-	if current_round >= total_rounds:
+	if current_round >= active_total:
 		_end_match()
 		return
 	win_screen.get_node("Label").text = "PLAYER %s \nWINS ROUND!" % ("1" if p1_score > p2_score else "2")
@@ -233,6 +242,8 @@ func _update_round() -> void:
 func _overtime():
 	overtime = true
 	current_round = 1
+	p1_score = 0
+	p2_score = 0
 	round_winners.clear()
 	round_winners.resize(overtime_rounds)
 	round_winners.fill(0)
@@ -240,18 +251,20 @@ func _overtime():
 	start_round()
 
 func _end_match() -> void:
-	
 	if p1_score == p2_score:
 		win_screen.get_node("Label").text = "DRAW!\nONE MORE!"
+		win_screen.get_node("slide").play("fly in")
 		win_screen.show()
 		await get_tree().create_timer(1.0).timeout
 		_overtime()
 	else:
 		win_screen.get_node("Label").text = "PLAYER %s\nWINS MATCH" % ("1" if p1_score > p2_score else "2")
+		win_screen.get_node("slide").play("fly in")
 		win_screen.show()
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		win_screen.hide()
 		rematch.game_over = true
+		rematch.show()
 		print("game over")
 		
 
@@ -294,7 +307,7 @@ func _on_player_hit(attacker_name: String):
 		return
 	frozen = true
 	_record_round_result(1 if attacker_name == "1" else -1)
-	_update_round()
+	_update_round(1 if attacker_name == "1" else -1)
 	
 	pass
 	

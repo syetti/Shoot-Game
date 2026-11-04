@@ -31,4 +31,8 @@ func _handle_input(input_prefix: String):
 		get_node(input_prefix+"block").frame = 1
 	else:
 		get_node(input_prefix+"block").frame = 0
-	pass
+	
+	if Input.is_action_pressed(input_prefix + "feint"):
+		get_node(input_prefix+"feint").frame = 1
+	else:
+		get_node(input_prefix+"feint").frame = 0
