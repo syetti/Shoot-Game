@@ -320,59 +320,59 @@ z_index = 1
 scale = Vector2(2, 2)
 script = ExtResource("2_cka0j")
 
-[node name="p2_shoot" type="AnimatedSprite2D" parent="Controls" unique_id=931246813]
+[node name="p1_shoot" type="AnimatedSprite2D" parent="Controls" unique_id=931246813]
 position = Vector2(-108.5, 44)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"w_hit"
 frame_progress = 0.6965811
 
-[node name="p2_left" type="AnimatedSprite2D" parent="Controls" unique_id=1724901216]
+[node name="p1_left" type="AnimatedSprite2D" parent="Controls" unique_id=1724901216]
 position = Vector2(-125.5, 54)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"a_hit"
 
-[node name="p2_feint" type="AnimatedSprite2D" parent="Controls" unique_id=88179222]
-position = Vector2(-91.5, 42.5)
+[node name="p1_feint" type="AnimatedSprite2D" parent="Controls" unique_id=88179222]
+position = Vector2(-91.5, 42)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"e_hit"
 
-[node name="p2_block" type="AnimatedSprite2D" parent="Controls" unique_id=20232934]
+[node name="p1_block" type="AnimatedSprite2D" parent="Controls" unique_id=20232934]
 position = Vector2(-108.5, 55.5)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"s_hit"
 frame = 1
 frame_progress = 0.054584812
 
-[node name="p2_right" type="AnimatedSprite2D" parent="Controls" unique_id=1980711667]
+[node name="p1_right" type="AnimatedSprite2D" parent="Controls" unique_id=1980711667]
 position = Vector2(-91.5, 54)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"d_hit"
 
-[node name="p1_shoot" type="AnimatedSprite2D" parent="Controls" unique_id=771623745]
+[node name="p2_shoot" type="AnimatedSprite2D" parent="Controls" unique_id=771623745]
 position = Vector2(-108.5, 44)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"up_hit"
 offset = Vector2(214, 0)
 
-[node name="p1_left" type="AnimatedSprite2D" parent="Controls" unique_id=8133373]
+[node name="p2_left" type="AnimatedSprite2D" parent="Controls" unique_id=8133373]
 position = Vector2(-125.5, 54)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"left_hit"
 offset = Vector2(214, 0)
 
-[node name="p1_block" type="AnimatedSprite2D" parent="Controls" unique_id=383838353]
+[node name="p2_block" type="AnimatedSprite2D" parent="Controls" unique_id=383838353]
 position = Vector2(-108.5, 55.5)
 sprite_frames = SubResource("SpriteFrames_cka0j")
 animation = &"down_hit"
 offset = Vector2(214, 0)
 
-[node name="p1_right" type="AnimatedSprite2D" parent="Controls" unique_id=607356907]
+[node name="p2_right" type="AnimatedSprite2D" parent="Controls" unique_id=607356907]
 position = Vector2(-91.5, 54)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"right_hit"
 offset = Vector2(214, 0)
 
-[node name="p1_feint" type="AnimatedSprite2D" parent="Controls" unique_id=1821997737]
+[node name="p2_feint" type="AnimatedSprite2D" parent="Controls" unique_id=1821997737]
 position = Vector2(-129, 42)
 sprite_frames = SubResource("SpriteFrames_3c5ox")
 animation = &"shift_hit"

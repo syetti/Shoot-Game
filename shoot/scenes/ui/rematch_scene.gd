@@ -2,14 +2,15 @@ extends Control
 
 enum MenuOption {REMATCH, QUIT}
 var game_over: bool = false
-var p1_cursor_index: int = 0
-var p2_cursor_index: int = 0
+var p1_cursor_index: int = MenuOption.REMATCH
+var p2_cursor_index: int = MenuOption.REMATCH
 
 var p1_locked: bool = false
 var p2_locked: bool = false
 
 var p1_choice: int = -1
 var p2_choice: int = -1
+
 signal rematch_requested
 signal exit_requested
 
@@ -17,11 +18,12 @@ signal exit_requested
 @onready var yes_place = %yes
 
 func _ready() -> void:
-	
-	pass # Replace with function body.
-
+	hide()
+	pass		
 
 func _process(delta: float) -> void:
+	if not game_over: 
+		return
 	if game_over:
 		show()
 		handle_input(1)
@@ -33,22 +35,42 @@ func _process(delta: float) -> void:
 		hide()
 	pass
 
+func set_game_over(state: bool) -> void:
+	game_over = state
+	_reset_menu()
+	if game_over:
+		show()
+	else:
+		hide()
+
+func _reset_menu():
+	p1_locked = false
+	p1_locked = false
+	p2_locked = false
+	p1_choice = -1
+	p2_choice = -1
+	p1_cursor_index = MenuOption.REMATCH
+	p2_cursor_index = MenuOption.REMATCH
+	
+	%p1_y.show()
+	%p1_e.hide()
+	%p2_y.show()
+	%p2_e.hide()
+	
 func check_match_state():
-	if not p1_locked or not p2_locked:
+	if not p1_locked and not p2_locked:
 		return
 	
-	
 	if p1_choice == MenuOption.QUIT or p2_choice == MenuOption.QUIT:
+		set_game_over(false)
 		print("A player chose to quit. Returning to menu...")
 		exit_requested.emit()
-		game_over = false
-		hide()
 		
 	if p1_choice == MenuOption.REMATCH and p2_choice == MenuOption.REMATCH:
 		print("Both players chose rematch. Restarting fight...")
+		set_game_over(false)
 		rematch_requested.emit()
-		game_over = false
-		hide()
+	
 		
 func handle_input(player_id: int):
 	var p1 = (player_id == 1)
@@ -57,7 +79,7 @@ func handle_input(player_id: int):
 	var curr_idx = p1_cursor_index if p1 else p2_cursor_index
 	
 	if locked:
-		if Input.is_action_just_pressed(prefix + "shoot"):
+		if Input.is_action_just_pressed(prefix + "block") or Input.is_action_just_pressed(prefix + "shoot"):
 			if p1:
 				p1_locked = false
 			else:

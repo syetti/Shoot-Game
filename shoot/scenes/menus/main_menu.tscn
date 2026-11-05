@@ -20,11 +20,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -98.5
-offset_top = -20.0
+offset_top = -34.5
 offset_right = 98.5
-offset_bottom = 20.0
+offset_bottom = 34.5
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=1355893947]
 layout_mode = 2
@@ -32,6 +33,7 @@ texture = ExtResource("2_ovrgc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1911321433]
 layout_mode = 2
+alignment = 1
 
 [node name="play" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=995669668]
 layout_mode = 2

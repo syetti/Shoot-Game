@@ -12,9 +12,9 @@
 			"buffer_window": 10,
 			"shoot": {
 				"shoot_distance": 210,
-				"prep_time": 20,
+				"prep_time": 25,
 				"active_time": 5,
-				"recovery_time": 40
+				"recovery_time": 10
 			},
 			"block": {
 				"prep_time": 5,

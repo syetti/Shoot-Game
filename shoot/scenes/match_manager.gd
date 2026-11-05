@@ -92,11 +92,11 @@ func _reset_player_pos() -> void:
 	p1.velocity = Vector2.ZERO
 	p2.velocity = Vector2.ZERO
 	
-	p1.position = Vector2(1000, 0)
-	p2.position = Vector2(-1000, 0)
+	p1.position = Vector2(-1000, 0)
+	p2.position = Vector2(1000, 0)
 	
-	p1.position = Vector2(160, 0)
-	p2.position = Vector2(-160,0)
+	p1.position = Vector2(-160, 0)
+	p2.position = Vector2(160,0)
 	pass
 
 func _spawn_players() -> void:
@@ -109,13 +109,13 @@ func _spawn_players() -> void:
 			return
 
 	var p1_data := {
-		"position": Vector2(160, 0),
-		"fixed_facing_dir": -1,
+		"position": Vector2(-160, 0),
+		"fixed_facing_dir": 1,
 		"peer_id": host_id,
 	}
 	var p2_data := {
-		"position": Vector2(-160, 0),
-		"fixed_facing_dir": 1,
+		"position": Vector2(160, 0),
+		"fixed_facing_dir": -1,
 		"peer_id": client_id,
 	}
 
@@ -160,8 +160,8 @@ func _spawn_local_player(p_name: String, data: Dictionary) -> void:
 	
 	
 func _color_players():
-	$"1/Sprite".modulate = Color("#5696D1")
-	$"-1/Sprite".modulate = Color("#FFFF")
+	$"1/Sprite".modulate = Color("#FFFF")
+	$"-1/Sprite".modulate = Color("#5696D1")
 
 	
 func _set_signals():
@@ -170,6 +170,7 @@ func _set_signals():
 	p1.player_hit.connect(_on_player_hit)
 	p2.player_hit.connect(_on_player_hit)
 	rematch.rematch_requested.connect(_execute_rematch) 
+	rematch.exit_requested.connect(_execute_exit) 
 
 func _freeze(next: int, ticks: int = FREEZE_TICKS) -> void:
 	pending = next
@@ -228,7 +229,7 @@ func _update_round(winner: int) -> void:
 	if current_round >= active_total:
 		_end_match()
 		return
-	win_screen.get_node("Label").text = "PLAYER %s \nWINS ROUND!" % ("1" if p1_score > p2_score else "2")
+	win_screen.get_node("Label").text = "PLAYER %s \nWINS ROUND!" % ("1" if winner == 1 else "2")
 	win_screen.get_node("slide").play("fly in")
 	win_screen.show()
 	current_round += 1
@@ -314,7 +315,12 @@ func _on_player_hit(attacker_name: String):
 func _execute_rematch():
 	start_match()
 	return
+
+func _execute_exit():
+	get_tree().quit()
 	
+	pass
+
 func _on_player_feint(player: int, val : int):
 	if player == 1:
 		$fbar1.value = val

@@ -79,8 +79,8 @@ const FATIGUE_BAR_MAX: int = 3
 @onready var anims: AnimationPlayer = $Anims
 @onready var shoot_collision: CollisionShape2D = $HitBox
 @onready var sprite: Sprite2D = $Sprite
-@onready var shoot_afterimg = $Sprite/afterimg
-
+@onready var s_afterimg = $Sprite/s_afterimg
+@onready var b_afterimg = $Sprite/b_afterimg
 # ════════════════════════════════════════════════════════════════════════════════
 # IDENTITY
 # ════════════════════════════════════════════════════════════════════════════════
@@ -197,7 +197,8 @@ func _network_spawn(data: Dictionary) -> void:
 	shoot_collision.disabled = true
 
 	$Sprite.flip_h = (fixed_facing_dir == -1)
-	shoot_afterimg.scale.x = fixed_facing_dir
+	s_afterimg.scale.x = fixed_facing_dir
+	b_afterimg.scale.x = fixed_facing_dir
 
 
 	set_multiplayer_authority(data.get("peer_id", 1))
@@ -371,6 +372,7 @@ func _on_state_enter(state: State) -> void:
 		State.SHOOT:
 			shoot_state   = MoveState.PREP
 			state_timer   = Data.moves_shoot_prep_time
+
 			has_connected = false
 			velocity.x    = 0
 
@@ -401,10 +403,11 @@ func _on_state_exit(state: State) -> void:
 			shoot_state   = MoveState.PREP
 			has_connected = false
 			velocity.x    = 0
-			shoot_afterimg.emitting = false
+			s_afterimg.emitting = false
 
 		State.BLOCK:
 			block_state = MoveState.PREP
+			b_afterimg.emitting = false
 
 		State.FEINT:
 			feint_state = MoveState.PREP
@@ -486,11 +489,12 @@ func _handle_block_state(input: Dictionary) -> void:
 		
 		MoveState.KNOCKBACK:
 			anims.play("block_anim/block_a") 
-
 			var pushback_speed: int = Data.combat_knockback_distance / Data.combat_knockback_time
 			velocity.x = -fixed_facing_dir * pushback_speed
+			b_afterimg.emitting = true
 			if state_timer <= 0:
 				velocity.x = 0
+				b_afterimg.emitting = false
 				if input.get("block", false):
 					block_state = MoveState.ACTIVE
 				else:
@@ -511,7 +515,7 @@ func _handle_shoot_state() -> void:
 
 		MoveState.ACTIVE:
 			anims.play("shoot_anim/shoot_a")
-			shoot_afterimg.emitting = true
+			s_afterimg.emitting = true
 			fatigue_bar_val = max(0, fatigue_bar_val - 1)
 			var t: float = 1.0 - (float(state_timer) / float(total_frames))
 			var avg_speed : float = float(Data.moves_shoot_distance) / float(total_frames)
@@ -537,7 +541,7 @@ func _handle_shoot_state() -> void:
 				velocity.x  = 0
 				state_timer = Data.moves_shoot_recovery_time
 				shoot_state = MoveState.RECOVERY
-				shoot_afterimg.emitting = false
+				s_afterimg.emitting = false
 
 		MoveState.HIT:
 			velocity.x  = 0
@@ -629,6 +633,9 @@ func _handle_hit_state() -> void:
 func try_hit() -> bool:
 	if current_state == State.BLOCK:
 		block_state = MoveState.KNOCKBACK
+		state_timer = Data.combat_knockback_time
+		var pushback_speed: int = (Data.combat_knockback_distance/2) / Data.combat_knockback_time
+		velocity.x = -fixed_facing_dir * pushback_speed
 		return false
 	_try_state_transition(State.BEEN_HIT)
 	return true
