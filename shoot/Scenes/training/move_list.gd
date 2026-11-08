@@ -1,6 +1,6 @@
 extends VBoxContainer
 var num_of_moves = 0
-var max_moves = 25
+var max_moves = 20
 var last_displayed_index = -1
 
 var new_move_scene = preload("res://Scenes/training/move_cell.tscn")
@@ -43,26 +43,5 @@ func _physics_process(delta: float) -> void:
 	if children.size() > max_moves:
 		children[0].queue_free()
 		children.remove_at(0)
-		
-	
-	
-	
-	
+
 	pass
-#
-	#var player = $"../soloNetworkTest/P1"
-	#if player:
-		#var buffer = player.input_buffer
-		#for move in buffer[0]:
-			##Find a way to find moves worth printing
-			#
-			##Move valid "move" checking to here so we dont print unneeded moves
-			#
-			#
-			#
-			#var new_move = new_move_scene.instantiate()
-			#box.add_child(new_move)
-			#new_move.add(move, buffer)
-		#
-		#
-	#

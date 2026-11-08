@@ -1,0 +1,251 @@
+[gd_scene format=3 uid="uid://ddyk4hj2v1tiu"]
+
+[ext_resource type="Texture2D" uid="uid://l3nyqtw052io" path="res://icon.svg" id="2_a3w44"]
+[ext_resource type="FontFile" uid="uid://dlynpj5bpe5gb" path="res://resources/BoldPixels.ttf" id="3_v2fs0"]
+
+[sub_resource type="Animation" id="Animation_v2fs0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-758, 246)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("white:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-653, 187)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("white:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0.02)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("whitetop:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("whitetop:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1e-05)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("white:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("whitetop:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_527tb"]
+resource_name = "fly in"
+length = 1.5
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.19999999, 1.3333334, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-758, 128.5), Vector2(-44, 128.5), Vector2(23, 128.5), Vector2(670, 128.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("white:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1, 1.1333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-653, 187), Vector2(0, 187)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("white:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.2, 1.3333334),
+"transitions": PackedFloat32Array(8.88, 8.88),
+"update": 0,
+"values": [Vector2(1, 1e-05), Vector2(1, 0.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("whitetop:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.2),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 187)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("whitetop:scale")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.2, 1.3333334),
+"transitions": PackedFloat32Array(8.88, 8.88),
+"update": 0,
+"values": [Vector2(1, 1e-05), Vector2(1, -0.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("white:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.3333334, 1.5),
+"transitions": PackedFloat32Array(8.88, 1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(18.892157, 18.892157, 18.892157, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("whitetop:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(1.3333334, 1.5),
+"transitions": PackedFloat32Array(8.88, 1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(18.892157, 18.892157, 18.892157, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uirxa"]
+_data = {
+&"RESET": SubResource("Animation_v2fs0"),
+&"fly in": SubResource("Animation_527tb")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_3c5ox"]
+font = ExtResource("3_v2fs0")
+font_size = 52
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="control" type="Control" unique_id=1975718328]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="white" type="TextureRect" parent="." unique_id=1196030214]
+modulate = Color(18.892157, 18.892157, 18.892157, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -653.0
+offset_top = 187.0
+offset_right = -653.0
+offset_bottom = 196.61896
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.02)
+texture = ExtResource("2_a3w44")
+stretch_mode = 6
+
+[node name="whitetop" type="TextureRect" parent="." unique_id=2124783725]
+modulate = Color(18.892157, 18.892157, 18.892157, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 9.6189575
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1e-05)
+texture = ExtResource("2_a3w44")
+stretch_mode = 6
+
+[node name="slide" type="AnimationPlayer" parent="." unique_id=541137068]
+deterministic = true
+libraries/ = SubResource("AnimationLibrary_uirxa")
+
+[node name="Label" type="Label" parent="." unique_id=1724312164]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -758.0
+offset_top = 66.0
+offset_right = -758.0
+offset_bottom = 169.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Player 1 	
+Wins!"
+label_settings = SubResource("LabelSettings_3c5ox")
+horizontal_alignment = 1
+vertical_alignment = 1

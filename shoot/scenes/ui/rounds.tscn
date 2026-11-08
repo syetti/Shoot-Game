@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bfk8vtyd6tucq"]
+
+[ext_resource type="Texture2D" uid="uid://dpuivuyugall7" path="res://Sprites/Points.png" id="1_n3aoy"]
+[ext_resource type="Texture2D" uid="uid://ytjusamjk8xa" path="res://Sprites/Points_over.png" id="2_1k7l6"]
+[ext_resource type="Texture2D" uid="uid://chx0l2gmiri02" path="res://Sprites/Points_progress.png" id="3_h6hvh"]
+
+[node name="Rounds" type="Control" unique_id=1687030221]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoundsContainer" type="HBoxContainer" parent="." unique_id=1101781985]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 11.0
+offset_right = -320.0
+offset_bottom = 27.0
+grow_horizontal = 2
+scale = Vector2(2, 2)
+alignment = 1
+
+[node name="R1" type="TextureProgressBar" parent="RoundsContainer" unique_id=530543620]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+allow_greater = true
+texture_under = ExtResource("1_n3aoy")
+texture_over = ExtResource("2_1k7l6")
+texture_progress = ExtResource("3_h6hvh")

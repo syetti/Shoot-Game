@@ -1,0 +1,29 @@
+extends Control
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	LobbyManager.connect("room_error", _on_room_error)
+	LobbyManager.connect("room_joined", _on_room_joined)
+	%ErrorLabel.hide()
+
+
+func _on_join_room_button_pressed() -> void:
+	LobbyManager.join_room(%LobbyCodeText.text)
+	%ErrorLabel.hide()
+	
+	
+
+
+func _on_room_joined(code: String):
+	%JoinLobbyCodeText.text = code
+	
+	return
+func _on_room_error(msg: String):
+	match msg:
+		"Room not found":
+			%ErrorLabel.text = msg.to_upper()
+			%ErrorLabel.show()
+		"Room full":
+			%ErrorLabel.text = msg.to_upper()
+			%ErrorLabel.show()
+	pass

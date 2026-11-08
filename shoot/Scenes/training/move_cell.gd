@@ -26,6 +26,8 @@ func update_move( move: int) ->void:
 			text = "BLOCK"
 		6:
 			text = "FEINT"
+		7:
+			text = "HIT"
 func _ready() -> void: 
 	
 	pass

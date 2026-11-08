@@ -1,5 +1,4 @@
-- optimize state machine (this is dumb for speed but good theory-wise) DONE!!!
-- add scrolling movelist... extend input buffer and make input_buffer display DONE!!!!
+
 - add shadows
 - reimport all anims
 	- add win anim
@@ -8,15 +7,16 @@
 - import map
 	- get flag system working
 	- use ijf scorebug with flags ( if flag falling system too complex)
-
+- get block prep working
+- make feint work
 
 
 --IDEA - Overload. Each player has bar of mental. Repeated actions from other players that illicit a response fill 
-	the bar until they're stunned for a certain period. Mimic mental fatigue.
+	the bar until they're stunned for a certain period. This mimics mental fatigue.
 	- Weaponize reactions
 	- Fatigue bar depletes as you make the opponent react 
 	- Fast-paced gameplay
-	- 3 rounds
+	- 3 roundsS
 	-- Controls 
 		- Q : Shoot
 		- E : Feint
@@ -24,9 +24,9 @@
 		- D : Right
 		- S : Block
 
---Win - shoot or throw opp
+--Win - shoot opponent
 
---Lose - get thrown or shot on
+--Lose - get shot on
 
 --Options:
 	Shoot:
@@ -40,11 +40,6 @@
 
 --Frame Data:
 	-Will be updated later...
-
-- handle block logic
-- redo sprite legs. ugly.
-- add animation for hitting opp
-- differentiate dummy and player2
 
 --MUSIC
 -Anything

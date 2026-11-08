@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ennqbad38ife"]
+
+[ext_resource type="Script" uid="uid://oswmk05o634b" path="res://scenes/components/match_timer.gd" id="1_75ft4"]
+[ext_resource type="FontFile" uid="uid://dlynpj5bpe5gb" path="res://resources/BoldPixels.ttf" id="2_2kyqo"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_e62lw"]
+font = ExtResource("2_2kyqo")
+shadow_size = 0
+
+[node name="live_match_timer" type="Timer" unique_id=425439505]
+script = ExtResource("1_75ft4")
+autostart = true
+
+[node name="Control" type="Control" parent="." unique_id=324815734]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_right = 320.0
+offset_bottom = 360.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="Control" unique_id=687587287]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 25.0
+offset_bottom = 47.0
+grow_horizontal = 2
+text = "0:00"
+label_settings = SubResource("LabelSettings_e62lw")
+horizontal_alignment = 1
+
+[connection signal="timeout" from="." to="." method="_on_timeout"]

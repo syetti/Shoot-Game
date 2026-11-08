@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://yahmm3l2svbo"]
+
+[ext_resource type="Script" path="res://scenes/ui/ui.gd" id="1_f5cxw"]
+[ext_resource type="PackedScene" uid="uid://n5xyxy27sjl0" path="res://scenes/training/move_list.tscn" id="2_aac20"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wviqb"]
+font_size = 100
+
+[sub_resource type="LabelSettings" id="LabelSettings_jxero"]
+font_size = 100
+
+[node name="UI" type="CanvasLayer" unique_id=848026519 groups=["network_sync"]]
+script = ExtResource("1_f5cxw")
+move_list_scene = ExtResource("2_aac20")
+
+[node name="MatchBeginTime" type="Label" parent="." unique_id=130276897]
+z_index = 1
+offset_right = 1152.0
+offset_bottom = 648.0
+label_settings = SubResource("LabelSettings_wviqb")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Announcer" type="Label" parent="." unique_id=1834204145]
+visible = false
+offset_right = 1152.0
+offset_bottom = 647.0
+text = "STUFFED!"
+label_settings = SubResource("LabelSettings_jxero")
+horizontal_alignment = 1
+
+[node name="server" type="Button" parent="." unique_id=9554592]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_right = 58.0
+offset_bottom = 15.5
+grow_vertical = 2
+text = "Server
+"
+
+[node name="client" type="Button" parent="." unique_id=781432825]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "Client
+"
+
+[node name="network_status" type="Label" parent="." unique_id=1496981205]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="sync_status" type="Label" parent="." unique_id=1201686128]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+text = "ggagg"
+horizontal_alignment = 3
+vertical_alignment = 1

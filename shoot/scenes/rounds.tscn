@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dijm6sjpswlwo"]
+
+[ext_resource type="Texture2D" uid="uid://dpuivuyugall7" path="res://Sprites/Points.png" id="1_r25ui"]
+
+[node name="Rounds" type="Control" unique_id=1687030221]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoundsContainer" type="HBoxContainer" parent="." unique_id=1101781985]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -28.0
+offset_right = 28.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="R1" type="TextureRect" parent="RoundsContainer" unique_id=1104160506]
+layout_mode = 2
+texture = ExtResource("1_r25ui")
+stretch_mode = 2
+
+[node name="R2" type="TextureRect" parent="RoundsContainer" unique_id=271164450]
+layout_mode = 2
+texture = ExtResource("1_r25ui")
+stretch_mode = 2
+
+[node name="R3" type="TextureRect" parent="RoundsContainer" unique_id=608242321]
+layout_mode = 2
+texture = ExtResource("1_r25ui")
+stretch_mode = 2
