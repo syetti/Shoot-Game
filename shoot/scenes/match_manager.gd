@@ -2,8 +2,8 @@ extends Node
 
 const P1_NAME := "1"
 const P2_NAME := "-1"
-const COLOR_P1 : Color = Color("#5696D1")
-const COLOR_P2 : Color = Color("#FFFFFF")
+const COLOR_P1 : Color = Color("#FFFFFF")
+const COLOR_P2 : Color = Color("#5696D1") 
 var match_timer : Node
 @export var round_markers_scene: PackedScene
 var match_time_secs: int
@@ -18,6 +18,7 @@ var live_match_timer_scene = preload("uid://ennqbad38ife")
 var local_match_timer_scene = preload("uid://dwp0eijdrxbq4")
 var wrestler = preload("uid://c00otajcfr0y7")
 var win_screen_scene = preload("uid://ddyk4hj2v1tiu")
+@onready var camera = $Camera2D
 var rematch: Control
 var win_screen : Control
 var current_round = 1
@@ -79,8 +80,17 @@ func _setup_ui():
 	
 	_hide_menu_ui()
 	
-func _hide_match_ui():
-	round_markers.hide()
+func _hide_match_ui(val: bool):
+	
+	if val:
+		get_node("UI/match_timer/Control2").hide()
+		return
+		
+	get_node("UI/match_timer/Control2").show()
+	return
+		
+	
+	
 
 func _hide_menu_ui():
 	rematch.game_over = false
@@ -92,11 +102,14 @@ func _reset_player_pos() -> void:
 	p1.velocity = Vector2.ZERO
 	p2.velocity = Vector2.ZERO
 	
-	p1.position = Vector2(-1000, 0)
-	p2.position = Vector2(1000, 0)
+	p1.position = Vector2(-1000, 300)
+	p2.position = Vector2(1000, 200)
 	
-	p1.position = Vector2(-160, 0)
-	p2.position = Vector2(160,0)
+	p1.position = Vector2(-160, 27)
+	p2.position = Vector2(160, 27)
+	
+	PhysicsServer2D.body_set_state(p1.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM, p1.global_transform)
+	PhysicsServer2D.body_set_state(p2.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM, p2.global_transform)
 	pass
 
 func _spawn_players() -> void:
@@ -109,12 +122,12 @@ func _spawn_players() -> void:
 			return
 
 	var p1_data := {
-		"position": Vector2(-160, 0),
+		"position": Vector2(-160, 27),
 		"fixed_facing_dir": 1,
 		"peer_id": host_id,
 	}
 	var p2_data := {
-		"position": Vector2(160, 0),
+		"position": Vector2(160, 27),
 		"fixed_facing_dir": -1,
 		"peer_id": client_id,
 	}
@@ -165,13 +178,15 @@ func _color_players():
 
 	
 func _set_signals():
-	p1.player_feint.connect(_on_player_feint)
-	p2.player_feint.connect(_on_player_feint)
+	p1.feint_update.connect(_on_feint_update)
+	p2.feint_update.connect(_on_feint_update)
 	p1.player_hit.connect(_on_player_hit)
 	p2.player_hit.connect(_on_player_hit)
+	p1.hit_blocked.connect(_on_hit_blocked)
+	p2.hit_blocked.connect(_on_hit_blocked)
 	rematch.rematch_requested.connect(_execute_rematch) 
 	rematch.exit_requested.connect(_execute_exit) 
-
+	match_timer.match_timeout.connect(_match_timeout)
 func _freeze(next: int, ticks: int = FREEZE_TICKS) -> void:
 	pending = next
 	freeze_ticks = ticks
@@ -211,9 +226,10 @@ func start_match() -> void:
 	pass
 
 func start_round() -> void:
+	_hide_match_ui(false)
+	_reset_player_pos()
 	frozen = false
 	win_screen.hide()
-	_reset_player_pos()
 	p1.reset_player()
 	p2.reset_player()
 	match_timer.start()
@@ -229,13 +245,14 @@ func _update_round(winner: int) -> void:
 	if current_round >= active_total:
 		_end_match()
 		return
+	_hide_match_ui(true)
 	win_screen.get_node("Label").text = "PLAYER %s \nWINS ROUND!" % ("1" if winner == 1 else "2")
 	win_screen.get_node("slide").play("fly in")
 	win_screen.show()
 	current_round += 1
 	
-	await get_tree().create_timer(1.2).timeout
-
+	await get_tree().create_timer(1.5).timeout
+	
 	start_round()
 	
 	
@@ -253,12 +270,14 @@ func _overtime():
 
 func _end_match() -> void:
 	if p1_score == p2_score:
+		_hide_match_ui(true)
 		win_screen.get_node("Label").text = "DRAW!\nONE MORE!"
 		win_screen.get_node("slide").play("fly in")
 		win_screen.show()
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.5).timeout
 		_overtime()
 	else:
+		_hide_match_ui(true)
 		win_screen.get_node("Label").text = "PLAYER %s\nWINS MATCH" % ("1" if p1_score > p2_score else "2")
 		win_screen.get_node("slide").play("fly in")
 		win_screen.show()
@@ -266,8 +285,14 @@ func _end_match() -> void:
 		win_screen.hide()
 		rematch.game_over = true
 		rematch.show()
+		match_timer.stop()
 		print("game over")
 		
+func _match_timeout():
+	_overtime()
+	if overtime:
+		_end_match()
+	pass
 
 func _record_round_result(winner: int) -> void:
 	var idx :int = current_round - 1
@@ -309,25 +334,30 @@ func _on_player_hit(attacker_name: String):
 	frozen = true
 	_record_round_result(1 if attacker_name == "1" else -1)
 	_update_round(1 if attacker_name == "1" else -1)
-	
+	camera.screen_shake(7,0.1)
 	pass
+
+func _on_hit_blocked():
+	camera.screen_shake(5,0.05)
 	
 func _execute_rematch():
 	start_match()
 	return
 
 func _execute_exit():
-	get_tree().quit()
+	get_tree().change_scene_to_file("uid://g50mrmljb3rf")
 	
 	pass
 
-func _on_player_feint(player: int, val : int):
+func _on_feint_update(player: int, val : int):
 	if player == 1:
 		$fbar1.value = val
 		return
 	$fbar2.value = val
 	return
-	
+
+
+
 ####
 
 

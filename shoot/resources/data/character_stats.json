@@ -33,7 +33,7 @@
 			"hitstop_frames": 10,
 			"knockback_distance": 32,
 			"knockback_time": 8,
-			"reaction_window_time": 60,
+			"reaction_window_time": 30,
 			"hit_anim_time": 40
 		},
 		"fatigue": {

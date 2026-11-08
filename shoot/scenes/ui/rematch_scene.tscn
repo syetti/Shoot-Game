@@ -2,9 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://b3xfh45wcw1sx" path="res://Sprites/Stun-Bar/StunBarBackground.png" id="1_1qj0j"]
 [ext_resource type="Script" uid="uid://dtcic8te1bvu0" path="res://scenes/ui/rematch_scene.gd" id="1_c3dvj"]
+[ext_resource type="FontFile" uid="uid://dlynpj5bpe5gb" path="res://resources/BoldPixels.ttf" id="2_dayyu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3c5ox"]
+font = ExtResource("2_dayyu")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3c5ox"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_34555"]
+font = ExtResource("2_dayyu")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_34555"]
 texture = ExtResource("1_1qj0j")
@@ -27,8 +34,10 @@ modulate_color = Color(2.7349215, 4.5099597, 6.1466823, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32qwl"]
 bg_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_feebd"]
+font = ExtResource("2_dayyu")
+
 [node name="RematchScene" type="Control" unique_id=590398204]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,6 +63,7 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=2029152216]
 layout_mode = 2
 text = "Rematch?"
+label_settings = SubResource("LabelSettings_3c5ox")
 horizontal_alignment = 1
 
 [node name="Options" type="HBoxContainer" parent="VBoxContainer" unique_id=1928089024]
@@ -72,6 +82,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3c5ox")
 unique_name_in_owner = true
 layout_mode = 2
 text = "EXIT"
+label_settings = SubResource("LabelSettings_34555")
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Options/exit_layout" unique_id=1871341473]
@@ -110,6 +121,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "YES"
+label_settings = SubResource("LabelSettings_feebd")
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Options/yes_layout" unique_id=1423036374]

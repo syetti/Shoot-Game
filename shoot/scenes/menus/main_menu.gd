@@ -1,8 +1,5 @@
 extends Control
 
-@export var lobby_create_scene: PackedScene
-@export var lobby_join_scene: PackedScene
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,13 +9,15 @@ func _ready() -> void:
 
 
 
-func _on_training_button_pressed() -> void:
+
+func _on_exit_pressed() -> void:
+	print("exiting")
+	get_tree().quit()
+
+
+func _on_settings_pressed() -> void:
 	pass # Replace with function body.
 
 
-func _on_local_button_pressed() -> void:
-	pass # Replace with function body.
-
-
-func _on_exit_button_pressed() -> void:
-	pass # Replace with function body.
+func _on_play_pressed() -> void:
+	get_tree().change_scene_to_file("uid://41xc5bqrcd11")

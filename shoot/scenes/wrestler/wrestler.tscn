@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c00otajcfr0y7"]
 
+[ext_resource type="Shader" uid="uid://bjhyg3xkog2ys" path="res://scenes/wrestler/drop_shadow.gdshader" id="1_1htxc"]
 [ext_resource type="Script" uid="uid://dnqtumlxck4cg" path="res://scenes/wrestler/wrestler.gd" id="1_xe0xt"]
 [ext_resource type="Shape2D" uid="uid://dha3xi5mvs08x" path="res://scenes/components/hurtbox_shape.tres" id="2_gpx7x"]
 [ext_resource type="Script" uid="uid://7pefdhcr1asv" path="res://addons/delta_rollback/NetworkAnimationPlayer.gd" id="3_lvqsm"]
@@ -265,7 +266,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_ba55o"]
-length = 0.19999999999999998
+length = 0.2
 loop_mode = 1
 step = 0.016666668
 tracks/0/type = "value"
@@ -288,26 +289,26 @@ step = 0.016666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:position")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.083333336, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Vector2(-5.684342e-14, 0), Vector2(-6, 0), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.25000167),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [18, 23]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(-5.684342e-14, 0), Vector2(-6, 0), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_4u3dw"]
@@ -417,6 +418,14 @@ _data = {
 &"stun": SubResource("Animation_8c5c7")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1htxc"]
+shader = ExtResource("1_1htxc")
+shader_parameter/dist = 1.0000000475
+shader_parameter/softness = 0.10000000475
+shader_parameter/angle = 145.482006910395
+shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
+shader_parameter/global_direction = true
+
 [sub_resource type="Curve" id="Curve_qjojg"]
 _data = [Vector2(0.0027700886, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.48591554), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -443,7 +452,7 @@ collision_mask = 3
 script = ExtResource("1_xe0xt")
 
 [node name="HurtBox" type="CollisionShape2D" parent="." unique_id=1660789225]
-position = Vector2(1, 12)
+position = Vector2(1, 0)
 shape = ExtResource("2_gpx7x")
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
@@ -456,6 +465,7 @@ script = ExtResource("3_lvqsm")
 metadata/_custom_type_script = "uid://7pefdhcr1asv"
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=131849878]
+material = SubResource("ShaderMaterial_1htxc")
 position = Vector2(-5.684342e-14, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("4_x3ttl")
@@ -483,7 +493,7 @@ lifetime = 0.12
 process_material = SubResource("ParticleProcessMaterial_3c5ox")
 
 [node name="HitBox" type="CollisionShape2D" parent="." unique_id=20392300]
-position = Vector2(0, 6)
+position = Vector2(0, -4.57)
 shape = ExtResource("7_72myw")
 disabled = true
 debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

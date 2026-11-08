@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://dmptjr1mlrtb4"]
 
-[ext_resource type="Texture2D" uid="uid://dfftgtg42q1dv" path="res://Sprites/Background/Background.png" id="1_0o31u"]
 [ext_resource type="Script" uid="uid://c4mc6t78svotj" path="res://scenes/control_display.gd" id="2_cka0j"]
 [ext_resource type="Texture2D" uid="uid://eutcwxa3ox4v" path="res://Sprites/keycaps/a_key.png" id="2_pgmei"]
 [ext_resource type="Texture2D" uid="uid://b75owke6fko3d" path="res://Sprites/keycaps/d_key.png" id="3_3a513"]
@@ -12,6 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://g3okp3sw0x2y" path="res://Sprites/keycaps/right_key.png" id="6_7hw6f"]
 [ext_resource type="Texture2D" uid="uid://dhy8nhf6247jp" path="res://Sprites/keycaps/shift_key.png" id="8_7hw6f"]
 [ext_resource type="Texture2D" uid="uid://b2owyvk4iyhyp" path="res://Sprites/keycaps/up_key.png" id="8_yprhr"]
+[ext_resource type="Texture2D" uid="uid://cbdfkec0ydsku" path="res://Sprites/Background/Background_CROWD.png" id="12_yprhr"]
+[ext_resource type="Texture2D" uid="uid://cj48lmti20j6u" path="res://logo/logo_letters.png" id="13_6yrp8"]
+[ext_resource type="Shader" uid="uid://bjhyg3xkog2ys" path="res://scenes/wrestler/drop_shadow.gdshader" id="13_qwkg6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_edq5k"]
 size = Vector2(21.75, 421)
@@ -302,7 +304,54 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_yprhr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("bg:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_6yrp8"]
+resource_name = "bg"
+length = 3.0000000000000004
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("bg:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qwkg6"]
+_data = {
+&"RESET": SubResource("Animation_yprhr"),
+&"bg": SubResource("Animation_6yrp8")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6yrp8"]
+shader = ExtResource("13_qwkg6")
+shader_parameter/dist = 3.0000001425
+shader_parameter/softness = 0.0
+shader_parameter/angle = 41.3450019638875
+shader_parameter/shadow_color = Color(0, 0, 0, 0.5)
+shader_parameter/global_direction = true
+
 [node name="wrestlingMat" type="Node2D" unique_id=1292016925]
+position = Vector2(2, 15)
 metadata/_edit_vertical_guides_ = [-541.0, 478.0, -166.0, 161.0]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=358801482]
@@ -379,9 +428,18 @@ animation = &"shift_hit"
 frame_progress = 0.64355296
 offset = Vector2(214, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=390845443]
+[node name="bg" type="Sprite2D" parent="." unique_id=390845443]
 position = Vector2(-2.4999847, -6)
 scale = Vector2(2.3535714, 2.3666666)
-texture = ExtResource("1_0o31u")
-hframes = 8
-frame = 2
+texture = ExtResource("12_yprhr")
+hframes = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1039166153]
+libraries/ = SubResource("AnimationLibrary_qwkg6")
+autoplay = &"bg"
+
+[node name="logo" type="Sprite2D" parent="." unique_id=1196597020]
+material = SubResource("ShaderMaterial_6yrp8")
+position = Vector2(0, 92)
+scale = Vector2(2, 2)
+texture = ExtResource("13_6yrp8")

@@ -13,7 +13,8 @@ extends CharacterBody2D
 # ════════════════════════════════════════════════════════════════════════════════
 
 signal player_hit(attacker_name: String)
-signal player_feint(player : int)
+signal feint_update(player : int, bar_val: int)
+signal hit_blocked
 
 # ════════════════════════════════════════════════════════════════════════════════
 # ENUMS
@@ -78,6 +79,7 @@ const FATIGUE_BAR_MAX: int = 3
 
 @onready var anims: AnimationPlayer = $Anims
 @onready var shoot_collision: CollisionShape2D = $HitBox
+@onready var hit_collision: CollisionShape2D = $HurtBox
 @onready var sprite: Sprite2D = $Sprite
 @onready var s_afterimg = $Sprite/s_afterimg
 @onready var b_afterimg = $Sprite/b_afterimg
@@ -173,9 +175,9 @@ func _ready() -> void:
 	Data = GameData.new()
 	Data._scan_into_vars()
 
-	transform.x = Vector2(fixed_facing_dir, 0.0)
-
-
+	
+	_apply_facing()
+	
 func _physics_process(_delta: float) -> void:
 	if is_local_mode and not get_parent().frozen:
 		_network_process(_get_local_input())
@@ -232,18 +234,12 @@ func _network_process(input: Dictionary) -> void:
 
 	# ── Physics move ─────────────────────────────────────────────────────────
 	collider = move_and_collide(velocity)
-	#-------Smear Shader-----------
-	if sprite and sprite.material is ShaderMaterial:
-		var smear_vector = velocity * (1.0 / 60.0) 
-		if shoot_state == MoveState.ACTIVE:
-			sprite.material.set_shader_parameter("velocity", smear_vector)
-		else:
-			sprite.material.set_shader_parameter("velocity", smear_vector)
+	
 	
 	# ── Stun threshold check ─────────────────────────────────────────────────
 	if fatigue_bar_val >= FATIGUE_BAR_MAX:
 		fatigue_bar_val = 0
-		player_feint.emit(fixed_facing_dir, fatigue_bar_val)
+		feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 		_try_state_transition(State.STUN)
 
 
@@ -372,7 +368,6 @@ func _on_state_enter(state: State) -> void:
 		State.SHOOT:
 			shoot_state   = MoveState.PREP
 			state_timer   = Data.moves_shoot_prep_time
-
 			has_connected = false
 			velocity.x    = 0
 
@@ -404,6 +399,7 @@ func _on_state_exit(state: State) -> void:
 			has_connected = false
 			velocity.x    = 0
 			s_afterimg.emitting = false
+			sprite.position = Vector2.ZERO
 
 		State.BLOCK:
 			block_state = MoveState.PREP
@@ -413,6 +409,7 @@ func _on_state_exit(state: State) -> void:
 			feint_state = MoveState.PREP
 			opp_feint_reacted = false
 			feint_check = false   # ready for next feint
+			sprite.position = Vector2.ZERO
 
 		State.BEEN_HIT:
 			been_hit_state = MoveState.PREP
@@ -509,30 +506,34 @@ func _handle_shoot_state() -> void:
 		MoveState.PREP:
 			anims.play("shoot_anim/shoot_p")
 			if state_timer <= 0:
-				shoot_collision.disabled = false
+				sprite.position = Vector2.ZERO
 				state_timer = Data.moves_shoot_active_time
 				shoot_state = MoveState.ACTIVE
 
 		MoveState.ACTIVE:
+			shoot_collision.disabled = false
 			anims.play("shoot_anim/shoot_a")
 			s_afterimg.emitting = true
 			fatigue_bar_val = max(0, fatigue_bar_val - 1)
+			feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 			var t: float = 1.0 - (float(state_timer) / float(total_frames))
 			var avg_speed : float = float(Data.moves_shoot_distance) / float(total_frames)
 			var current_speed: float = lerpf(0.0, avg_speed * 2.0,  t)
 			velocity.x = fixed_facing_dir * current_speed
-			
+			collider = move_and_collide(velocity)
+			velocity = Vector2.ZERO
 
 			match _resolve_shoot_collision():
 				HitResult.LANDED:
 					shoot_collision.disabled = true
-					velocity.x  = 0
+					velocity.x = 0
 					shoot_state = MoveState.HIT
 					return
 				HitResult.BLOCKED:
 					shoot_collision.disabled = true
 					velocity.x  = 0
 					shoot_state = MoveState.BLOCKED
+					hit_blocked.emit()
 					return
 				
 
@@ -675,13 +676,13 @@ func _on_feint_reacted() -> void:
 	reaction_window  = 0
 	if opp and opp.current_state == State.FEINT:
 		opp.opp_feint_reacted = true   
-	player_feint.emit(fixed_facing_dir, fatigue_bar_val)
+	feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 
 
 func _on_feint_ignored() -> void:
 	fatigue_bar_val = max(0, fatigue_bar_val - 1)
 	player_feint_reacted   = false
-	player_feint.emit(fixed_facing_dir, fatigue_bar_val)
+	feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 
 
 
@@ -726,16 +727,35 @@ func reset_player() -> void:
 	been_hit_state = MoveState.PREP
 	hit_state      = MoveState.PREP
 
-	state_timer     = 0
-	reaction_window = 0
-	player_feint_reacted    = false
-	opp_feint_reacted   = false
-	feint_check     = false
-	has_connected   = false
-
+	state_timer          = 0
+	reaction_window      = 0
+	player_feint_reacted = false
+	opp_feint_reacted    = false
+	feint_check          = false
+	has_connected        = false
+	collider             = null
+	
+	shoot_collision.disabled = true
+	hit_collision.disabled   = false
+	s_afterimg.emitting      = false
+	b_afterimg.emitting      = false
+	
+	if anims.has_animation("RESET"):
+		anims.play("RESET")
+		anims.advance(0)
+	anims.play("idle")
+	anims.advance(0)
+	
+	_apply_facing()
+	
 	fatigue_bar_val = 0
 	input_buffer.clear()
 	velocity = Vector2.ZERO
-
 	show()
-	fatigue_bar_val = 0
+func _apply_facing() -> void:
+	transform.x = Vector2(1.0, 0.0)
+	transform.y = Vector2(0.0, 1.0)
+	$Sprite.flip_h = (fixed_facing_dir == -1)
+	s_afterimg.scale.x = fixed_facing_dir
+	b_afterimg.scale.x = fixed_facing_dir
+	

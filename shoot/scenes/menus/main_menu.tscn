@@ -1,7 +1,164 @@
 [gd_scene format=3 uid="uid://g50mrmljb3rf"]
 
 [ext_resource type="Script" uid="uid://cbtjkwamtv04p" path="res://scenes/menus/main_menu.gd" id="1_xqga4"]
-[ext_resource type="Texture2D" uid="uid://djjvcctobo3mg" path="res://Sprites/HIT.png" id="2_ovrgc"]
+[ext_resource type="Texture2D" uid="uid://l3nyqtw052io" path="res://icon.svg" id="2_ovrgc"]
+[ext_resource type="Texture2D" uid="uid://cj48lmti20j6u" path="res://logo/logo_letters.png" id="3_2o76q"]
+[ext_resource type="Texture2D" uid="uid://cg6bxgrnoeqql" path="res://Sprites/ui/play_button.png" id="3_ng0o5"]
+[ext_resource type="Texture2D" uid="uid://nqwqwhv1a6tm" path="res://Sprites/ui/gear_icon.png" id="4_8r73w"]
+[ext_resource type="Texture2D" uid="uid://bj68oq6ie6isa" path="res://Sprites/ui/leave_icon.png" id="5_1hnlc"]
+[ext_resource type="FontFile" uid="uid://dlynpj5bpe5gb" path="res://resources/BoldPixels.ttf" id="6_8r73w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32qwl"]
+bg_color = Color(0, 0, 0, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3c5ox"]
+bg_color = Color(0, 0, 0, 1)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_3c5ox"]
+font = ExtResource("6_8r73w")
+font_size = 9
+
+[sub_resource type="Animation" id="Animation_2o76q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-225, 35)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureRect:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("options:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Label:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_6bivr"]
+resource_name = "start_anim"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.26666668, 1.1333333, 2.9, 2.966667, 3.4333334, 4.166667),
+"transitions": PackedFloat32Array(4.4382677, 4.4382677, 0.11662936, 0.11662936, 1, 0.1386964, 0.1386964),
+"update": 0,
+"values": [Vector2(-225, 200), Vector2(800, 200), Vector2(641, 35), Vector2(-217.59998, 35), Vector2(-250, 147), Vector2(-250, 147), Vector2(277.99997, 147)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 2.7333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureRect:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 2.966667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(4, 4), Vector2(1, 1), Vector2(2, 2)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("options:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 4.4666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Label:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 4.8333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_imvie"]
+_data = {
+&"RESET": SubResource("Animation_2o76q"),
+&"start_anim": SubResource("Animation_6bivr")
+}
 
 [node name="MainMenu" type="Control" unique_id=654519501]
 layout_mode = 3
@@ -12,37 +169,85 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xqga4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1179727046]
+[node name="whitetop" type="TextureRect" parent="." unique_id=2145069404]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_ovrgc")
+stretch_mode = 6
+
+[node name="options" type="HBoxContainer" parent="." unique_id=1911321433]
+visible = false
+layout_mode = 0
+offset_top = 222.0
+offset_right = 640.0
+offset_bottom = 255.0
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="play" type="Button" parent="options" unique_id=995669668]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_32qwl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3c5ox")
+icon = ExtResource("3_ng0o5")
+icon_alignment = 1
+
+[node name="settings" type="Button" parent="options" unique_id=538644354]
+visible = false
+layout_mode = 2
+icon = ExtResource("4_8r73w")
+flat = true
+
+[node name="exit" type="Button" parent="options" unique_id=589894889]
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_32qwl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3c5ox")
+icon = ExtResource("5_1hnlc")
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="." unique_id=2029480797]
+visible = false
+layout_mode = 0
+offset_left = 384.0
+offset_top = 178.0
+offset_right = 440.0
+offset_bottom = 217.0
+pivot_offset = Vector2(27, 15)
+text = "demo
+"
+label_settings = SubResource("LabelSettings_3c5ox")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1430512799]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -98.5
-offset_top = -34.5
-offset_right = 98.5
-offset_bottom = 34.5
+offset_left = -545.0
+offset_top = -145.0
+offset_right = -460.99896
+offset_bottom = -78.999954
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+scale = Vector2(2, 2)
+pivot_offset = Vector2(42, 33)
+mouse_filter = 2
+texture = ExtResource("3_2o76q")
+stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=1355893947]
-layout_mode = 2
-texture = ExtResource("2_ovrgc")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1019961206]
+libraries/ = SubResource("AnimationLibrary_imvie")
+autoplay = &"start_anim"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1911321433]
-layout_mode = 2
-alignment = 1
-
-[node name="play" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=995669668]
-layout_mode = 2
-text = "PLAY"
-
-[node name="settings" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=538644354]
-layout_mode = 2
-text = "SETTINGS"
-
-[node name="exit" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=589894889]
-layout_mode = 2
-text = "EXIT"
+[connection signal="pressed" from="options/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="options/settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="options/exit" to="." method="_on_exit_pressed"]
