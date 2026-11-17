@@ -21,6 +21,7 @@ content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
 bg_color = Color(0.7764706, 0.18431373, 0, 1)
+border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -69,7 +70,6 @@ grow_vertical = 2
 script = ExtResource("1_u178o")
 
 [node name="CreateLobby" type="Control" parent="." unique_id=654519501]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -174,6 +174,7 @@ layout_mode = 2
 text = "Exit To Menu"
 
 [node name="JoinLobby" type="Control" parent="." unique_id=507224447]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
