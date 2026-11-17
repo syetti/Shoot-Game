@@ -6,83 +6,86 @@ uniform float angle : hint_range(0.0, 360.0) = 45.0;
 uniform vec4 shadow_color : source_color = vec4(0.0, 0.0, 0.0, 0.5);
 uniform bool global_direction = true;
 
+// Only needed if you use the Sprite2D's flip_h / flip_v checkboxes.
+// (Using negative scale instead needs neither; see notes.)
+uniform bool flip_h = false;
+uniform bool flip_v = false;
+
 varying vec2 main_uv;
 varying vec2 shadow_uv;
 varying vec4 modulate_color;
+// Current frame's rect in sheet UV space, derived in vertex()
+varying flat vec2 uv_min;
+varying flat vec2 uv_max;
 
-// Returns 1.0 inside [0, 1] UV bounds, 0.0 outside (prevents texture repeat/clamping)
 float in_bounds(vec2 uv) {
-	vec2 s = step(vec2(0.0), uv) - step(vec2(1.0), uv);
+	vec2 s = step(uv_min, uv) - step(uv_max, uv);
 	return s.x * s.y;
 }
 
-// Samples texture alpha safely within UV bounds
 float sample_alpha(sampler2D tex, vec2 uv) {
 	return texture(tex, uv).a * in_bounds(uv);
 }
 
 void vertex() {
-	// Capture node modulate / self_modulate color
 	modulate_color = COLOR;
-	
-	// Calculate total pixel padding needed for both offset and blur radius
+
+	// Before padding, VERTEX is the frame's corner in local pixels (centered Sprite2D),
+	// so the frame size in UV space is just its pixel size * TEXTURE_PIXEL_SIZE.
+	vec2 corner = sign(VERTEX);                       // geometric corner: -1 or +1
+	vec2 fsize = 2.0 * abs(VERTEX) * TEXTURE_PIXEL_SIZE;
+
+	// Which UV corner sits at this vertex (flipped axes swap it)
+	vec2 flip = vec2(flip_h ? -1.0 : 1.0, flip_v ? -1.0 : 1.0);
+	vec2 uv_corner = corner * flip;
+
+	// Recover the frame rect from this vertex's own UV (identical for all 4 vertices)
+	vec2 center = UV - uv_corner * fsize * 0.5;
+	vec2 eps = TEXTURE_PIXEL_SIZE * 0.01;             // guards against float rounding at the edge
+	uv_min = center - fsize * 0.5 - eps;
+	uv_max = center + fsize * 0.5 + eps;
+
+	// Expand quad and UV by the same number of texture pixels
 	float total_pad = dist + softness * 2.0;
-	vec2 pad_uv = TEXTURE_PIXEL_SIZE * total_pad;
-	
-	// Expand vertex outward from center regardless of Sprite2D pivot/centered setting
-	VERTEX += sign(UV - 0.5) * total_pad;
-	
-	// Remap UV so the original sprite remains stationary in the center
-	vec2 scale = 1.0 + pad_uv * 2.0;
-	main_uv = (UV - 0.5) * scale + 0.5;
-	
-	// Calculate shadow offset direction
+	VERTEX += corner * total_pad;
+	main_uv = UV + uv_corner * total_pad * TEXTURE_PIXEL_SIZE;
+
 	float rad = radians(angle);
 	vec2 dir = vec2(cos(rad), sin(rad));
-	
 	if (global_direction) {
-		// Keep shadow angle consistent in world space even when the sprite rotates
-		dir = normalize((vec4(dir, 0.0, 0.0) * MODEL_MATRIX).xy);
+		dir = normalize((inverse(MODEL_MATRIX) * vec4(dir, 0.0, 0.0)).xy);
 	}
-	
-	shadow_uv = main_uv - dir * TEXTURE_PIXEL_SIZE * dist;
+
+	shadow_uv = main_uv - dir * flip * dist * TEXTURE_PIXEL_SIZE;
 }
 
 void fragment() {
-	// 1. Sample shadow alpha (with optional 9-tap Gaussian-like blur)
 	float shadow_alpha = 0.0;
-	
+
 	if (softness <= 0.01) {
 		shadow_alpha = sample_alpha(TEXTURE, shadow_uv);
 	} else {
-		vec2 blur_step = TEXTURE_PIXEL_SIZE * softness;
-		
-		// Center sample (weight 4)
+		vec2 b = TEXTURE_PIXEL_SIZE * softness;
+
 		shadow_alpha += sample_alpha(TEXTURE, shadow_uv) * 4.0;
-		
-		// Axis samples (weight 2 each)
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(blur_step.x, 0.0)) * 2.0;
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv - vec2(blur_step.x, 0.0)) * 2.0;
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(0.0, blur_step.y)) * 2.0;
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv - vec2(0.0, blur_step.y)) * 2.0;
-		
-		// Diagonal samples (weight 1 each)
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(blur_step.x, blur_step.y));
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(-blur_step.x, blur_step.y));
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(blur_step.x, -blur_step.y));
-		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(-blur_step.x, -blur_step.y));
-		
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(b.x, 0.0)) * 2.0;
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv - vec2(b.x, 0.0)) * 2.0;
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(0.0, b.y)) * 2.0;
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv - vec2(0.0, b.y)) * 2.0;
+
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2( b.x,  b.y));
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(-b.x,  b.y));
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2( b.x, -b.y));
+		shadow_alpha += sample_alpha(TEXTURE, shadow_uv + vec2(-b.x, -b.y));
+
 		shadow_alpha /= 16.0;
 	}
-	
-	vec4 sh_col = vec4(shadow_color.rgb, shadow_color.a * shadow_alpha);
-	
-	// 2. Sample main sprite color safely within [0, 1] bounds
+
+	float sh_a = shadow_color.a * shadow_alpha * modulate_color.a;
 	vec4 main_col = texture(TEXTURE, main_uv) * in_bounds(main_uv) * modulate_color;
-	
-	// 3. Proper Porter-Duff "Source Over" alpha compositing (prevents dark fringes)
-	float out_a = main_col.a + sh_col.a * (1.0 - main_col.a);
-	vec3 out_rgb = mix(sh_col.rgb * sh_col.a, main_col.rgb, main_col.a) / max(out_a, 0.0001);
-	
+
+	float out_a = main_col.a + sh_a * (1.0 - main_col.a);
+	vec3 out_rgb = (main_col.rgb * main_col.a + shadow_color.rgb * sh_a * (1.0 - main_col.a)) / max(out_a, 0.0001);
+
 	COLOR = vec4(out_rgb, out_a);
 }

@@ -27,13 +27,17 @@ var p2_score = 0
 var is_local_mode = true
 var p1: CharacterBody2D
 var p2: CharacterBody2D
-
+var p1_shot_tick:int = MAX_SHOT_TICKS
+var p2_shot_tick:int = MAX_SHOT_TICKS
+var priority: int = 0
 enum Pending { NONE, NEXT_ROUND, OVERTIME, MATCH_OVER }
 const FREEZE_TICKS := 120
+const MAX_SHOT_TICKS := 60
+const MAX_SHOT_WINDOW := 1
 var frozen : bool
 var freeze_ticks := 0
 var pending: int = Pending.NONE
-
+var ticks = 0
 
 var _ready_peers := {}
 var _start_requested := false
@@ -48,7 +52,10 @@ func _ready() -> void:
 		add_to_group("network_sync")
 		_setup_network_match()
 
-
+func _physics_process(_delta: float) -> void:
+	ticks += 1
+	if ticks > MAX_SHOT_TICKS:
+		ticks = 0
 
 func _start_local_match() -> void:
 	_setup_ui()
@@ -108,8 +115,7 @@ func _reset_player_pos() -> void:
 	p1.position = Vector2(-160, 27)
 	p2.position = Vector2(160, 27)
 	
-	PhysicsServer2D.body_set_state(p1.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM, p1.global_transform)
-	PhysicsServer2D.body_set_state(p2.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM, p2.global_transform)
+	
 	pass
 
 func _spawn_players() -> void:
@@ -166,7 +172,6 @@ func _spawn_local_player(p_name: String, data: Dictionary) -> void:
 	var player = wrestler.instantiate()
 	player.name = p_name
 	
-	# Apply the dictionary data directly to the node's properties
 	for key in data.keys():
 		player.set(key, data[key])
 	add_child(player)
@@ -184,6 +189,8 @@ func _set_signals():
 	p2.player_hit.connect(_on_player_hit)
 	p1.hit_blocked.connect(_on_hit_blocked)
 	p2.hit_blocked.connect(_on_hit_blocked)
+	p1.player_shot.connect(_on_player_shot)
+	p2.player_shot.connect(_on_player_shot)
 	rematch.rematch_requested.connect(_execute_rematch) 
 	rematch.exit_requested.connect(_execute_exit) 
 	match_timer.match_timeout.connect(_match_timeout)
@@ -235,8 +242,10 @@ func start_round() -> void:
 	match_timer.start()
 	$fbar1.value = 0
 	$fbar2.value = 0
+	reset_shot_ticks()
 
 func _update_round(winner: int) -> void: 
+
 	var active_total : int = overtime_rounds if overtime else total_rounds
 	var best_of_rounds = round(total_rounds/2)+1 
 	if p1_score >= best_of_rounds or p2_score >= best_of_rounds:
@@ -328,17 +337,51 @@ func _rebind_round_markers(visible_count: int) -> void:
 		rounds[i].visible = i < visible_count
 	_refresh_round_markers()
 
-func _on_player_hit(attacker_name: String):
+func _on_player_hit():
 	if frozen: 
 		return
 	frozen = true
-	_record_round_result(1 if attacker_name == "1" else -1)
-	_update_round(1 if attacker_name == "1" else -1)
+	if priority != 0:
+		_record_round_result(priority)
+		_update_round(priority)
+	else:
+		p1.shoot_state = 5
+		p2.shoot_state = 5
+	reset_shot_ticks()
 	camera.screen_shake(7,0.1)
 	pass
 
 func _on_hit_blocked():
 	camera.screen_shake(5,0.05)
+
+func _on_player_shot(player:int):
+
+	match player:
+		1: 
+			p1_shot_tick = ticks
+			
+		-1: 
+			p2_shot_tick = ticks
+		
+			
+	if p1_shot_tick != MAX_SHOT_TICKS and p2_shot_tick != MAX_SHOT_TICKS:
+		if abs(p1_shot_tick-p2_shot_tick) <= MAX_SHOT_WINDOW:
+			priority = 0
+			
+		else:
+			priority = 1 if p1_shot_tick < p2_shot_tick else -1
+	
+	elif p1_shot_tick < MAX_SHOT_TICKS:
+		priority = 1
+	else:
+		priority = -1
+	
+
+	p1.priority = priority
+	p2.priority = priority
+func reset_shot_ticks():
+	p1_shot_tick = MAX_SHOT_TICKS
+	p2_shot_tick = MAX_SHOT_TICKS
 	
 func _execute_rematch():
 	start_match()

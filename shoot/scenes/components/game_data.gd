@@ -29,6 +29,7 @@ var combat_stunned_time: int
 var combat_stuffed_stunned_time : int
 var combat_hitstop_frames: int
 var combat_knockback_distance: int
+var combat_knockback_block_distance: int
 var combat_knockback_time: int
 var combat_reaction_window_time: int
 var combat_hit_anim_time: int
@@ -74,6 +75,7 @@ func _scan_into_vars() -> void:
 	combat_stuffed_stunned_time = stats["combat"]["stuffed_stun_time"]
 	combat_hitstop_frames = stats["combat"]["hitstop_frames"]
 	combat_knockback_distance = stats["combat"]["knockback_distance"]
+	combat_knockback_block_distance = stats["combat"]["knockback_block_distance"]
 	combat_knockback_time = stats["combat"]["knockback_time"]
 	combat_reaction_window_time = stats["combat"]["reaction_window_time"]
 	combat_hit_anim_time = stats["combat"]["hit_anim_time"]

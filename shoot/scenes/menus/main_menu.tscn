@@ -204,7 +204,6 @@ icon = ExtResource("4_8r73w")
 flat = true
 
 [node name="exit" type="Button" parent="options" unique_id=589894889]
-visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_32qwl")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3c5ox")

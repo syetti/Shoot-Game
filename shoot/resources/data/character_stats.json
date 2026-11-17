@@ -11,10 +11,10 @@
 		"moves": {
 			"buffer_window": 10,
 			"shoot": {
-				"shoot_distance": 210,
+				"shoot_distance": 150,
 				"prep_time": 25,
 				"active_time": 5,
-				"recovery_time": 10
+				"recovery_time": 15
 			},
 			"block": {
 				"prep_time": 5,
@@ -31,8 +31,9 @@
 			"stunned_time": 75,
 			"stuffed_stun_time": 10,
 			"hitstop_frames": 10,
-			"knockback_distance": 32,
-			"knockback_time": 8,
+			"knockback_distance": 160,
+			"knockback_block_distance": 90, 
+			"knockback_time": 20,
 			"reaction_window_time": 30,
 			"hit_anim_time": 40
 		},

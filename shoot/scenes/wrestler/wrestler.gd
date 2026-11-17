@@ -12,7 +12,8 @@ extends CharacterBody2D
 # SIGNALS
 # ════════════════════════════════════════════════════════════════════════════════
 
-signal player_hit(attacker_name: String)
+signal player_hit()
+signal player_shot(player : int, attack_tick : int)
 signal feint_update(player : int, bar_val: int)
 signal hit_blocked
 
@@ -41,7 +42,7 @@ enum MoveState {
 	KNOCKBACK = 6,
 }
 
-enum HitResult { MISS, LANDED, BLOCKED }
+enum HitResult { MISS, LANDED, BLOCKED}
 
 
 # ════════════════════════════════════════════════════════════════════════════════
@@ -83,6 +84,7 @@ const FATIGUE_BAR_MAX: int = 3
 @onready var sprite: Sprite2D = $Sprite
 @onready var s_afterimg = $Sprite/s_afterimg
 @onready var b_afterimg = $Sprite/b_afterimg
+@onready var k_afterimg = $Sprite/k_afterimg
 # ════════════════════════════════════════════════════════════════════════════════
 # IDENTITY
 # ════════════════════════════════════════════════════════════════════════════════
@@ -92,7 +94,7 @@ var fixed_facing_dir: int = 1
 var input_prefix: String  = ""
 var is_local_mode: bool   = true
 var frozen: bool = false
-
+var priority = 0
 
 # ════════════════════════════════════════════════════════════════════════════════
 # STATE MACHINE
@@ -108,7 +110,7 @@ var been_hit_state: int = MoveState.PREP
 var hit_state:      int = MoveState.PREP
 
 var state_timer: int = 0
-
+var tick = 0
 
 # ════════════════════════════════════════════════════════════════════════════════
 # INPUT
@@ -148,7 +150,7 @@ var collider: KinematicCollision2D
 var Data: GameData
 var score: int = 0
 var last_position : Vector2
-
+var initial_y :int
 # ════════════════════════════════════════════════════════════════════════════════
 # LIFECYCLE
 # ════════════════════════════════════════════════════════════════════════════════
@@ -159,6 +161,8 @@ func _ready() -> void:
 	
 	if sprite.material:
 		sprite.material = sprite.material.duplicate()
+	
+	_apply_facing()
 	
 	match name:
 		"1":  
@@ -176,7 +180,7 @@ func _ready() -> void:
 	Data._scan_into_vars()
 
 	
-	_apply_facing()
+
 	
 func _physics_process(_delta: float) -> void:
 	if is_local_mode and not get_parent().frozen:
@@ -193,14 +197,13 @@ func _network_spawn(data: Dictionary) -> void:
 	Data = GameData.new()
 	Data._scan_into_vars()
 
-	position               = data.get("position", Vector2(180, 400))
+	
 	fixed_facing_dir       = data.get("fixed_facing_dir", 1)
 	dummy                  = data.get("dummy_state", false)
 	shoot_collision.disabled = true
 
-	$Sprite.flip_h = (fixed_facing_dir == -1)
-	s_afterimg.scale.x = fixed_facing_dir
-	b_afterimg.scale.x = fixed_facing_dir
+	_apply_facing()
+	
 
 
 	set_multiplayer_authority(data.get("peer_id", 1))
@@ -211,10 +214,16 @@ func _network_spawn(data: Dictionary) -> void:
 func _network_process(input: Dictionary) -> void:
 	_update_input_buffer()
 	_buffer_pressed_inputs(input)
-
+	
+	tick += 1
+	
+	if tick > 60:
+		tick = 0
+		
+		 
 	if state_timer > 0:
 		state_timer -= 1
-
+	
 	if dummy:
 		input = { "block": dummy_block, "feint": dummy_feint }
 
@@ -233,15 +242,16 @@ func _network_process(input: Dictionary) -> void:
 	_tick_reaction_window()
 
 	# ── Physics move ─────────────────────────────────────────────────────────
+	initial_y = position.y 
 	collider = move_and_collide(velocity)
-	
-	
+	position.y = initial_y
 	# ── Stun threshold check ─────────────────────────────────────────────────
 	if fatigue_bar_val >= FATIGUE_BAR_MAX:
 		fatigue_bar_val = 0
 		feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 		_try_state_transition(State.STUN)
-
+	# Stick Sprite
+	$Sprite.global_position.x = global_position.x
 
 
 func _save_state() -> Dictionary:
@@ -370,6 +380,7 @@ func _on_state_enter(state: State) -> void:
 			state_timer   = Data.moves_shoot_prep_time
 			has_connected = false
 			velocity.x    = 0
+			
 
 		State.BLOCK:
 			block_state = MoveState.PREP
@@ -389,7 +400,7 @@ func _on_state_enter(state: State) -> void:
 		State.HIT:
 			hit_state   = MoveState.PREP
 			state_timer = Data.combat_hitstop_frames
-			player_hit.emit(name)
+			player_hit.emit()
 
 
 func _on_state_exit(state: State) -> void:
@@ -399,6 +410,7 @@ func _on_state_exit(state: State) -> void:
 			has_connected = false
 			velocity.x    = 0
 			s_afterimg.emitting = false
+			k_afterimg.emitting = false
 			sprite.position = Vector2.ZERO
 
 		State.BLOCK:
@@ -486,7 +498,7 @@ func _handle_block_state(input: Dictionary) -> void:
 		
 		MoveState.KNOCKBACK:
 			anims.play("block_anim/block_a") 
-			var pushback_speed: int = Data.combat_knockback_distance / Data.combat_knockback_time
+			var pushback_speed: int = Data.combat_knockback_block_distance / Data.combat_knockback_time
 			velocity.x = -fixed_facing_dir * pushback_speed
 			b_afterimg.emitting = true
 			if state_timer <= 0:
@@ -509,8 +521,10 @@ func _handle_shoot_state() -> void:
 				sprite.position = Vector2.ZERO
 				state_timer = Data.moves_shoot_active_time
 				shoot_state = MoveState.ACTIVE
+				
 
 		MoveState.ACTIVE:
+			player_shot.emit(fixed_facing_dir)
 			shoot_collision.disabled = false
 			anims.play("shoot_anim/shoot_a")
 			s_afterimg.emitting = true
@@ -521,6 +535,7 @@ func _handle_shoot_state() -> void:
 			var current_speed: float = lerpf(0.0, avg_speed * 2.0,  t)
 			velocity.x = fixed_facing_dir * current_speed
 			collider = move_and_collide(velocity)
+			global_position.y = initial_y
 			velocity = Vector2.ZERO
 
 			match _resolve_shoot_collision():
@@ -533,8 +548,10 @@ func _handle_shoot_state() -> void:
 					shoot_collision.disabled = true
 					velocity.x  = 0
 					shoot_state = MoveState.BLOCKED
+					
 					hit_blocked.emit()
-					return
+				
+					
 				
 
 			if state_timer <= 0:
@@ -547,11 +564,14 @@ func _handle_shoot_state() -> void:
 		MoveState.HIT:
 			velocity.x  = 0
 			shoot_collision.disabled = true
+			s_afterimg.emitting = false
 			_try_state_transition(State.HIT)   
 
 		MoveState.BLOCKED:
 			velocity.x  = 0
-			anims.play("shoot_anim/shoot_r")
+			s_afterimg.emitting = false
+			k_afterimg.emitting = true
+			anims.play("knockback")
 			state_timer = Data.combat_knockback_time  
 			shoot_state = MoveState.KNOCKBACK
 
@@ -632,14 +652,20 @@ func _handle_hit_state() -> void:
 
 ## Called by the opponent's attack. Returns true if the hit lands (not blocked).
 func try_hit() -> bool:
+	if priority == 0:
+		return false
+		
 	if current_state == State.BLOCK:
 		block_state = MoveState.KNOCKBACK
 		state_timer = Data.combat_knockback_time
 		var pushback_speed: int = (Data.combat_knockback_distance/2) / Data.combat_knockback_time
 		velocity.x = -fixed_facing_dir * pushback_speed
 		return false
+		
 	_try_state_transition(State.BEEN_HIT)
 	return true
+	
+	
 
 
 ## Called by the opponent when entering feint ACTIVE phase.
@@ -707,10 +733,10 @@ func _resolve_shoot_collision() -> HitResult:
 		return HitResult.MISS
 
 	has_connected = true   
-
+	
 	if object.try_hit():           
 		return HitResult.LANDED
-
+		
 	return HitResult.BLOCKED
 
 
@@ -739,6 +765,7 @@ func reset_player() -> void:
 	hit_collision.disabled   = false
 	s_afterimg.emitting      = false
 	b_afterimg.emitting      = false
+	k_afterimg.emitting      = false
 	
 	if anims.has_animation("RESET"):
 		anims.play("RESET")
@@ -747,15 +774,12 @@ func reset_player() -> void:
 	anims.advance(0)
 	
 	_apply_facing()
-	
+
 	fatigue_bar_val = 0
 	input_buffer.clear()
 	velocity = Vector2.ZERO
 	show()
 func _apply_facing() -> void:
-	transform.x = Vector2(1.0, 0.0)
-	transform.y = Vector2(0.0, 1.0)
-	$Sprite.flip_h = (fixed_facing_dir == -1)
-	s_afterimg.scale.x = fixed_facing_dir
-	b_afterimg.scale.x = fixed_facing_dir
+	rotation = 0.0
+	scale = Vector2(fixed_facing_dir, 1.0)	
 	
