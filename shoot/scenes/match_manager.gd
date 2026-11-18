@@ -367,7 +367,6 @@ func _on_player_shot(player:int):
 	if p1_shot_tick != MAX_SHOT_TICKS and p2_shot_tick != MAX_SHOT_TICKS:
 		if abs(p1_shot_tick-p2_shot_tick) <= MAX_SHOT_WINDOW:
 			priority = 0
-			
 		else:
 			priority = 1 if p1_shot_tick < p2_shot_tick else -1
 	

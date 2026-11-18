@@ -94,7 +94,7 @@ var fixed_facing_dir: int = 1
 var input_prefix: String  = ""
 var is_local_mode: bool   = true
 var frozen: bool = false
-var priority = 0
+var priority = -2
 
 # ════════════════════════════════════════════════════════════════════════════════
 # STATE MACHINE
@@ -217,8 +217,6 @@ func _network_process(input: Dictionary) -> void:
 	
 	tick += 1
 	
-	if tick > 60:
-		tick = 0
 		
 		 
 	if state_timer > 0:
@@ -535,9 +533,6 @@ func _handle_shoot_state() -> void:
 			var current_speed: float = lerpf(0.0, avg_speed * 2.0,  t)
 			velocity.x = fixed_facing_dir * current_speed
 			collider = move_and_collide(velocity)
-			global_position.y = initial_y
-			velocity = Vector2.ZERO
-
 			match _resolve_shoot_collision():
 				HitResult.LANDED:
 					shoot_collision.disabled = true
@@ -548,12 +543,11 @@ func _handle_shoot_state() -> void:
 					shoot_collision.disabled = true
 					velocity.x  = 0
 					shoot_state = MoveState.BLOCKED
-					
 					hit_blocked.emit()
-				
+					return
+				HitResult.MISS:
+					pass
 					
-				
-
 			if state_timer <= 0:
 				shoot_collision.disabled = true
 				velocity.x  = 0
@@ -571,11 +565,11 @@ func _handle_shoot_state() -> void:
 			velocity.x  = 0
 			s_afterimg.emitting = false
 			k_afterimg.emitting = true
-			anims.play("knockback")
 			state_timer = Data.combat_knockback_time  
 			shoot_state = MoveState.KNOCKBACK
 
 		MoveState.KNOCKBACK:
+			anims.play("knockback")
 			velocity.x = -fixed_facing_dir * knockback_speed
 			if state_timer <= 0:                       
 				velocity.x = 0
@@ -723,27 +717,26 @@ func _move(move_dir: float) -> void:
 
 
 
-## Returns true if this player's active hitbox overlapped a valid opponent this frame.
 func _resolve_shoot_collision() -> HitResult:
-	if has_connected or not collider:
+	
+	if not collider:
 		return HitResult.MISS
-
+	
+		
 	var object = collider.get_collider()
 	if not object or not object.has_method("try_hit"):
 		return HitResult.MISS
 
-	has_connected = true   
 	
-	if object.try_hit():           
+	if object.try_hit():      
+		print(object)
 		return HitResult.LANDED
 		
 	return HitResult.BLOCKED
 
 
 
-# ════════════════════════════════════════════════════════════════════════════════
-# UTILITY
-# ════════════════════════════════════════════════════════════════════════════════
+# UTILITY ################
 
 func reset_player() -> void:
 	current_state  = State.IDLE
