@@ -482,6 +482,7 @@ script = ExtResource("1_xe0xt")
 [node name="HurtBox" type="CollisionShape2D" parent="." unique_id=1660789225]
 position = Vector2(5.125, -2)
 shape = ExtResource("2_gpx7x")
+one_way_collision_margin = 0.0
 
 [node name="Anims" type="AnimationPlayer" parent="." unique_id=831962395]
 libraries/ = SubResource("AnimationLibrary_jl2re")
@@ -534,4 +535,5 @@ process_material = SubResource("ParticleProcessMaterial_3c5ox")
 position = Vector2(0, -4)
 shape = ExtResource("7_72myw")
 disabled = true
+one_way_collision_margin = 0.0
 debug_color = Color(1, 0.64047605, 0.5326994, 0.41960785)

@@ -150,7 +150,7 @@ var collider: KinematicCollision2D
 var Data: GameData
 var score: int = 0
 var last_position : Vector2
-var initial_y :int
+var initial_pos : Vector2
 # ════════════════════════════════════════════════════════════════════════════════
 # LIFECYCLE
 # ════════════════════════════════════════════════════════════════════════════════
@@ -178,7 +178,8 @@ func _ready() -> void:
 		frozen = parent_frozen
 	Data = GameData.new()
 	Data._scan_into_vars()
-
+	
+	initial_pos.y = 27
 	
 
 	
@@ -198,10 +199,11 @@ func _network_spawn(data: Dictionary) -> void:
 	Data._scan_into_vars()
 
 	
-	fixed_facing_dir       = data.get("fixed_facing_dir", 1)
-	dummy                  = data.get("dummy_state", false)
+	fixed_facing_dir = data.get("fixed_facing_dir", 1)
+	dummy = data.get("dummy_state", false)
+	initial_pos = data.get("position")
+	print(initial_pos)
 	shoot_collision.disabled = true
-
 	_apply_facing()
 	
 
@@ -212,9 +214,9 @@ func _network_spawn(data: Dictionary) -> void:
 
 
 func _network_process(input: Dictionary) -> void:
+	
 	_update_input_buffer()
 	_buffer_pressed_inputs(input)
-	
 	tick += 1
 	
 		
@@ -240,17 +242,18 @@ func _network_process(input: Dictionary) -> void:
 	_tick_reaction_window()
 
 	# ── Physics move ─────────────────────────────────────────────────────────
-	initial_y = position.y 
+	
 	collider = move_and_collide(velocity)
-	position.y = initial_y
+	if position.y != initial_pos.y:
+		position.y = initial_pos.y
+
+	
 	# ── Stun threshold check ─────────────────────────────────────────────────
 	if fatigue_bar_val >= FATIGUE_BAR_MAX:
 		fatigue_bar_val = 0
 		feint_update.emit(fixed_facing_dir, fatigue_bar_val)
 		_try_state_transition(State.STUN)
-	# Stick Sprite
-	$Sprite.global_position.x = global_position.x
-
+		
 
 func _save_state() -> Dictionary:
 	# Everything _network_process reads or writes must be here, or a rollback
@@ -536,12 +539,12 @@ func _handle_shoot_state() -> void:
 			match _resolve_shoot_collision():
 				HitResult.LANDED:
 					shoot_collision.disabled = true
-					velocity.x = 0
+					velocity = Vector2.ZERO
 					shoot_state = MoveState.HIT
 					return
 				HitResult.BLOCKED:
 					shoot_collision.disabled = true
-					velocity.x  = 0
+					velocity = Vector2.ZERO
 					shoot_state = MoveState.BLOCKED
 					hit_blocked.emit()
 					return
@@ -562,7 +565,6 @@ func _handle_shoot_state() -> void:
 			_try_state_transition(State.HIT)   
 
 		MoveState.BLOCKED:
-			velocity.x  = 0
 			s_afterimg.emitting = false
 			k_afterimg.emitting = true
 			state_timer = Data.combat_knockback_time  
@@ -726,10 +728,11 @@ func _resolve_shoot_collision() -> HitResult:
 	var object = collider.get_collider()
 	if not object or not object.has_method("try_hit"):
 		return HitResult.MISS
+	
 
+	object.velocity = Vector2.ZERO
 	
 	if object.try_hit():      
-		print(object)
 		return HitResult.LANDED
 		
 	return HitResult.BLOCKED

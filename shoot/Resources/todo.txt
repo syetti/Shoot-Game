@@ -1,14 +1,11 @@
 
-- add shadows
-- reimport all anims
-	- add win anim
-	- handle blocked while shooting anim
-	- calibrate feint animations
+- prioroty no matching collision
+- controller support
+- online
 - import map
 	- get flag system working
 	- use ijf scorebug with flags ( if flag falling system too complex)
-- get block prep working
-- make feint work
+
 
 
 --IDEA - Overload. Each player has bar of mental. Repeated actions from other players that illicit a response fill 

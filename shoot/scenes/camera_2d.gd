@@ -11,6 +11,9 @@ var shake_time_speed:float = 20.0
 
 var noise = FastNoiseLite.new()
 
+#zoom
+
+
 # Called when the node enters the scene tree for the first time.
 func screen_shake(intensity:int, time:float):
 	randomize()
@@ -22,15 +25,24 @@ func screen_shake(intensity:int, time:float):
 	shake_time = 0.0
 	pass
 
+
+func track_players() -> void:
+	var midpoint =  int(($"1".global_position.x)- ($"-1".get_global_pos.x)/2)
+	
+	pass
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	
+	
+	
 	if active_shake_time > 0:
 		shake_time += delta * shake_time_speed
 		active_shake_time -= delta
 		
 		offset = Vector2(
 			noise.get_noise_2d(shake_time,0)*shake_intensity,
-			noise.get_noise_2d(0,shake_time)*shake_intensity
+			2
 		)
 		
 		shake_intensity = max(shake_intensity - shake_decay * delta, 0)

@@ -342,6 +342,7 @@ func _on_player_hit():
 		return
 	frozen = true
 	if priority != 0:
+		print(priority)
 		_record_round_result(priority)
 		_update_round(priority)
 	else:
